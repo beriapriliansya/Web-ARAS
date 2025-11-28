@@ -10,7 +10,7 @@ class DestinasiController extends Controller
 {
     /**
      * Display a listing of the resource.
-     * Menampilkan daftar semua destinasi
+     * Menampilkan daftar semua destinasi (PUBLIC - untuk user biasa)
      */
     public function index(Request $request)
     {
@@ -38,12 +38,37 @@ class DestinasiController extends Controller
     }
 
     /**
+     * ADMIN: Display a listing of all destinasi
+     */
+    public function adminIndex(Request $request)
+    {
+        $query = DestinasiWisata::query();
+
+        if ($request->has('kategori') && $request->kategori != '') {
+            $query->kategori($request->kategori);
+        }
+
+        if ($request->has('search') && $request->search != '') {
+            $query->search($request->search);
+        }
+
+        if ($request->has('status') && $request->status != '') {
+            $query->where('status', $request->status);
+        }
+
+        $destinasi = $query->latest()->paginate(12);
+        $kategoriList = DestinasiWisata::select('kategori')->distinct()->pluck('kategori');
+
+        return view('admin.destinasi.index', compact('destinasi', 'kategoriList'));
+    }
+
+    /**
      * Show the form for creating a new resource.
-     * Menampilkan form tambah destinasi
+     * Menampilkan form tambah destinasi (ADMIN ONLY)
      */
     public function create()
     {
-        return view('destinasi.create');
+        return view('admin.destinasi.create');
     }
 
     /**
@@ -82,13 +107,13 @@ class DestinasiController extends Controller
         // Simpan ke database
         DestinasiWisata::create($validated);
 
-        return redirect()->route('destinasi.index')
+        return redirect()->route('admin.destinasi.index')
             ->with('success', 'Destinasi wisata berhasil ditambahkan!');
     }
 
     /**
      * Display the specified resource.
-     * Menampilkan detail destinasi
+     * Menampilkan detail destinasi (PUBLIC)
      */
     public function show($id)
     {
@@ -99,13 +124,24 @@ class DestinasiController extends Controller
     }
 
     /**
+     * ADMIN: Display the specified resource.
+     */
+    public function adminShow($id)
+    {
+        $destinasi = DestinasiWisata::with(['alternatif.kriteria', 'hasilAras', 'ulasan.user'])
+            ->findOrFail($id);
+
+        return view('admin.destinasi.show', compact('destinasi'));
+    }
+
+    /**
      * Show the form for editing the specified resource.
-     * Menampilkan form edit destinasi
+     * Menampilkan form edit destinasi (ADMIN ONLY)
      */
     public function edit($id)
     {
         $destinasi = DestinasiWisata::findOrFail($id);
-        return view('destinasi.edit', compact('destinasi'));
+        return view('admin.destinasi.edit', compact('destinasi'));
     }
 
     /**
@@ -151,20 +187,20 @@ class DestinasiController extends Controller
         // Update database
         $destinasi->update($validated);
 
-        return redirect()->route('destinasi.show', $id)
+        return redirect()->route('admin.destinasi.show', $id)
             ->with('success', 'Destinasi wisata berhasil diupdate!');
     }
 
     /**
      * Remove the specified resource from storage.
-     * Hapus destinasi (soft delete)
+     * Hapus destinasi (soft delete) (ADMIN ONLY)
      */
     public function destroy($id)
     {
         $destinasi = DestinasiWisata::findOrFail($id);
         $destinasi->delete(); // Soft delete
 
-        return redirect()->route('destinasi.index')
+        return redirect()->route('admin.destinasi.index')
             ->with('success', 'Destinasi wisata berhasil dihapus!');
     }
 }

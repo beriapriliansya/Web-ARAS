@@ -1,74 +1,58 @@
 <!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="@yield('meta_description', 'Sistem Informasi Pariwisata Kabupaten Pesawaran dengan Metode ARAS')">
-    <meta name="keywords" content="@yield('meta_keywords', 'pariwisata, pesawaran, wisata, ARAS, rekomendasi')">
-    <meta name="csrf-token" content="{{ csrf_token() }}">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>@yield('title', 'Pariwisata Pesawaran') - Sistem Rekomendasi Destinasi Wisata</title>
+        <title>{{ config('app.name', 'Laravel') }}</title>
 
-    <!-- Vite CSS & JS -->
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
+        <!-- Fonts -->
+        <link rel="preconnect" href="https://fonts.bunny.net">
+        <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
 
-    <!-- Google Maps API -->
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCnMki_UaMHA56B2gcZwgPVmVmL23tXKII&libraries=places"></script>
+        <!-- ======================================================= -->
+        <!-- TAMBAHAN WAJIB: BOOTSTRAP 5 CSS & ICONS -->
+        <!-- ======================================================= -->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
 
-    <!-- Custom CSS per halaman -->
-    @stack('styles')
-</head>
-<body>
-    <!-- Navbar -->
-    @include('partials.navbar')
+        <!-- Scripts (Bawaan Laravel Breeze / Tailwind) -->
+        <!-- Note: Tailwind mungkin akan sedikit bentrok dengan Bootstrap, tapi biarkan dulu -->
+        @vite(['resources/css/app.css', 'resources/js/app.js'])
 
-    <!-- Alert Messages -->
-    @if(session('success'))
-    <div class="container mt-3">
-        <div class="alert alert-success alert-dismissible fade show" role="alert">
-            <i class="bi bi-check-circle-fill me-2"></i>
-            <strong>Berhasil!</strong> {{ session('success') }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        <!-- Custom Style untuk menimpa konflik Tailwind jika perlu -->
+        <style>
+            /* Hapus underline default pada link di Bootstrap jika bentrok dengan Tailwind */
+            a { text-decoration: none; }
+        </style>
+    </head>
+    <body class="font-sans antialiased">
+        <div class="min-h-screen bg-gray-100">
+            @include('layouts.navigation')
+
+            <!-- Page Heading -->
+            @if (isset($header))
+                <header class="bg-white shadow">
+                    <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+                        {{ $header }}
+                    </div>
+                </header>
+            @endif
+
+            <!-- Page Content -->
+            <main>
+                @if(isset($slot))
+                    {{ $slot }}
+                @else
+                    @yield('content')
+                @endif
+            </main>
         </div>
-    </div>
-    @endif
 
-    @if(session('error'))
-    <div class="container mt-3">
-        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-            <i class="bi bi-exclamation-triangle-fill me-2"></i>
-            <strong>Error!</strong> {{ session('error') }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-        </div>
-    </div>
-    @endif
-
-    @if($errors->any())
-    <div class="container mt-3">
-        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-            <i class="bi bi-exclamation-triangle-fill me-2"></i>
-            <strong>Terjadi kesalahan:</strong>
-            <ul class="mb-0 mt-2">
-                @foreach($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-        </div>
-    </div>
-    @endif
-
-    <!-- Main Content -->
-    <main>
-        @yield('content')
-    </main>
-
-    <!-- Footer -->
-    @include('partials.footer')
-
-    <!-- Scroll to Top Button (created by JavaScript) -->
-
-    <!-- Custom JavaScript per halaman -->
-    @stack('scripts')
-</body>
+        <!-- ======================================================= -->
+        <!-- TAMBAHAN WAJIB: BOOTSTRAP 5 JS BUNDLE -->
+        <!-- ======================================================= -->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    </body>
 </html>

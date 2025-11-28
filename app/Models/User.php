@@ -21,6 +21,8 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'role',          // Pastikan 'role' ada di sini
+        'destinasi_id',  // Pastikan 'destinasi_id' ada di sini
     ];
 
     /**
@@ -42,4 +44,17 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    // ==========================================
+    // TAMBAHAN RELASI (Ini yang bikin error tadi)
+    // ==========================================
+
+    /**
+     * Relasi: User (Admin) memiliki satu Destinasi Wisata yang dikelola.
+     */
+    public function destinasi()
+    {
+        // belongsTo artinya: User "milik" satu destinasi (karena ada destinasi_id di tabel users)
+        return $this->belongsTo(DestinasiWisata::class, 'destinasi_id');
+    }
 }

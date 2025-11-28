@@ -16,9 +16,15 @@
                 </p>
             </div>
             <div class="col-md-4 text-md-end">
-                <a href="{{ route('destinasi.create') }}" class="btn btn-light btn-lg">
-                    <i class="bi bi-plus-circle"></i> Tambah Destinasi
-                </a>
+                @auth
+                    <a href="{{ route('booking.index') }}" class="btn btn-light btn-lg">
+                        <i class="bi bi-ticket-perforated"></i> Booking Saya
+                    </a>
+                @else
+                    <a href="{{ route('login') }}" class="btn btn-light btn-lg">
+                        <i class="bi bi-box-arrow-in-right"></i> Login untuk Booking
+                    </a>
+                @endauth
             </div>
         </div>
     </div>
@@ -123,20 +129,12 @@
                                    class="btn btn-primary btn-sm flex-grow-1">
                                     <i class="bi bi-eye"></i> Detail
                                 </a>
-                                <a href="{{ route('destinasi.edit', $item->id) }}"
-                                   class="btn btn-outline-warning btn-sm">
-                                    <i class="bi bi-pencil"></i>
-                                </a>
-                                <form action="{{ route('destinasi.destroy', $item->id) }}"
-                                      method="POST"
-                                      class="d-inline"
-                                      onsubmit="return confirm('Yakin ingin menghapus destinasi ini?')">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="btn btn-outline-danger btn-sm">
-                                        <i class="bi bi-trash"></i>
-                                    </button>
-                                </form>
+                                @auth
+                                    <a href="{{ route('booking.create', $item->id) }}"
+                                       class="btn btn-success btn-sm">
+                                        <i class="bi bi-cart-plus"></i> Book
+                                    </a>
+                                @endauth
                             </div>
                         </div>
                     </div>
@@ -159,4 +157,4 @@
         </div>
     @endif
 </div>
-@endsection
+@endsection 

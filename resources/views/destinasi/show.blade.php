@@ -27,11 +27,19 @@
                             <span class="badge bg-primary mb-2">{{ $destinasi->kategori }}</span>
                             <h1 class="display-5 fw-bold mb-0">{{ $destinasi->nama }}</h1>
                         </div>
-                        <div class="text-end">
-                            <a href="{{ route('destinasi.edit', $destinasi->id) }}" class="btn btn-warning">
-                                <i class="bi bi-pencil"></i> Edit
-                            </a>
-                        </div>
+                        @auth
+                            <div class="text-end">
+                                <a href="{{ route('booking.create', $destinasi->id) }}" class="btn btn-success btn-lg">
+                                    <i class="bi bi-cart-plus"></i> Book Tiket
+                                </a>
+                            </div>
+                        @else
+                            <div class="text-end">
+                                <a href="{{ route('login') }}" class="btn btn-primary btn-lg">
+                                    <i class="bi bi-box-arrow-in-right"></i> Login untuk Book
+                                </a>
+                            </div>
+                        @endauth
                     </div>
 
                     <!-- Quick Info -->

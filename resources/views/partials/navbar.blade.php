@@ -25,29 +25,58 @@
                         <i class="bi bi-stars"></i> Rekomendasi
                     </a>
                 </li>
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
-                        <i class="bi bi-gear-fill"></i> Lainnya
-                    </a>
-                    <ul class="dropdown-menu">
-                        <li>
-                            <a class="dropdown-item" href="{{ route('aras.index') }}">
-                                <i class="bi bi-calculator"></i> Perhitungan ARAS
+
+                @auth
+                    <!-- Menu untuk user yang sudah login -->
+                    <li class="nav-item">
+                        <a class="nav-link {{ Request::routeIs('booking.*') ? 'active' : '' }}" href="{{ route('booking.index') }}">
+                            <i class="bi bi-ticket-perforated"></i> Booking Saya
+                        </a>
+                    </li>
+
+                    @if(auth()->user()->isAdmin())
+                        <!-- Menu khusus admin -->
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('admin.dashboard') }}">
+                                <i class="bi bi-speedometer2"></i> Dashboard Admin
                             </a>
                         </li>
-                        <li><hr class="dropdown-divider"></li>
-                        <li>
-                            <a class="dropdown-item" href="{{ route('tentang') }}">
-                                <i class="bi bi-info-circle"></i> Tentang
-                            </a>
-                        </li>
-                        <li>
-                            <a class="dropdown-item" href="{{ route('kontak') }}">
-                                <i class="bi bi-envelope"></i> Kontak
-                            </a>
-                        </li>
-                    </ul>
-                </li>
+                    @endif
+
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                            <i class="bi bi-person-circle"></i> {{ auth()->user()->name }}
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li>
+                                <a class="dropdown-item" href="{{ route('profile.edit') }}">
+                                    <i class="bi bi-person"></i> Profile
+                                </a>
+                            </li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li>
+                                <form method="POST" action="{{ route('logout') }}">
+                                    @csrf
+                                    <button type="submit" class="dropdown-item text-danger">
+                                        <i class="bi bi-box-arrow-right"></i> Logout
+                                    </button>
+                                </form>
+                            </li>
+                        </ul>
+                    </li>
+                @else
+                    <!-- Menu untuk guest (belum login) -->
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route('login') }}">
+                            <i class="bi bi-box-arrow-in-right"></i> Login
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link btn btn-outline-light" href="{{ route('register') }}">
+                            <i class="bi bi-person-plus"></i> Register
+                        </a>
+                    </li>
+                @endauth
             </ul>
         </div>
     </div>
