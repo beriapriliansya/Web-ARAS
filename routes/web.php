@@ -2,11 +2,15 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
-use App\Http\Controllers\DestinasiController;
+use App\Http\Controllers\DestinasiController; // Controller Public (Read Only)
 use App\Http\Controllers\ArasController;
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\UlasanController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\AdminController;
+
+// Import Controller Admin Destinasi dengan Alias agar tidak bentrok
+use App\Http\Controllers\Admin\DestinasiController as AdminDestinasiController;
 
 /*
 |--------------------------------------------------------------------------
@@ -50,6 +54,7 @@ Route::get('/api/destinasi/all', function() {
     return response()->json($destinasi);
 })->name('api.destinasi.all');
 
+
 // ==========================================
 // USER AUTHENTICATED ROUTES (Harus login)
 // ==========================================
@@ -60,7 +65,7 @@ Route::middleware(['auth'])->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-    // Booking Tiket (Harus login)
+    // Booking Tiket (User)
     Route::get('/booking', [BookingController::class, 'index'])->name('booking.index');
     Route::get('/booking/create/{destinasi_id}', [BookingController::class, 'create'])->name('booking.create');
     Route::post('/booking', [BookingController::class, 'store'])->name('booking.store');
@@ -68,55 +73,35 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/booking/{id}/payment', [BookingController::class, 'uploadPayment'])->name('booking.upload_payment');
     Route::post('/booking/{id}/cancel', [BookingController::class, 'cancel'])->name('booking.cancel');
 
-    // Ulasan/Rating (Harus punya booking completed)
+    // Ulasan/Rating
     Route::get('/ulasan/create/{booking_id}', [UlasanController::class, 'create'])->name('ulasan.create');
     Route::post('/ulasan', [UlasanController::class, 'store'])->name('ulasan.store');
 
 });
 
 // ==========================================
-// ADMIN ROUTES (Hanya Admin Destinasi)
+// ADMIN ROUTES (Superadmin & Admin Destinasi)
 // ==========================================
 Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () {
 
-    Route::get('/dashboard', [App\Http\Controllers\AdminController::class, 'dashboard'])->name('dashboard');
+    // 1. Dashboard Utama
+    Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
 
-    // Route untuk Manajemen User (CRUD)
-    Route::post('/users', [App\Http\Controllers\AdminController::class, 'storeUser'])->name('users.store');
-    Route::delete('/users/{id}', [App\Http\Controllers\AdminController::class, 'destroyUser'])->name('users.destroy');
+    // 2. Manajemen User (CRUD)
+    Route::post('/users', [AdminController::class, 'storeUser'])->name('users.store');
+    Route::delete('/users/{id}', [AdminController::class, 'destroyUser'])->name('users.destroy');
 
-    // Dashboard
-    // Route::get('/dashboard', function() {
-    //     $totalDestinasi = \App\Models\DestinasiWisata::count();
-    //     $destinasiAktif = \App\Models\DestinasiWisata::where('status', 'aktif')->count();
-    //     $totalKriteria = \App\Models\Kriteria::count();
-    //     $totalUser = \App\Models\User::where('role', 'user')->count();
-    //     $totalBooking = \App\Models\Booking::count();
-    //     $bookingPending = \App\Models\Booking::where('status', 'pending')->count();
-// 
-    //     $bookingsTerbaru = \App\Models\Booking::with(['user', 'destinasi'])
-    //         ->latest()->limit(10)->get();
-// 
-    //     $topDestinasi = \App\Models\HasilAras::with('destinasi')
-    //         ->orderByRanking()->limit(5)->get();
-// 
-    //     return view('admin.dashboard', compact(
-    //         'totalDestinasi', 'destinasiAktif', 'totalKriteria',
-    //         'totalUser', 'totalBooking', 'bookingPending',
-    //         'bookingsTerbaru', 'topDestinasi'
-    //     ));
-    // })->name('dashboard');
+    // 3. Manajemen Destinasi (CRUD Lengkap)
+    // Menggunakan AdminDestinasiController (bukan yang public)
+    // Except 'create', 'edit' karena kita pakai Modal di halaman index
+    Route::resource('destinasi', AdminDestinasiController::class)
+        ->except(['create', 'edit', 'show']);
 
-    // CRUD Destinasi (Admin only)
-    Route::resource('destinasi', DestinasiController::class)->except(['index', 'show']);
-    Route::get('destinasi', [DestinasiController::class, 'adminIndex'])->name('destinasi.index');
-    Route::get('destinasi/{id}', [DestinasiController::class, 'adminShow'])->name('destinasi.show');
-
-    // ARAS Management
+    // 4. ARAS Management
     Route::get('/aras', [ArasController::class, 'index'])->name('aras.index');
     Route::post('/aras/hitung', [ArasController::class, 'hitung'])->name('aras.hitung');
 
-    // Booking Management
+    // 5. Booking Management (Admin View)
     Route::get('/bookings', function() {
         $bookings = \App\Models\Booking::with(['user', 'destinasi'])->latest()->paginate(20);
         return view('admin.bookings.index', compact('bookings'));
@@ -134,5 +119,3 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
     })->name('bookings.complete');
 
 });
-
-

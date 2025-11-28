@@ -25,7 +25,8 @@
                 {{-- Cek apakah route destinasi ada --}}
                 @if(Route::has('destinasi.index'))
                 <li class="nav-item">
-                    <a class="nav-link px-3 {{ request()->routeIs('destinasi.*') ? 'active fw-bold text-primary' : '' }}" href="{{ route('destinasi.index') }}">
+                    <a class="nav-link px-3 {{ request()->routeIs('destinasi.*') || request()->routeIs('admin.destinasi.*') ? 'active fw-bold text-primary' : '' }}"
+                    href="{{ (auth()->check() && (auth()->user()->role === 'superadmin' || auth()->user()->role === 'admin')) ? route('admin.destinasi.index') : route('destinasi.index') }}">
                         Destinasi
                     </a>
                 </li>
