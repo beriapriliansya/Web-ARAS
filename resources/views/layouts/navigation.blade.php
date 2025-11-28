@@ -6,22 +6,24 @@
             <span>Wisata Pesawaran</span>
         </a>
 
-        <!-- 2. TOMBOL HAMBURGER (Untuk Tampilan HP) -->
+        <!-- 2. TOMBOL HAMBURGER (Mobile) -->
         <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
 
-        <!-- 3. ISI MENU (Collapsible) -->
+        <!-- 3. ISI MENU -->
         <div class="collapse navbar-collapse" id="navbarContent">
 
-            <!-- Menu Kiri (Navigasi Utama) -->
+            <!-- MENU KIRI (Navigasi Utama) -->
             <ul class="navbar-nav me-auto mb-2 mb-lg-0 py-2">
+                <!-- Home -->
                 <li class="nav-item">
                     <a class="nav-link px-3 {{ request()->routeIs('home') ? 'active fw-bold text-primary' : '' }}" href="{{ route('home') }}">
                         Home
                     </a>
                 </li>
 
+                <!-- Menu Destinasi (Pintar: Admin ke Kelola, User ke Lihat) -->
                 @if(Route::has('destinasi.index'))
                 <li class="nav-item">
                     <a class="nav-link px-3 {{ request()->routeIs('destinasi.*') || request()->routeIs('admin.destinasi.*') ? 'active fw-bold text-primary' : '' }}"
@@ -31,33 +33,52 @@
                 </li>
                 @endif
 
-                @if(Route::has('aras.ranking'))
+                <!-- MENU KHUSUS SUPERADMIN: Kalkulasi ARAS -->
+                <!-- Ini yang tadi ketinggalan -->
+                @if(auth()->check() && auth()->user()->role === 'superadmin')
                 <li class="nav-item">
-                    <a class="nav-link px-3 {{ request()->routeIs('aras.ranking') ? 'active fw-bold text-primary' : '' }}" href="{{ route('aras.ranking') }}">
-                        Rekomendasi ARAS
+                    <a class="nav-link px-3 {{ request()->routeIs('admin.aras.*') ? 'active fw-bold text-primary' : '' }}" href="{{ route('admin.aras.index') }}">
+                        Perhitungan ARAS
                     </a>
                 </li>
                 @endif
+
+                <!-- Menu Rekomendasi (Hanya User/Public, Admin tidak butuh ini di navbar) -->
+                @if(Route::has('aras.ranking') && (!auth()->check() || auth()->user()->role === 'user'))
+                <li class="nav-item">
+                    <a class="nav-link px-3 {{ request()->routeIs('aras.ranking') ? 'active fw-bold text-primary' : '' }}" href="{{ route('aras.ranking') }}">
+                        Rekomendasi
+                    </a>
+                </li>
+                @endif
+
+                <!-- Menu Tentang -->
+                <li class="nav-item">
+                    <a class="nav-link px-3 {{ request()->routeIs('tentang') ? 'active fw-bold text-primary' : '' }}" href="{{ route('tentang') }}">
+                        Tentang
+                    </a>
+                </li>
             </ul>
 
-            <!-- Menu Kanan (User Authentication) -->
+            <!-- MENU KANAN (User Authentication) -->
             <ul class="navbar-nav ms-auto align-items-lg-center mb-2 mb-lg-0">
                 @auth
                     <!-- JIKA SUDAH LOGIN -->
                     <li class="nav-item d-flex align-items-center gap-3">
-                        <!-- 1. Nama User (Link ke Dashboard/Profile) -->
+
+                        <!-- Nama User (Link Cerdas: Admin ke Dashboard, User ke Profil) -->
                         <a href="{{ (auth()->user()->role === 'admin' || auth()->user()->role === 'superadmin') ? route('admin.dashboard') : route('profile.edit') }}"
-                           class="text-decoration-none fw-bold text-dark d-flex align-items-center">
-                            <div class="bg-primary text-white rounded-circle d-flex justify-content-center align-items-center me-2" style="width: 35px; height: 35px;">
+                           class="text-decoration-none fw-bold text-dark d-flex align-items-center bg-light px-3 py-1 rounded-pill border hover-shadow transition">
+                            <div class="bg-primary text-white rounded-circle d-flex justify-content-center align-items-center me-2" style="width: 30px; height: 30px; font-size: 0.8rem;">
                                 {{ substr(Auth::user()->name, 0, 1) }}
                             </div>
-                            <span>{{ Auth::user()->name }}</span>
+                            <span class="small">{{ Str::limit(Auth::user()->name, 15) }}</span>
                         </a>
 
-                        <!-- 2. Tombol Logout (Langsung Form) -->
-                        <form method="POST" action="{{ route('logout') }}">
+                        <!-- Tombol Logout (Direct Form - Anti Macet) -->
+                        <form method="POST" action="{{ route('logout') }}" class="m-0">
                             @csrf
-                            <button type="submit" class="btn btn-danger btn-sm fw-bold px-3 rounded-pill">
+                            <button type="submit" class="btn btn-outline-danger btn-sm fw-bold px-3 rounded-pill" onclick="return confirm('Apakah Anda yakin ingin keluar?');">
                                 <i class="bi bi-box-arrow-right"></i> Logout
                             </button>
                         </form>
@@ -78,4 +99,8 @@
             </ul>
         </div>
     </div>
+
+    <style>
+        .hover-shadow:hover { box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075); text-decoration: none; }
+    </style>
 </nav>

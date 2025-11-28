@@ -14,38 +14,19 @@ return new class extends Migration
         Schema::create('hasil_aras', function (Blueprint $table) {
             $table->id();
 
-            // Foreign Key
+            // Relasi ke Destinasi
             $table->foreignId('destinasi_id')
                   ->constrained('destinasi_wisata')
                   ->onDelete('cascade');
 
-            // Hasil Perhitungan ARAS
-            // Step 1: Nilai Normalisasi Terbobot
-            $table->decimal('nilai_normalisasi', 10, 6);
+            // Nilai Perhitungan ARAS
+            $table->double('nilai_s'); // Nilai Optimality Function (Si)
+            $table->double('nilai_k'); // Nilai Degree of Utility (Ki)
 
-            // Step 2: Nilai Optimal (S0)
-            $table->decimal('nilai_optimal', 10, 6);
+            // Ranking Akhir
+            $table->integer('ranking');
 
-            // Step 3: Utilitas (Ki = Si / S0)
-            $table->decimal('utilitas', 10, 6);
-
-            // Ranking (posisi urutan)
-            $table->integer('ranking')->nullable();
-
-            // Persentase (untuk visualisasi)
-            $table->decimal('persentase', 5, 2)->nullable(); // 0.00 - 100.00
-
-            // Metadata Perhitungan
-            $table->timestamp('tanggal_hitung'); // Kapan dihitung
-            $table->json('detail_perhitungan')->nullable(); // Detail step by step
-
-            // Timestamps
             $table->timestamps();
-
-            // Indexes
-            $table->index('destinasi_id');
-            $table->index('ranking');
-            $table->index('tanggal_hitung');
         });
     }
 

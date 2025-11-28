@@ -1,12 +1,7 @@
 <x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Kalkulasi Metode ARAS') }}
-        </h2>
-    </x-slot>
-
     <div class="container py-5">
 
+        <!-- Notifikasi -->
         @if(session('success'))
             <div class="alert alert-success alert-dismissible fade show" role="alert">
                 <i class="bi bi-check-circle-fill me-2"></i> {{ session('success') }}
