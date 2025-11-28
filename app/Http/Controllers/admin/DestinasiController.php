@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\DestinasiWisata;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\File; // Import Facade File untuk hapus gambar
+use Illuminate\Support\Facades\File;
 
 class DestinasiController extends Controller
 {
@@ -14,9 +14,18 @@ class DestinasiController extends Controller
      */
     public function index()
     {
-        // Ambil data destinasi terbaru, paginate 10 per halaman
         $destinasi = DestinasiWisata::latest()->paginate(10);
         return view('admin.destinasi.index', compact('destinasi'));
+    }
+
+    /**
+     * Menampilkan FORM tambah destinasi baru
+     * (Fungsi ini yang menyebabkan error jika hilang)
+     */
+    public function create()
+    {
+        // Menggunakan view yang sama dengan edit (reusable form)
+        return view('admin.destinasi.create');
     }
 
     /**
@@ -24,11 +33,20 @@ class DestinasiController extends Controller
      */
     public function store(Request $request)
     {
-        // Panggil fungsi helper handleSave untuk validasi & simpan
         $this->handleSave($request);
 
         return redirect()->route('admin.destinasi.index')
             ->with('success', 'Destinasi Wisata berhasil ditambahkan!');
+    }
+
+    /**
+     * Menampilkan FORM edit untuk destinasi tertentu
+     */
+    public function edit($id)
+    {
+        $destinasi = DestinasiWisata::findOrFail($id);
+        // Load view form dan kirim data $destinasi agar form terisi otomatis
+        return view('admin.destinasi.edit', compact('destinasi'));
     }
 
     /**
@@ -38,7 +56,6 @@ class DestinasiController extends Controller
     {
         $destinasi = DestinasiWisata::findOrFail($id);
 
-        // Panggil fungsi helper handleSave dengan parameter destinasi (mode update)
         $this->handleSave($request, $destinasi);
 
         return redirect()->route('admin.destinasi.index')
@@ -65,7 +82,6 @@ class DestinasiController extends Controller
 
     /**
      * Helper Function: Menangani Logika Simpan (Create & Update)
-     * Menggabungkan logika agar tidak duplikat kode
      */
     private function handleSave(Request $request, $destinasi = null)
     {

@@ -133,9 +133,7 @@
                         </tbody>
                     </table>
                 </div>
-                <div class="mt-3">
-                    {{ $listDestinasi->appends(['users_page' => $users->currentPage()])->links() }}
-                </div>
+
             </div>
         </div>
 

@@ -9,6 +9,7 @@ use App\Http\Controllers\UlasanController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\AdminController;
 
+
 // Import Controller Admin Destinasi dengan Alias agar tidak bentrok
 use App\Http\Controllers\Admin\DestinasiController as AdminDestinasiController;
 
@@ -29,6 +30,7 @@ require __DIR__.'/auth.php';
 
 // Home & Static Pages
 Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::redirect('/home', '/');
 Route::get('/tentang', [HomeController::class, 'tentang'])->name('tentang');
 Route::get('/kontak', [HomeController::class, 'kontak'])->name('kontak');
 
@@ -94,8 +96,7 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
     // 3. Manajemen Destinasi (CRUD Lengkap)
     // Menggunakan AdminDestinasiController (bukan yang public)
     // Except 'create', 'edit' karena kita pakai Modal di halaman index
-    Route::resource('destinasi', AdminDestinasiController::class)
-        ->except(['create', 'edit', 'show']);
+    Route::resource('destinasi', App\Http\Controllers\Admin\DestinasiController::class);
 
     // 4. ARAS Management
     Route::get('/aras', [ArasController::class, 'index'])->name('aras.index');

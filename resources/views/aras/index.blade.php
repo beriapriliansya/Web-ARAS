@@ -132,7 +132,7 @@
             <p class="text-muted mb-4">
                 Klik tombol di bawah untuk memulai perhitungan metode ARAS dan mendapatkan ranking destinasi wisata terbaik
             </p>
-            <form action="{{ route('aras.hitung') }}" method="POST"
+            <form action="{{ route('admin.aras.hitung') }}" method="POST">
                   onsubmit="return confirm('Yakin ingin menghitung ulang? Data hasil sebelumnya akan ditimpa.')">
                 @csrf
                 <button type="submit" class="btn btn-primary btn-lg px-5">

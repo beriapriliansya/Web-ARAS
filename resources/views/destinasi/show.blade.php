@@ -1,327 +1,145 @@
-@extends('layouts.app')
+<x-app-layout>
+    <x-slot name="header">
+        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+            {{ $destinasi->nama }}
+        </h2>
+    </x-slot>
 
-@section('title', $destinasi->nama)
-
-@section('content')
-<!-- Breadcrumb -->
-<div class="container mt-4">
-    <nav aria-label="breadcrumb">
-        <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="{{ route('home') }}">Home</a></li>
-            <li class="breadcrumb-item"><a href="{{ route('destinasi.index') }}">Destinasi</a></li>
-            <li class="breadcrumb-item active">{{ $destinasi->nama }}</li>
-        </ol>
-    </nav>
-</div>
-
-<!-- Main Content -->
-<div class="container my-4">
-    <div class="row">
-        <!-- Left Column: Info -->
-        <div class="col-lg-8">
-            <!-- Header -->
-            <div class="card mb-4">
-                <div class="card-body">
-                    <div class="d-flex justify-content-between align-items-start mb-3">
-                        <div>
-                            <span class="badge bg-primary mb-2">{{ $destinasi->kategori }}</span>
-                            <h1 class="display-5 fw-bold mb-0">{{ $destinasi->nama }}</h1>
-                        </div>
-                        @auth
-                            <div class="text-end">
-                                <a href="{{ route('booking.create', $destinasi->id) }}" class="btn btn-success btn-lg">
-                                    <i class="bi bi-cart-plus"></i> Book Tiket
-                                </a>
-                            </div>
-                        @else
-                            <div class="text-end">
-                                <a href="{{ route('login') }}" class="btn btn-primary btn-lg">
-                                    <i class="bi bi-box-arrow-in-right"></i> Login untuk Book
-                                </a>
-                            </div>
-                        @endauth
-                    </div>
-
-                    <!-- Quick Info -->
-                    <div class="row g-3">
-                        <div class="col-md-6">
-                            <p class="mb-2">
-                                <i class="bi bi-geo-alt-fill text-danger"></i>
-                                <strong>Lokasi:</strong><br>
-                                <span class="text-muted">{{ $destinasi->alamat }}</span>
-                            </p>
-                        </div>
-                        <div class="col-md-6">
-                            <p class="mb-2">
-                                <i class="bi bi-cash text-success"></i>
-                                <strong>Harga Tiket:</strong><br>
-                                <span class="fs-5 fw-bold text-success">
-                                    Rp {{ number_format($destinasi->harga_tiket, 0, ',', '.') }}
-                                </span>
-                            </p>
-                        </div>
-                        @if($destinasi->jam_buka && $destinasi->jam_tutup)
-                        <div class="col-md-6">
-                            <p class="mb-2">
-                                <i class="bi bi-clock text-primary"></i>
-                                <strong>Jam Operasional:</strong><br>
-                                <span class="text-muted">
-                                    {{ \Carbon\Carbon::parse($destinasi->jam_buka)->format('H:i') }} -
-                                    {{ \Carbon\Carbon::parse($destinasi->jam_tutup)->format('H:i') }} WIB
-                                </span>
-                            </p>
-                        </div>
-                        @endif
-                        @if($destinasi->telepon)
-                        <div class="col-md-6">
-                            <p class="mb-2">
-                                <i class="bi bi-telephone text-info"></i>
-                                <strong>Telepon:</strong><br>
-                                <span class="text-muted">{{ $destinasi->telepon }}</span>
-                            </p>
-                        </div>
-                        @endif
-                    </div>
-                </div>
+    <!-- Hero Image / Foto Utama -->
+    <div class="relative w-full h-64 md:h-96 bg-gray-200">
+        @if($destinasi->foto)
+            <img src="{{ asset('images/destinasi/'.$destinasi->foto) }}"
+                 alt="{{ $destinasi->nama }}"
+                 class="w-full h-full object-cover">
+        @else
+            <div class="w-full h-full flex items-center justify-center bg-secondary text-white">
+                <i class="bi bi-image fs-1"></i>
             </div>
-
-            <!-- Deskripsi -->
-            <div class="card mb-4">
-                <div class="card-header bg-white">
-                    <h5 class="mb-0"><i class="bi bi-info-circle"></i> Deskripsi</h5>
-                </div>
-                <div class="card-body">
-                    <p class="text-muted" style="text-align: justify;">
-                        {{ $destinasi->deskripsi }}
-                    </p>
-                </div>
-            </div>
-
-            <!-- Fasilitas -->
-            @if($destinasi->fasilitas && count($destinasi->fasilitas) > 0)
-            <div class="card mb-4">
-                <div class="card-header bg-white">
-                    <h5 class="mb-0"><i class="bi bi-house-check"></i> Fasilitas</h5>
-                </div>
-                <div class="card-body">
-                    <div class="row g-3">
-                        @foreach($destinasi->fasilitas as $fasilitas)
-                            <div class="col-md-6">
-                                <div class="d-flex align-items-center">
-                                    <i class="bi bi-check-circle-fill text-success me-2"></i>
-                                    <span>{{ $fasilitas }}</span>
-                                </div>
-                            </div>
-                        @endforeach
-                    </div>
-                </div>
-            </div>
-            @endif
-
-            <!-- Nilai Kriteria ARAS -->
-            @if($destinasi->alternatif->count() > 0)
-            <div class="card mb-4">
-                <div class="card-header bg-white">
-                    <h5 class="mb-0"><i class="bi bi-bar-chart"></i> Nilai Kriteria</h5>
-                </div>
-                <div class="card-body">
-                    <div class="table-responsive">
-                        <table class="table table-hover">
-                            <thead>
-                                <tr>
-                                    <th>Kriteria</th>
-                                    <th>Nilai</th>
-                                    <th>Satuan</th>
-                                    <th>Tipe</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach($destinasi->alternatif as $alt)
-                                    <tr>
-                                        <td>
-                                            <strong>{{ $alt->kriteria->nama_kriteria }}</strong>
-                                            <br>
-                                            <small class="text-muted">({{ $alt->kriteria->kode }})</small>
-                                        </td>
-                                        <td class="fw-bold">{{ $alt->nilai }}</td>
-                                        <td>{{ $alt->kriteria->satuan }}</td>
-                                        <td>
-                                            @if($alt->kriteria->tipe == 'benefit')
-                                                <span class="badge bg-success">Benefit</span>
-                                            @else
-                                                <span class="badge bg-warning">Cost</span>
-                                            @endif
-                                        </td>
-                                    </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-            @endif
-
-            <!-- Hasil ARAS -->
-            @if($destinasi->hasilAras)
-            <div class="card mb-4">
-                <div class="card-header bg-primary text-white">
-                    <h5 class="mb-0"><i class="bi bi-trophy"></i> Hasil Analisis ARAS</h5>
-                </div>
-                <div class="card-body">
-                    <div class="row text-center g-3">
-                        <div class="col-md-3">
-                            <div class="p-3 bg-light rounded">
-                                <h2 class="fw-bold text-primary mb-0">{{ $destinasi->hasilAras->ranking }}</h2>
-                                <small class="text-muted">Ranking</small>
-                            </div>
-                        </div>
-                        <div class="col-md-3">
-                            <div class="p-3 bg-light rounded">
-                                <h2 class="fw-bold text-success mb-0">
-                                    {{ number_format($destinasi->hasilAras->utilitas, 4) }}
-                                </h2>
-                                <small class="text-muted">Utilitas</small>
-                            </div>
-                        </div>
-                        <div class="col-md-3">
-                            <div class="p-3 bg-light rounded">
-                                <h2 class="fw-bold text-info mb-0">
-                                    {{ number_format($destinasi->hasilAras->persentase, 2) }}%
-                                </h2>
-                                <small class="text-muted">Persentase</small>
-                            </div>
-                        </div>
-                        <div class="col-md-3">
-                            <div class="p-3 bg-light rounded">
-                                <h6 class="fw-bold text-warning mb-0">
-                                    {{ $destinasi->hasilAras->kategori_performa }}
-                                </h6>
-                                <small class="text-muted">Kategori</small>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            @endif
-        </div>
-
-        <!-- Right Column: Map & Actions -->
-        <div class="col-lg-4">
-            <!-- Google Maps -->
-            <div class="card mb-4">
-                <div class="card-header bg-white">
-                    <h5 class="mb-0"><i class="bi bi-map"></i> Lokasi</h5>
-                </div>
-                <div class="card-body p-0">
-                    <div id="map" style="height: 400px; width: 100%;"></div>
-                </div>
-                <div class="card-footer bg-white">
-                    <div class="d-grid gap-2">
-                        <a href="https://www.google.com/maps/dir/?api=1&destination={{ $destinasi->latitude }},{{ $destinasi->longitude }}"
-                           target="_blank"
-                           class="btn btn-primary">
-                            <i class="bi bi-compass"></i> Buka di Google Maps
-                        </a>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Actions -->
-            <div class="card">
-                <div class="card-header bg-white">
-                    <h5 class="mb-0"><i class="bi bi-share"></i> Bagikan</h5>
-                </div>
-                <div class="card-body">
-                    <div class="d-grid gap-2">
-                        <button class="btn btn-outline-primary" onclick="shareToFacebook()">
-                            <i class="bi bi-facebook"></i> Facebook
-                        </button>
-                        <button class="btn btn-outline-info" onclick="shareToTwitter()">
-                            <i class="bi bi-twitter"></i> Twitter
-                        </button>
-                        <button class="btn btn-outline-success" onclick="shareToWhatsApp()">
-                            <i class="bi bi-whatsapp"></i> WhatsApp
-                        </button>
-                        <button class="btn btn-outline-secondary" onclick="copyLink()">
-                            <i class="bi bi-link-45deg"></i> Copy Link
-                        </button>
-                    </div>
-                </div>
+        @endif
+        <div class="absolute inset-0 bg-black bg-opacity-40 flex items-end">
+            <div class="container mx-auto px-4 py-6">
+                <span class="badge bg-primary mb-2">{{ $destinasi->kategori }}</span>
+                <h1 class="text-white text-3xl md:text-5xl font-bold drop-shadow-lg">{{ $destinasi->nama }}</h1>
+                <p class="text-white text-opacity-90 mt-2"><i class="bi bi-geo-alt-fill"></i> {{ $destinasi->alamat }}</p>
             </div>
         </div>
     </div>
-</div>
-@endsection
 
-@push('scripts')
-<script>
-    // Initialize Google Maps
-    function initMap() {
-        const destinasiLat = {{ $destinasi->latitude }};
-        const destinasiLng = {{ $destinasi->longitude }};
-        const destinasiNama = "{{ $destinasi->nama }}";
+    <div class="container py-5">
+        <div class="row g-5">
 
-        // Create map
-        const map = new google.maps.Map(document.getElementById('map'), {
-            center: { lat: destinasiLat, lng: destinasiLng },
-            zoom: 15,
-            mapTypeControl: true,
-            streetViewControl: true,
-            fullscreenControl: true,
-        });
-
-        // Add marker
-        const marker = new google.maps.Marker({
-            position: { lat: destinasiLat, lng: destinasiLng },
-            map: map,
-            title: destinasiNama,
-            animation: google.maps.Animation.DROP,
-        });
-
-        // Info window
-        const infoWindow = new google.maps.InfoWindow({
-            content: `
-                <div style="padding: 10px;">
-                    <h6 class="fw-bold mb-2">${destinasiNama}</h6>
-                    <p class="mb-1 small">{{ $destinasi->kategori }}</p>
-                    <p class="mb-0 small text-muted">{{ Str::limit($destinasi->alamat, 50) }}</p>
+            <!-- KOLOM KIRI: Informasi Detail -->
+            <div class="col-lg-8">
+                <!-- Deskripsi -->
+                <div class="card shadow-sm border-0 mb-4">
+                    <div class="card-body p-4">
+                        <h4 class="fw-bold mb-3 text-primary"><i class="bi bi-info-circle me-2"></i>Tentang Destinasi</h4>
+                        <p class="text-secondary leading-relaxed" style="text-align: justify; line-height: 1.8;">
+                            {!! nl2br(e($destinasi->deskripsi)) !!}
+                        </p>
+                    </div>
                 </div>
-            `
-        });
 
-        marker.addListener('click', () => {
-            infoWindow.open(map, marker);
-        });
+                <!-- Fasilitas Grid -->
+                @if($destinasi->fasilitas && count($destinasi->fasilitas) > 0)
+                <div class="card shadow-sm border-0 mb-4">
+                    <div class="card-body p-4">
+                        <h5 class="fw-bold mb-3"><i class="bi bi-grid-fill me-2"></i>Fasilitas Tersedia</h5>
+                        <div class="row g-3">
+                            @foreach($destinasi->fasilitas as $fasilitas)
+                                <div class="col-md-4 col-6">
+                                    <div class="d-flex align-items-center p-2 border rounded bg-light">
+                                        <i class="bi bi-check-circle-fill text-success me-2"></i>
+                                        <span class="fw-medium text-dark">{{ $fasilitas }}</span>
+                                    </div>
+                                </div>
+                            @endforeach
+                        </div>
+                    </div>
+                </div>
+                @endif
 
-        // Auto open info window
-        infoWindow.open(map, marker);
-    }
+                <!-- Peta Lokasi -->
+                <div class="card shadow-sm border-0 mb-4">
+                    <div class="card-body p-4">
+                        <h5 class="fw-bold mb-3"><i class="bi bi-map-fill me-2"></i>Lokasi</h5>
+                        <div class="bg-light rounded p-3 text-center">
+                            <p class="mb-2">Koordinat: <code>{{ $destinasi->latitude }}, {{ $destinasi->longitude }}</code></p>
+                            <a href="https://www.google.com/maps/search/?api=1&query={{ $destinasi->latitude }},{{ $destinasi->longitude }}"
+                               target="_blank"
+                               class="btn btn-outline-primary">
+                                <i class="bi bi-box-arrow-up-right me-1"></i> Buka di Google Maps
+                            </a>
+                        </div>
+                    </div>
+                </div>
 
-    // Load map when page ready
-    window.addEventListener('load', initMap);
+                <!-- Ulasan (Placeholder) -->
+                <div class="card shadow-sm border-0">
+                    <div class="card-body p-4">
+                        <h5 class="fw-bold mb-3"><i class="bi bi-star-fill text-warning me-2"></i>Ulasan Pengunjung</h5>
+                        <!-- Logika ulasan bisa ditambahkan nanti -->
+                        <p class="text-muted">Belum ada ulasan untuk destinasi ini.</p>
+                    </div>
+                </div>
+            </div>
 
-    // Share Functions
-    function shareToFacebook() {
-        const url = encodeURIComponent(window.location.href);
-        window.open(`https://www.facebook.com/sharer/sharer.php?u=${url}`, '_blank');
-    }
+            <!-- KOLOM KANAN: Card Booking (Sticky) -->
+            <div class="col-lg-4">
+                <div class="card shadow border-0 sticky-top" style="top: 100px; z-index: 99;">
+                    <div class="card-body p-4">
+                        <h5 class="fw-bold text-dark mb-4">Jadwalkan Kunjungan</h5>
 
-    function shareToTwitter() {
-        const url = encodeURIComponent(window.location.href);
-        const text = encodeURIComponent('{{ $destinasi->nama }} - Destinasi wisata di Pesawaran');
-        window.open(`https://twitter.com/intent/tweet?url=${url}&text=${text}`, '_blank');
-    }
+                        <!-- Harga -->
+                        <div class="d-flex justify-content-between align-items-center mb-3 pb-3 border-bottom">
+                            <span class="text-muted">Harga Tiket</span>
+                            <span class="fs-4 fw-bold text-primary">Rp {{ number_format($destinasi->harga_tiket, 0, ',', '.') }}</span>
+                        </div>
 
-    function shareToWhatsApp() {
-        const url = encodeURIComponent(window.location.href);
-        const text = encodeURIComponent('Lihat destinasi wisata: {{ $destinasi->nama }}');
-        window.open(`https://wa.me/?text=${text} ${url}`, '_blank');
-    }
+                        <!-- Jam Buka -->
+                        <div class="mb-4">
+                            <div class="d-flex align-items-center mb-2">
+                                <i class="bi bi-clock text-secondary me-2"></i>
+                                <span class="fw-bold">Jam Operasional</span>
+                            </div>
+                            <div class="bg-light p-2 rounded text-center text-sm">
+                                {{ $destinasi->jam_buka ? \Carbon\Carbon::parse($destinasi->jam_buka)->format('H:i') : '08:00' }} -
+                                {{ $destinasi->jam_tutup ? \Carbon\Carbon::parse($destinasi->jam_tutup)->format('H:i') : '17:00' }} WIB
+                            </div>
+                        </div>
 
-    function copyLink() {
-        navigator.clipboard.writeText(window.location.href).then(() => {
-            alert('Link berhasil disalin!');
-        });
-    }
-</script>
-@endpush
+                        <!-- TOMBOL ACTION (LOGIKA KUNCI) -->
+                        <div class="d-grid gap-2">
+                            @auth
+                                {{-- JIKA SUDAH LOGIN: Masuk ke halaman booking --}}
+                                <a href="{{ route('booking.create', $destinasi->id) }}" class="btn btn-primary btn-lg fw-bold py-3 shadow-sm">
+                                    <i class="bi bi-ticket-perforated me-2"></i> Pesan Tiket Sekarang
+                                </a>
+                            @else
+                                {{-- JIKA BELUM LOGIN: Arahkan ke Login --}}
+                                <a href="{{ route('login') }}" class="btn btn-primary btn-lg fw-bold py-3 shadow-sm"
+                                   onclick="return confirm('Anda harus Login terlebih dahulu untuk memesan tiket. Lanjutkan ke halaman Login?');">
+                                    <i class="bi bi-lock-fill me-2"></i> Login untuk Memesan
+                                </a>
+                                <div class="text-center mt-2">
+                                    <small class="text-muted">Belum punya akun? <a href="{{ route('register') }}" class="text-primary fw-bold">Daftar disini</a></small>
+                                </div>
+                            @endauth
+                        </div>
+
+                        <div class="mt-4 pt-3 border-top text-center">
+                            <span class="text-muted small d-block mb-2">Bagikan destinasi ini:</span>
+                            <div class="d-flex justify-content-center gap-2">
+                                <button class="btn btn-sm btn-outline-primary rounded-circle" style="width: 35px; height: 35px;"><i class="bi bi-facebook"></i></button>
+                                <button class="btn btn-sm btn-outline-info rounded-circle" style="width: 35px; height: 35px;"><i class="bi bi-twitter"></i></button>
+                                <button class="btn btn-sm btn-outline-success rounded-circle" style="width: 35px; height: 35px;"><i class="bi bi-whatsapp"></i></button>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</x-app-layout>

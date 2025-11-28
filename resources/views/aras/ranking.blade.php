@@ -205,7 +205,7 @@
             <p class="text-muted mb-4">
                 Silakan lakukan perhitungan ARAS terlebih dahulu untuk mendapatkan rekomendasi destinasi
             </p>
-            <a href="{{ route('aras.index') }}" class="btn btn-primary btn-lg">
+            <a href="{{ route('admin.aras.index') }}" class="btn btn-primary btn-lg">
                 <i class="bi bi-calculator"></i> Hitung Metode ARAS
             </a>
         </div>
