@@ -58,6 +58,26 @@
                         Tentang
                     </a>
                 </li>
+
+                <!-- MENU KHUSUS SUPERADMIN: Manage Berita -->
+                <!-- Ini yang tadi ketinggalan -->
+                @if(auth()->check() && auth()->user()->role === 'superadmin' || auth()->user()->role === 'admin')
+                <li class="nav-item">
+                    <a class="nav-link px-3 {{ request()->routeIs('admin.news.*') ? 'active fw-bold text-primary' : '' }}" href="{{ route('admin.news.index') }}">
+                        Manajemen Berita
+                    </a>
+                </li>
+                @endif
+
+                <!-- Menu Berita (Hanya User/Public, Admin tidak butuh ini di navbar) -->
+                @if(Route::has('news.index') && (!auth()->check() || auth()->user()->role === 'user'))
+                <li class="nav-item">
+                    <a class="nav-link px-3 {{ request()->routeIs('news.index') ? 'active fw-bold text-primary' : '' }}" href="{{ route('news.index') }}">
+                        Berita
+                    </a>
+                </li>
+                @endif
+
             </ul>
 
             <!-- MENU KANAN (User Authentication) -->

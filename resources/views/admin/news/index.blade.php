@@ -1,0 +1,74 @@
+<x-app-layout>
+
+    <!-- Konten Utama (Menggunakan Container Bootstrap) -->
+    <div class="container py-4">
+        <div class="row justify-content-center">
+            <div class="col-lg-12">
+
+                <!-- Header Halaman -->
+                <div class="d-flex justify-content-between align-items-center mb-4 border-bottom pb-3">
+                    <h1 class="h3 mb-0 text-gray-800 fw-bold">{{ __('Manajemen Berita') }}</h1>
+                    <a href="{{ route('admin.news.create') }}" class="btn btn-primary shadow-sm fw-bold rounded-pill px-4">
+                        <i class="fas fa-plus me-1"></i> {{ __('Tambah Berita Baru') }}
+                    </a>
+                </div>
+
+                @if(session('success'))
+                    <div class="alert alert-success alert-dismissible fade show rounded-3 shadow-sm" role="alert">
+                        {{ session('success') }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                @endif
+
+                <!-- Tabel Data Berita -->
+                <div class="card shadow-lg border-0 rounded-3">
+                    <div class="card-body p-4">
+                        <div class="table-responsive">
+                            <table class="table table-hover table-striped" width="100%" cellspacing="0">
+                                <thead class="bg-light">
+                                    <tr>
+                                        <th class="small py-3">{{ __('Judul') }}</th>
+                                        <th class="small py-3">{{ __('Penulis') }}</th>
+                                        <th class="small py-3">{{ __('Status') }}</th>
+                                        <th class="small py-3">{{ __('Views') }}</th>
+                                        <th class="small py-3">{{ __('Aksi') }}</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach($news as $article)
+                                    <tr class="align-middle">
+                                        <td class="small fw-bold">{{ Str::limit($article->title, 50) }}</td>
+                                        <td class="small">{{ $article->author->name ?? 'N/A' }}</td>
+                                        <td class="small">
+                                            @if($article->status == 'published')
+                                                <span class="badge bg-success py-2 px-3">{{ __('Published') }}</span>
+                                            @else
+                                                <span class="badge bg-warning text-dark py-2 px-3">{{ __('Draft') }}</span>
+                                            @endif
+                                        </td>
+                                        <td class="small">{{ number_format($article->views) }}</td>
+                                        <td class="small d-flex flex-wrap gap-1">
+                                            <a href="{{ route('admin.news.show', $article->id) }}" class="btn btn-info btn-sm text-white" title="Lihat"><i class="fas fa-eye"></i></a>
+                                            <a href="{{ route('admin.news.edit', $article->id) }}" class="btn btn-warning btn-sm" title="Edit"><i class="fas fa-edit"></i></a>
+
+                                            <form action="{{ route('admin.news.destroy', $article->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Yakin ingin menghapus berita ini?');">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="btn btn-danger btn-sm" title="Hapus"><i class="fas fa-trash"></i></button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="d-flex justify-content-center mt-3">
+                            {{ $news->links() }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</x-app-layout>

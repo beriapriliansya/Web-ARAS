@@ -8,7 +8,8 @@ use App\Http\Controllers\BookingController;
 use App\Http\Controllers\UlasanController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\AdminController;
-
+use App\Http\Controllers\NewsController; // Controller Public News
+use App\Http\Controllers\Admin\NewsController as AdminNewsController; // Controller Admin News
 
 // Import Controller Admin Destinasi dengan Alias agar tidak bentrok
 use App\Http\Controllers\Admin\DestinasiController as AdminDestinasiController;
@@ -34,6 +35,10 @@ Route::redirect('/home', '/');
 Route::get('/tentang', [HomeController::class, 'tentang'])->name('tentang');
 Route::get('/kontak', [HomeController::class, 'kontak'])->name('kontak');
 
+// Berita (News) - Tampilan Publik
+Route::get('/news', [NewsController::class, 'index'])->name('news.index');
+Route::get('/news/{slug}', [NewsController::class, 'show'])->name('news.show');
+
 // Destinasi - HANYA LIHAT (Read Only untuk public)
 Route::get('/destinasi', [DestinasiController::class, 'index'])->name('destinasi.index');
 Route::get('/destinasi/{id}', [DestinasiController::class, 'show'])->name('destinasi.show');
@@ -55,6 +60,16 @@ Route::get('/api/destinasi/all', function() {
     $destinasi = \App\Models\DestinasiWisata::aktif()->get();
     return response()->json($destinasi);
 })->name('api.destinasi.all');
+
+
+// ==========================================
+// ADMIN ROUTES (Manajemen Berita) <--- BLOK YANG DIBUAT KHUSUS DAN AMAN
+// ==========================================
+// Middleware 'can:manage-news' perlu Policy/Gate diimplementasi di App\Providers\AuthServiceProvider
+Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () {
+    // Route::resource otomatis membuat route untuk CRUD berita
+    Route::resource('news', AdminNewsController::class);
+});
 
 
 // ==========================================
@@ -82,7 +97,7 @@ Route::middleware(['auth'])->group(function () {
 });
 
 // ==========================================
-// ADMIN ROUTES (Superadmin & Admin Destinasi)
+// ADMIN ROUTES (Superadmin & Admin Destinasi) - Route Sisanya
 // ==========================================
 Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () {
 
