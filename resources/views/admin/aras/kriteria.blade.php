@@ -5,7 +5,7 @@
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}">Dashboard</a></li>
                 <li class="breadcrumb-item"><a href="{{ route('admin.aras.index') }}">Perhitungan ARAS</a></li>
-                <li class="breadcrumb-item active" aria-current="page">Kelola Kriteria</li>
+                <li class="breadcrumb-item active" aria-current="page">Kelola Bobot</li>
             </ol>
         </nav>
 

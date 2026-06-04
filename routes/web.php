@@ -119,8 +119,15 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
     // 4. ARAS Management
     Route::get('/aras', [ArasController::class, 'index'])->name('aras.index');
     Route::post('/aras/hitung', [ArasController::class, 'hitung'])->name('aras.hitung');
+    Route::get('/aras/kriteria-list', [ArasController::class, 'kriteriaList'])->name('aras.kriteria.list');
     Route::get('/aras/kriteria', [ArasController::class, 'editKriteria'])->name('aras.kriteria.edit');
-    Route::post('/aras/kriteria', [ArasController::class, 'updateKriteria'])->name('aras.kriteria.update');
+    Route::post('/aras/kriteria', [ArasController::class, 'updateKriteria'])->name('aras.updateKriteria');
+    Route::get('/aras/subkriteria', [ArasController::class, 'subkriteria'])->name('aras.subkriteria');
+    Route::post('/aras/subkriteria', [ArasController::class, 'storeSubkriteria'])->name('aras.subkriteria.store');
+    Route::put('/aras/subkriteria/{id}', [ArasController::class, 'updateSubkriteria'])->name('aras.subkriteria.update');
+    Route::delete('/aras/subkriteria/{id}', [ArasController::class, 'destroySubkriteria'])->name('aras.subkriteria.destroy');
+    Route::get('/aras/penilaian', [ArasController::class, 'penilaian'])->name('aras.penilaian');
+    Route::post('/aras/penilaian', [ArasController::class, 'storePenilaian'])->name('aras.penilaian.store');
     Route::get('/aras/cetak', [ArasController::class, 'cetakLaporan'])->name('aras.cetak');
 
     // Manajemen Nilai Alternatif per Destinasi

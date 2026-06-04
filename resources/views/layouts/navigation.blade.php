@@ -33,13 +33,46 @@
                 </li>
                 @endif
 
-                <!-- MENU KHUSUS SUPERADMIN: Kalkulasi ARAS -->
-                <!-- Ini yang tadi ketinggalan -->
+                <!-- MENU KHUSUS SUPERADMIN: Kalkulasi ARAS (Dropdown) -->
                 @if(auth()->check() && auth()->user()->role === 'superadmin')
-                <li class="nav-item">
-                    <a class="nav-link px-3 {{ request()->routeIs('admin.aras.*') ? 'active fw-bold text-primary' : '' }}" href="{{ route('admin.aras.index') }}">
+                <li class="nav-item dropdown" x-data="{ open: false }" @click.outside="open = false">
+                    <a class="nav-link dropdown-toggle px-3 {{ request()->routeIs('admin.aras.*') ? 'active fw-bold text-primary' : '' }}" 
+                       href="#" id="navbarDropdownAras" role="button" 
+                       @click.prevent="open = !open"
+                       data-bs-toggle="dropdown" aria-expanded="false">
                         Perhitungan ARAS
                     </a>
+                    <ul class="dropdown-menu shadow border-0" :class="{ 'show': open }" x-show="open" x-transition
+                        aria-labelledby="navbarDropdownAras" style="display: none;">
+                        <li>
+                            <a class="dropdown-item py-2 {{ request()->routeIs('admin.aras.kriteria.list') ? 'active fw-bold' : '' }}" href="{{ route('admin.aras.kriteria.list') }}">
+                                <i class="bi bi-list-check me-2"></i> Kriteria
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item py-2 {{ request()->routeIs('admin.aras.subkriteria') ? 'active fw-bold' : '' }}" href="{{ route('admin.aras.subkriteria') }}">
+                                <i class="bi bi-list-stars me-2"></i> Sub Kriteria
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item py-2 {{ request()->routeIs('admin.aras.kriteria.edit') ? 'active fw-bold' : '' }}" href="{{ route('admin.aras.kriteria.edit') }}">
+                                <i class="bi bi-sliders me-2"></i> Bobot
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item py-2 {{ request()->routeIs('admin.aras.penilaian') ? 'active fw-bold' : '' }}" href="{{ route('admin.aras.penilaian') }}">
+                                <i class="bi bi-table me-2"></i> Penilaian
+                            </a>
+                        </li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+                        <li>
+                            <a class="dropdown-item py-2 {{ request()->routeIs('admin.aras.index') ? 'active fw-bold' : '' }}" href="{{ route('admin.aras.index') }}">
+                                <i class="bi bi-calculator me-2"></i> Hasil & Kalkulasi
+                            </a>
+                        </li>
+                    </ul>
                 </li>
                 @endif
 
@@ -122,5 +155,11 @@
 
     <style>
         .hover-shadow:hover { box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075); text-decoration: none; }
+        @media (min-width: 992px) {
+            .nav-item.dropdown:hover .dropdown-menu {
+                display: block !important;
+                margin-top: 0;
+            }
+        }
     </style>
 </nav>
