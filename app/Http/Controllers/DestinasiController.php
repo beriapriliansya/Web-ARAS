@@ -12,6 +12,11 @@ class DestinasiController extends Controller
      */
     public function index(Request $request)
     {
+        // Auto-update Pantai Mutun image filename in DB to match user's file
+        \Illuminate\Support\Facades\DB::table('destinasi_wisata')
+            ->where('foto', 'pantai_mutun.jpg')
+            ->update(['foto' => 'pantaimutun.jpg']);
+
         $query = DestinasiWisata::where('status', 'aktif');
 
         // Filter by kategori
@@ -37,6 +42,11 @@ class DestinasiController extends Controller
      */
     public function show($id)
     {
+        // Auto-update Pantai Mutun image filename in DB to match user's file
+        \Illuminate\Support\Facades\DB::table('destinasi_wisata')
+            ->where('foto', 'pantai_mutun.jpg')
+            ->update(['foto' => 'pantaimutun.jpg']);
+
         // Relasi dimuat agar halaman detail lengkap
         $destinasi = DestinasiWisata::with(['ulasan.user'])->findOrFail($id);
 

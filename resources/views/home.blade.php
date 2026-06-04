@@ -125,11 +125,18 @@
             @foreach($destinasiTerbaru as $destinasi)
                 <div class="col-md-4">
                     <div class="card h-100 shadow-sm border-0">
-                        {{-- Placeholder Image jika tidak ada gambar --}}
-                        <div class="bg-secondary text-white d-flex align-items-center justify-content-center" style="height: 200px;">
-                            <i class="bi bi-image fs-1"></i>
-                            {{-- Ganti div ini dengan <img> jika sudah ada fitur upload gambar --}}
-                            {{-- <img src="{{ asset('storage/' . $destinasi->gambar) }}" class="card-img-top" alt="..."> --}}
+                        <!-- Foto Destinasi -->
+                        <div class="position-relative" style="height: 200px; overflow: hidden; border-top-left-radius: 0.25rem; border-top-right-radius: 0.25rem;">
+                            @if($destinasi->foto && file_exists(public_path('images/destinasi/' . $destinasi->foto)))
+                                <img src="{{ asset('images/destinasi/' . $destinasi->foto) }}" 
+                                     class="card-img-top" 
+                                     alt="{{ $destinasi->nama }}"
+                                     style="object-fit: cover; height: 100%; width: 100%;">
+                            @else
+                                <div class="bg-secondary text-white d-flex align-items-center justify-content-center h-100">
+                                    <i class="bi bi-image fs-1"></i>
+                                </div>
+                            @endif
                         </div>
 
                         <div class="card-body">

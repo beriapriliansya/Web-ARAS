@@ -1,26 +1,51 @@
 <x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ $destinasi->nama }}
-        </h2>
-    </x-slot>
 
-    <!-- Hero Image / Foto Utama -->
-    <div class="relative w-full h-64 md:h-96 bg-gray-200">
-        @if($destinasi->foto)
-            <img src="{{ asset('images/destinasi/'.$destinasi->foto) }}"
+    <!-- Style Tambahan untuk Efek Teks -->
+    <style>
+        .text-shadow-large {
+            text-shadow: 2px 4px 10px rgba(0, 0, 0, 0.7);
+        }
+        .text-shadow-small {
+            text-shadow: 1px 2px 5px rgba(0, 0, 0, 0.6);
+        }
+        .hero-banner {
+            height: 450px;
+            background-color: #1a1e21;
+        }
+        @media (max-width: 768px) {
+            .hero-banner {
+                height: 300px;
+            }
+        }
+    </style>
+
+    <!-- Hero Banner Section -->
+    <div class="position-relative w-100 overflow-hidden hero-banner">
+        @if($destinasi->foto && file_exists(public_path('images/destinasi/' . $destinasi->foto)))
+            <img src="{{ asset('images/destinasi/' . $destinasi->foto) }}"
                  alt="{{ $destinasi->nama }}"
-                 class="w-full h-full object-cover">
+                 class="position-absolute top-50 start-50 translate-middle w-100 h-100"
+                 style="object-fit: cover; filter: brightness(0.6);">
         @else
-            <div class="w-full h-full flex items-center justify-center bg-secondary text-white">
-                <i class="bi bi-image fs-1"></i>
+            <!-- Default Gradient Fallback if Image doesn't exist -->
+            <div class="w-100 h-100 d-flex align-items-center justify-content-center"
+                 style="background: linear-gradient(135deg, #1f4068 0%, #162447 100%);">
+                <i class="bi bi-geo-alt text-white opacity-10" style="font-size: 8rem; position: absolute;"></i>
             </div>
         @endif
-        <div class="absolute inset-0 bg-black bg-opacity-40 flex items-end">
-            <div class="container mx-auto px-4 py-6">
-                <span class="badge bg-primary mb-2">{{ $destinasi->kategori }}</span>
-                <h1 class="text-white text-3xl md:text-5xl font-bold drop-shadow-lg">{{ $destinasi->nama }}</h1>
-                <p class="text-white text-opacity-90 mt-2"><i class="bi bi-geo-alt-fill"></i> {{ $destinasi->alamat }}</p>
+
+        <!-- Centered Text Content Overlay -->
+        <div class="position-absolute top-50 start-50 translate-middle text-center text-white px-3 w-100" style="z-index: 5;">
+            <div class="container">
+                <span class="badge bg-primary px-3 py-2 text-uppercase fw-bold mb-3 shadow-sm" style="font-size: 0.85rem; letter-spacing: 1px;">
+                    {{ $destinasi->kategori }}
+                </span>
+                <h1 class="display-3 fw-bold mb-2 text-shadow-large" style="font-family: 'Outfit', 'Inter', sans-serif;">
+                    {{ $destinasi->nama }}
+                </h1>
+                <p class="lead mb-0 text-shadow-small opacity-90 fs-5">
+                    <i class="bi bi-geo-alt-fill text-danger me-1"></i> {{ $destinasi->alamat }}
+                </p>
             </div>
         </div>
     </div>
@@ -73,64 +98,7 @@
                         </div>
                     </div>
                 </div>
-
-                <!-- Ulasan Pengunjung -->
-                <div class="card shadow-sm border-0">
-                    <div class="card-body p-4">
-                        <div class="d-flex justify-content-between align-items-center mb-3">
-                            <h5 class="fw-bold mb-0 text-dark">
-                                <i class="bi bi-chat-left-text-fill text-primary me-2"></i>Ulasan Pengunjung 
-                                <span class="badge bg-secondary ms-2" style="font-size: 0.8rem;">{{ $destinasi->ulasan->count() }}</span>
-                            </h5>
-                            @if($destinasi->ulasan->count() > 0)
-                                <div class="text-warning fw-bold">
-                                    <i class="bi bi-star-fill"></i> {{ number_format($destinasi->ulasan->avg('rating'), 1) }} / 5.0
-                                </div>
-                            @endif
-                        </div>
-                        
-                        <div class="ulasan-list">
-                            @forelse($destinasi->ulasan as $ulasan)
-                                <div class="ulasan-item pb-3 mb-3 border-bottom">
-                                    <div class="d-flex justify-content-between align-items-start flex-wrap">
-                                        <div class="d-flex align-items-center mb-2">
-                                            <div class="bg-light text-secondary rounded-circle d-flex justify-content-center align-items-center me-3 fw-bold" style="width: 40px; height: 40px; font-size: 0.9rem;">
-                                                {{ substr($ulasan->user->name, 0, 1) }}
-                                            </div>
-                                            <div>
-                                                <h6 class="fw-bold mb-0 text-dark">{{ $ulasan->user->name }}</h6>
-                                                <small class="text-muted" style="font-size: 0.75rem;">
-                                                    <i class="bi bi-clock me-1"></i> {{ $ulasan->created_at->diffForHumans() }}
-                                                </small>
-                                            </div>
-                                        </div>
-                                        
-                                        <!-- Bintang -->
-                                        <div class="text-warning mb-2">
-                                            @for($i = 1; $i <= 5; $i++)
-                                                @if($i <= $ulasan->rating)
-                                                    <i class="bi bi-star-fill"></i>
-                                                @else
-                                                    <i class="bi bi-star"></i>
-                                                @endif
-                                            @endfor
-                                        </div>
-                                    </div>
-                                    
-                                    <p class="text-secondary mb-0 small" style="text-align: justify; line-height: 1.6;">
-                                        {!! nl2br(e($ulasan->komentar)) !!}
-                                    </p>
-                                </div>
-                            @empty
-                                <div class="text-center py-4 text-muted">
-                                    <i class="bi bi-chat-square-quote fs-2 text-secondary mb-2"></i>
-                                    <p class="mb-0 small">Belum ada ulasan untuk destinasi ini. Kunjungi destinasi ini dan jadilah yang pertama memberikan ulasan!</p>
-                                </div>
-                            @endforelse
-                        </div>
-                    </div>
-                </div>
-            </div>
+            </div> <!-- Close col-lg-8 -->
 
             <!-- KOLOM KANAN: Card Booking (Sticky) -->
             <div class="col-lg-4">
@@ -157,14 +125,12 @@
                         </div>
 
                         <!-- TOMBOL ACTION (LOGIKA KUNCI) -->
-                        <div class="d-grid gap-2">
+                        <div class="d-grid gap-2 mb-3">
                             @auth
-                                {{-- JIKA SUDAH LOGIN: Masuk ke halaman booking --}}
                                 <a href="{{ route('booking.create', $destinasi->id) }}" class="btn btn-primary btn-lg fw-bold py-3 shadow-sm">
                                     <i class="bi bi-ticket-perforated me-2"></i> Pesan Tiket Sekarang
                                 </a>
                             @else
-                                {{-- JIKA BELUM LOGIN: Arahkan ke Login --}}
                                 <a href="{{ route('login') }}" class="btn btn-primary btn-lg fw-bold py-3 shadow-sm"
                                    onclick="return confirm('Anda harus Login terlebih dahulu untuk memesan tiket. Lanjutkan ke halaman Login?');">
                                     <i class="bi bi-lock-fill me-2"></i> Login untuk Memesan

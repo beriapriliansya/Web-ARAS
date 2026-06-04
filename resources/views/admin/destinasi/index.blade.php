@@ -78,7 +78,7 @@
                         <div class="card h-100 shadow-sm border-0 hover-card">
                             <!-- Foto Destinasi -->
                             <div class="position-relative" style="height: 200px; overflow: hidden;">
-                                @if($item->foto)
+                                @if($item->foto && file_exists(public_path('images/destinasi/' . $item->foto)))
                                     <img src="{{ asset('images/destinasi/' . $item->foto) }}"
                                          class="card-img-top"
                                          alt="{{ $item->nama }}"

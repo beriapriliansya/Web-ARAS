@@ -33,6 +33,10 @@ class DatabaseSeeder extends Seeder
         $this->call(AdminSeeder::class);
         $this->command->info('');
 
+        $this->command->info('5️⃣ Seeding Berita/News...');
+        $this->call(NewsSeeder::class);
+        $this->command->info('');
+
         $this->command->info('✅ Semua seeder berhasil dijalankan!');
         $this->command->info('🎉 Database siap digunakan!');
     }

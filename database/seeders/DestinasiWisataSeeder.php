@@ -20,7 +20,7 @@ class DestinasiWisataSeeder extends Seeder
                 'latitude' => -5.58921000,
                 'longitude' => 105.30788000,
                 'kategori' => 'Pantai',
-                'foto' => 'pantai_mutun.jpg',
+                'foto' => 'pantaimutun.jpg',
                 'harga_tiket' => 15000,
                 'jam_buka' => '06:00:00',
                 'jam_tutup' => '18:00:00',

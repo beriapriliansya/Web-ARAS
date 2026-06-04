@@ -1,560 +1,142 @@
 <x-app-layout>
-    <div class="container py-5">
-
-        @if(session('success'))
-            <div class="alert alert-success alert-dismissible fade show" role="alert">
-                <i class="bi bi-check-circle-fill me-2"></i> {{ session('success') }}
-                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-            </div>
-        @endif
-        @if(session('error'))
-            <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                <i class="bi bi-exclamation-triangle-fill me-2"></i> {{ session('error') }}
-                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-            </div>
-        @endif
-
-        <div class="row g-4 mb-5">
-            <div class="col-md-3">
-                <div class="card bg-primary text-white h-100 shadow-sm border-0">
-                    <div class="card-body">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <div>
-                                <h6 class="text-uppercase mb-1 opacity-75">Total Admin</h6>
-                                <h2 class="fw-bold mb-0">{{ $totalAdmin }}</h2>
-                            </div>
-                            <i class="bi bi-person-badge fs-1 opacity-50"></i>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="card bg-success text-white h-100 shadow-sm border-0">
-                    <div class="card-body">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <div>
-                                <h6 class="text-uppercase mb-1 opacity-75">Total User</h6>
-                                <h2 class="fw-bold mb-0">{{ $totalUser }}</h2>
-                            </div>
-                            <i class="bi bi-people-fill fs-1 opacity-50"></i>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="card bg-warning text-dark h-100 shadow-sm border-0">
-                    <div class="card-body">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <div>
-                                <h6 class="text-uppercase mb-1 opacity-75">Destinasi</h6>
-                                <h2 class="fw-bold mb-0">{{ $totalDestinasi }}</h2>
-                            </div>
-                            <i class="bi bi-map-fill fs-1 opacity-50"></i>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="card bg-danger text-white h-100 shadow-sm border-0">
-                    <div class="card-body">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <div>
-                                <h6 class="text-uppercase mb-1 opacity-75">Bookings</h6>
-                                <h2 class="fw-bold mb-0">{{ $totalBooking }}</h2>
-                            </div>
-                            <i class="bi bi-ticket-perforated-fill fs-1 opacity-50"></i>
-                        </div>
-                    </div>
-                </div>
-            </div>
+    <!-- Page Header -->
+    <div class="bg-primary text-white py-5" style="background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);">
+        <div class="container text-center py-3">
+            <h1 class="display-4 fw-bold mb-2">
+                <i class="bi bi-compass-fill"></i> Jelajahi Destinasi Wisata
+            </h1>
+            <p class="lead mb-0 opacity-75">
+                Temukan surga wisata terbaik di Kabupaten Pesawaran
+            </p>
         </div>
+    </div>
 
-        <div class="card shadow-sm border-0 mb-5">
-            <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
-                <h5 class="mb-0 fw-bold text-success">
-                    <i class="bi bi-map me-2"></i> Manajemen Destinasi Wisata
-                </h5>
-                <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modalBuatDestinasi">
-                    <i class="bi bi-plus-lg"></i> Tambah Destinasi
-                </button>
-            </div>
-            <div class="card-body">
-                <div class="table-responsive">
-                    <table class="table table-hover align-middle">
-                        <thead class="table-light">
-                            <tr>
-                                <th>Nama Destinasi</th>
-                                <th>Kategori</th>
-                                <th>Harga Tiket</th>
-                                <th>Status</th>
-                                <th class="text-end">Aksi</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @forelse($listDestinasi as $dest)
-                                <tr>
-                                    <td>
-                                        <span class="fw-bold">{{ $dest->nama }}</span>
-                                        <div class="small text-muted">{{ Str::limit($dest->alamat, 30) }}</div>
-                                    </td>
-                                    <td><span class="badge bg-info text-dark">{{ $dest->kategori }}</span></td>
-                                    <td>Rp {{ number_format($dest->harga_tiket, 0, ',', '.') }}</td>
-                                    <td>
-                                        @if($dest->status == 'aktif')
-                                            <span class="badge bg-success">Aktif</span>
-                                        @else
-                                            <span class="badge bg-secondary">Non-Aktif</span>
-                                        @endif
-                                    </td>
-                                    <td class="text-end">
-                                        <button class="btn btn-sm btn-outline-warning btn-edit-destinasi"
-                                            data-bs-toggle="modal"
-                                            data-bs-target="#modalEditDestinasi"
-                                            data-id="{{ $dest->id }}"
-                                            data-nama="{{ $dest->nama }}"
-                                            data-kategori="{{ $dest->kategori }}"
-                                            data-harga_tiket="{{ $dest->harga_tiket }}"
-                                            data-alamat="{{ $dest->alamat }}"
-                                            data-deskripsi="{{ $dest->deskripsi }}"
-                                            data-status="{{ $dest->status }}">
-                                            <i class="bi bi-pencil"></i>
-                                        </button>
-                                        <form action="{{ route('admin.destinasi.destroy', $dest->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Hapus destinasi ini?');">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="btn btn-sm btn-outline-danger">
-                                                <i class="bi bi-trash"></i>
-                                            </button>
-                                        </form>
-                                    </td>
-                                </tr>
-                            @empty
-                                <tr>
-                                    <td colspan="5" class="text-center py-4 text-muted">Belum ada data destinasi. Tambahkan dulu!</td>
-                                </tr>
-                            @endforelse
-                        </tbody>
-                    </table>
-                </div>
-                <div class="mt-3">
-                    {{ $listDestinasi->appends(['user_page' => $users->currentPage()])->links() }}
-                </div>
-            </div>
-        </div>
-
+    <!-- Filter & Search Section -->
+    <div class="container my-4">
         <div class="card shadow-sm border-0">
-            <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
-                <h5 class="mb-0 fw-bold text-primary">
-                    <i class="bi bi-person-gear me-2"></i> Manajemen User & Hak Akses
-                </h5>
-                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalTambahUser">
-                    <i class="bi bi-plus-lg"></i> Tambah User Baru
-                </button>
-            </div>
-            <div class="card-body">
-                <div class="table-responsive">
-                    <table class="table table-hover align-middle">
-                        <thead class="table-light">
-                            <tr>
-                                <th>Nama User</th>
-                                <th>Email</th>
-                                <th>Role</th>
-                                <th>Destinasi Kelolaan</th>
-                                <th class="text-end">Aksi</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @forelse($users as $user)
-                                <tr>
-                                    <td>
-                                        <div class="d-flex align-items-center">
-                                            <div class="bg-light rounded-circle d-flex justify-content-center align-items-center me-3" style="width: 40px; height: 40px;">
-                                                <span class="fw-bold text-secondary">{{ substr($user->name, 0, 1) }}</span>
-                                            </div>
-                                            <span class="fw-bold">{{ $user->name }}</span>
-                                        </div>
-                                    </td>
-                                    <td>{{ $user->email }}</td>
-                                    <td>
-                                        @if($user->role === 'superadmin')
-                                            <span class="badge bg-dark">Super Admin</span>
-                                        @elseif($user->role === 'admin')
-                                            <span class="badge bg-primary">Admin Destinasi</span>
-                                        @else
-                                            <span class="badge bg-secondary">User</span>
-                                        @endif
-                                    </td>
-                                    <td>
-                                        @if($user->role === 'admin' && $user->destinasi)
-                                            <span class="badge bg-success">
-                                                <i class="bi bi-geo-alt-fill"></i> {{ $user->destinasi->nama }}
-                                            </span>
-                                        @elseif($user->role === 'admin' && !$user->destinasi)
-                                            <span class="badge bg-warning text-dark">
-                                                <i class="bi bi-exclamation-circle"></i> Belum di-assign
-                                            </span>
-                                        @else
-                                            <span class="text-muted small">-</span>
-                                        @endif
-                                    </td>
-                                    <td class="text-end">
-                                        @if($user->id !== auth()->id())
-                                            <button class="btn btn-sm btn-outline-warning btn-edit-user"
-                                                data-bs-toggle="modal"
-                                                data-bs-target="#modalEditUser"
-                                                data-id="{{ $user->id }}"
-                                                data-name="{{ $user->name }}"
-                                                data-email="{{ $user->email }}"
-                                                data-role="{{ $user->role }}"
-                                                data-destinasi_id="{{ $user->destinasi_id }}">
-                                                <i class="bi bi-pencil"></i>
-                                            </button>
-                                            <form action="{{ route('admin.users.destroy', $user->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Hapus user ini?');">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="submit" class="btn btn-sm btn-outline-danger">
-                                                    <i class="bi bi-trash"></i>
-                                                </button>
-                                            </form>
-                                        @endif
-                                    </td>
-                                </tr>
-                            @empty
-                                <tr>
-                                    <td colspan="5" class="text-center py-4 text-muted">Belum ada data user.</td>
-                                </tr>
-                            @endforelse
-                        </tbody>
-                    </table>
-                </div>
-                <div class="mt-3">
-                    {{ $users->appends(['destinasi_page' => $listDestinasi->currentPage()])->links() }}
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="modal fade" id="modalBuatDestinasi" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header bg-success text-white">
-                    <h5 class="modal-title fw-bold">Tambah Destinasi Wisata Baru</h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <form action="{{ route('admin.destinasi.store') }}" method="POST" enctype="multipart/form-data">
-                    @csrf
-                    <div class="modal-body">
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label">Nama Destinasi</label>
-                                <input type="text" name="nama" class="form-control" required placeholder="Contoh: Pantai Pahawang">
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label">Kategori</label>
-                                <select name="kategori" class="form-select" required>
-                                    <option value="Pantai">Pantai</option>
-                                    <option value="Pulau">Pulau</option>
-                                    <option value="Air Terjun">Air Terjun</option>
-                                    <option value="Bukit">Bukit</option>
-                                    <option value="Taman">Taman</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Foto Destinasi</label>
-                            <input type="file" name="foto" class="form-control" accept="image/*" required>
-                            <div class="form-text">Wajib diisi. Maksimal 2MB, format JPG/PNG.</div>
-                        </div>
-
-                        <div class="mb-3">
-                            <label class="form-label">Harga Tiket (Rp)</label>
-                            <input type="number" name="harga_tiket" class="form-control" required placeholder="Contoh: 15000">
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Alamat Lengkap</label>
-                            <textarea name="alamat" class="form-control" rows="2" required placeholder="Alamat lokasi wisata..."></textarea>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Deskripsi Singkat</label>
-                            <textarea name="deskripsi" class="form-control" rows="3" required placeholder="Jelaskan keindahan tempat ini..."></textarea>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Status</label>
-                            <select name="status" class="form-select" required>
-                                <option value="aktif">Aktif (Tampil di Web)</option>
-                                <option value="non-aktif">Non-Aktif (Sembunyikan)</option>
-                            </select>
+            <div class="card-body p-4">
+                <form action="{{ route('destinasi.index') }}" method="GET" class="row g-3">
+                    <!-- Search -->
+                    <div class="col-md-6">
+                        <div class="input-group">
+                            <span class="input-group-text bg-light border-end-0">
+                                <i class="bi bi-search text-muted"></i>
+                            </span>
+                            <input type="text" class="form-control border-start-0 ps-0" name="search"
+                                   placeholder="Cari nama destinasi wisata..."
+                                   value="{{ request('search') }}">
                         </div>
                     </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-                        <button type="submit" class="btn btn-success">Simpan Destinasi</button>
+
+                    <!-- Filter Kategori -->
+                    <div class="col-md-4">
+                        <select class="form-select" name="kategori">
+                            <option value="">Semua Kategori</option>
+                            @foreach($kategoriList as $kat)
+                                <option value="{{ $kat }}" {{ request('kategori') == $kat ? 'selected' : '' }}>
+                                    {{ $kat }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    <!-- Button -->
+                    <div class="col-md-2">
+                        <button type="submit" class="btn btn-primary w-100 fw-bold">
+                            <i class="bi bi-funnel"></i> Filter
+                        </button>
                     </div>
                 </form>
             </div>
         </div>
     </div>
 
-    <div class="modal fade" id="modalEditDestinasi" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header bg-warning text-dark">
-                    <h5 class="modal-title fw-bold">Edit Destinasi Wisata</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <form id="formEditDestinasi" method="POST" enctype="multipart/form-data">
-                    @csrf
-                    @method('PUT')
-                    <div class="modal-body">
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label">Nama Destinasi</label>
-                                <input type="text" name="nama" id="edit_nama" class="form-control" required>
+    <!-- Destinasi Grid -->
+    <div class="container mb-5">
+        @if($destinasi->count() > 0)
+            <div class="row g-4">
+                @foreach($destinasi as $item)
+                    <div class="col-md-6 col-lg-4">
+                        <div class="card h-100 shadow-sm border-0 hover-card transition-all">
+                            <!-- Foto Destinasi -->
+                            <div class="position-relative" style="height: 220px; overflow: hidden; border-top-left-radius: 0.375rem; border-top-right-radius: 0.375rem;">
+                                @if($item->foto && file_exists(public_path('images/destinasi/' . $item->foto)))
+                                    <img src="{{ asset('images/destinasi/' . $item->foto) }}"
+                                         class="card-img-top"
+                                         alt="{{ $item->nama }}"
+                                         style="object-fit: cover; height: 100%; width: 100%; transition: transform 0.3s ease;">
+                                @else
+                                    <div class="bg-secondary d-flex align-items-center justify-content-center h-100 text-white">
+                                        <i class="bi bi-image" style="font-size: 3rem;"></i>
+                                    </div>
+                                @endif
+
+                                <!-- Badge Kategori -->
+                                <span class="position-absolute top-0 end-0 m-3 badge bg-primary shadow-sm px-3 py-2">
+                                    {{ $item->kategori }}
+                                </span>
                             </div>
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label">Kategori</label>
-                                <select name="kategori" id="edit_kategori" class="form-select" required>
-                                    <option value="Pantai">Pantai</option>
-                                    <option value="Pulau">Pulau</option>
-                                    <option value="Air Terjun">Air Terjun</option>
-                                    <option value="Bukit">Bukit</option>
-                                    <option value="Taman">Taman</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Ganti Foto Destinasi (Opsional)</label>
-                            <input type="file" name="foto" id="edit_foto" class="form-control" accept="image/*">
-                            <div class="form-text">Kosongkan jika tidak ingin mengubah foto.</div>
-                        </div>
 
-                        <div class="mb-3">
-                            <label class="form-label">Harga Tiket (Rp)</label>
-                            <input type="number" name="harga_tiket" id="edit_harga_tiket" class="form-control" required>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Alamat Lengkap</label>
-                            <textarea name="alamat" id="edit_alamat" class="form-control" rows="2" required></textarea>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Deskripsi Singkat</label>
-                            <textarea name="deskripsi" id="edit_deskripsi" class="form-control" rows="3" required></textarea>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Status</label>
-                            <select name="status" id="edit_status" class="form-select" required>
-                                <option value="aktif">Aktif (Tampil di Web)</option>
-                                <option value="non-aktif">Non-Aktif (Sembunyikan)</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-                        <button type="submit" class="btn btn-warning">Update Destinasi</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
+                            <div class="card-body d-flex flex-column p-4">
+                                <h5 class="card-title fw-bold mb-2 text-dark">{{ $item->nama }}</h5>
 
-    <div class="modal fade" id="modalTambahUser" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header bg-primary text-white">
-                    <h5 class="modal-title fw-bold">Tambah User / Admin Baru</h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <form action="{{ route('admin.users.store') }}" method="POST">
-                    @csrf
-                    <div class="modal-body">
-                        <div class="mb-3">
-                            <label class="form-label">Nama Lengkap</label>
-                            <input type="text" name="name" class="form-control" required placeholder="Contoh: Budi Santoso">
-                        </div>
+                                <p class="card-text text-secondary small flex-grow-1">
+                                    {{ Str::limit($item->deskripsi, 120) }}
+                                </p>
 
-                        <div class="mb-3">
-                            <label class="form-label">Email</label>
-                            <input type="email" name="email" class="form-control" required placeholder="email@contoh.com">
-                        </div>
+                                <!-- Info -->
+                                <div class="mb-4 border-top pt-3 mt-3">
+                                    <p class="mb-2 small text-muted text-truncate">
+                                        <i class="bi bi-geo-alt-fill text-danger me-1"></i>
+                                        {{ $item->alamat }}
+                                    </p>
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <span class="fw-bold text-success fs-5">
+                                            Rp {{ number_format($item->harga_tiket, 0, ',', '.') }}
+                                        </span>
+                                        <span class="small text-muted">
+                                            <i class="bi bi-clock me-1"></i> Operasional
+                                        </span>
+                                    </div>
+                                </div>
 
-                        <div class="mb-3">
-                            <label class="form-label">Password Default</label>
-                            <input type="password" name="password" class="form-control" required placeholder="Minimal 8 karakter">
-                        </div>
-
-                        <div class="mb-3">
-                            <label class="form-label">Role (Hak Akses)</label>
-                            <select name="role" id="roleSelect" class="form-select" required>
-                                <option value="user">User Biasa (Pengunjung)</option>
-                                <option value="admin">Admin Destinasi (Pengelola)</option>
-                                <option value="superadmin">Super Admin</option>
-                            </select>
-                        </div>
-
-                        <div class="mb-3 d-none" id="destinasiContainer">
-                            <label class="form-label fw-bold text-primary">Kelola Destinasi Mana?</label>
-                            <select name="destinasi_id" class="form-select border-primary">
-                                <option value="" selected disabled>-- Pilih Destinasi Wisata --</option>
-                                @foreach($listDestinasi as $dest)
-                                    <option value="{{ $dest->id }}">{{ $dest->nama }}</option>
-                                @endforeach
-                            </select>
-                            <div class="form-text text-primary">
-                                <i class="bi bi-info-circle"></i> Destinasi harus dibuat dulu di tabel atas sebelum muncul di sini.
+                                <!-- Actions -->
+                                <a href="{{ route('destinasi.show', $item->id) }}"
+                                   class="btn btn-primary w-100 fw-bold py-2 shadow-sm">
+                                    <i class="bi bi-eye-fill me-1"></i> Lihat Detail Wisata
+                                </a>
                             </div>
                         </div>
                     </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-                        <button type="submit" class="btn btn-primary">Simpan User</button>
-                    </div>
-                </form>
+                @endforeach
             </div>
-        </div>
+
+            <!-- Pagination -->
+            <div class="d-flex justify-content-center mt-5">
+                {{ $destinasi->withQueryString()->links() }}
+            </div>
+        @else
+            <div class="text-center py-5 bg-white rounded shadow-sm">
+                <i class="bi bi-inbox text-muted" style="font-size: 4rem;"></i>
+                <h3 class="mt-3 text-muted">Tidak ada destinasi ditemukan</h3>
+                <p class="text-muted">Coba ubah kata kunci pencarian atau kategori filter Anda.</p>
+                <a href="{{ route('destinasi.index') }}" class="btn btn-outline-primary fw-bold">
+                    <i class="bi bi-arrow-clockwise"></i> Reset Filter
+                </a>
+            </div>
+        @endif
     </div>
 
-    <div class="modal fade" id="modalEditUser" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header bg-warning text-dark">
-                    <h5 class="modal-title fw-bold">Edit User / Hak Akses</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <form id="formEditUser" method="POST">
-                    @csrf
-                    @method('PUT')
-                    <div class="modal-body">
-                        <div class="mb-3">
-                            <label class="form-label">Nama Lengkap</label>
-                            <input type="text" name="name" id="edit_user_name" class="form-control" required>
-                        </div>
-
-                        <div class="mb-3">
-                            <label class="form-label">Email</label>
-                            <input type="email" name="email" id="edit_user_email" class="form-control" required>
-                        </div>
-
-                        <div class="mb-3">
-                            <label class="form-label">Password Baru (Kosongkan jika tidak diubah)</label>
-                            <input type="password" name="password" class="form-control" placeholder="Minimal 8 karakter">
-                        </div>
-
-                        <div class="mb-3">
-                            <label class="form-label">Role (Hak Akses)</label>
-                            <select name="role" id="edit_user_role" class="form-select" required>
-                                <option value="user">User Biasa (Pengunjung)</option>
-                                <option value="admin">Admin Destinasi (Pengelola)</option>
-                                <option value="superadmin">Super Admin</option>
-                            </select>
-                        </div>
-
-                        <div class="mb-3 d-none" id="editDestinasiContainer">
-                            <label class="form-label fw-bold text-primary">Kelola Destinasi Mana?</label>
-                            <select name="destinasi_id" id="edit_user_destinasi_id" class="form-select border-primary">
-                                <option value="" selected>-- Pilih Destinasi Wisata --</option>
-                                @foreach($listDestinasi as $dest)
-                                    <option value="{{ $dest->id }}">{{ $dest->nama }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-                        <button type="submit" class="btn btn-warning">Update User</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-
-
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // --- LOGIKA MODAL TAMBAH USER (Original Code) ---
-            const roleSelect = document.getElementById('roleSelect');
-            const destinasiContainer = document.getElementById('destinasiContainer');
-
-            function toggleDestinasi() {
-                if (roleSelect.value === 'admin') {
-                    destinasiContainer.classList.remove('d-none');
-                    destinasiContainer.querySelector('select').setAttribute('required', 'required');
-                } else {
-                    destinasiContainer.classList.add('d-none');
-                    destinasiContainer.querySelector('select').removeAttribute('required');
-                }
-            }
-            roleSelect.addEventListener('change', toggleDestinasi);
-            toggleDestinasi(); // Panggil saat load untuk memastikan status awal
-
-            // --- LOGIKA EDIT DESTINASI ---
-            document.querySelectorAll('.btn-edit-destinasi').forEach(button => {
-                button.addEventListener('click', function() {
-                    const id = this.getAttribute('data-id');
-                    const nama = this.getAttribute('data-nama');
-                    const kategori = this.getAttribute('data-kategori');
-                    const hargaTiket = this.getAttribute('data-harga_tiket');
-                    const alamat = this.getAttribute('data-alamat');
-                    const deskripsi = this.getAttribute('data-deskripsi');
-                    const status = this.getAttribute('data-status');
-
-                    // 1. Set Action URL Form
-                    const form = document.getElementById('formEditDestinasi');
-                    form.action = `{{ url('admin/destinasi') }}/${id}`;
-
-                    // 2. Isi data ke form modal
-                    document.getElementById('edit_nama').value = nama;
-                    document.getElementById('edit_kategori').value = kategori;
-                    document.getElementById('edit_harga_tiket').value = hargaTiket;
-                    document.getElementById('edit_alamat').value = alamat;
-                    document.getElementById('edit_deskripsi').value = deskripsi;
-                    document.getElementById('edit_status').value = status;
-
-                    // PENTING: Reset input file agar tidak mengirim file yang lama
-                    const editFotoInput = document.getElementById('edit_foto');
-                    if (editFotoInput) {
-                        editFotoInput.value = '';
-                    }
-                });
-            });
-
-            // --- LOGIKA EDIT USER ---
-            document.querySelectorAll('.btn-edit-user').forEach(button => {
-                button.addEventListener('click', function() {
-                    const id = this.getAttribute('data-id');
-                    const name = this.getAttribute('data-name');
-                    const email = this.getAttribute('data-email');
-                    const role = this.getAttribute('data-role');
-                    const destinasiId = this.getAttribute('data-destinasi_id');
-
-                    // Elemen di modal edit user
-                    const form = document.getElementById('formEditUser');
-                    const editRoleSelect = document.getElementById('edit_user_role');
-                    const editDestinasiContainer = document.getElementById('editDestinasiContainer');
-                    const editDestinasiSelect = document.getElementById('edit_user_destinasi_id');
-
-                    // 1. Set Action URL Form
-                    form.action = `{{ url('admin/users') }}/${id}`;
-
-                    // 2. Isi data ke form modal
-                    document.getElementById('edit_user_name').value = name;
-                    document.getElementById('edit_user_email').value = email;
-                    editRoleSelect.value = role;
-
-                    // 3. Toggle visibility destinasi berdasarkan role
-                    function toggleEditDestinasiVisibility() {
-                        if (editRoleSelect.value === 'admin') {
-                            editDestinasiContainer.classList.remove('d-none');
-                            editDestinasiSelect.value = destinasiId;
-                        } else {
-                            editDestinasiContainer.classList.add('d-none');
-                        }
-                    }
-
-                    toggleEditDestinasiVisibility();
-                    editRoleSelect.onchange = toggleEditDestinasiVisibility;
-                });
-            });
-
-        });
-    </script>
+    <style>
+        .hover-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 0.5rem 1.5rem rgba(0, 0, 0, 0.1) !important;
+        }
+        .hover-card:hover img {
+            transform: scale(1.05);
+        }
+        .transition-all {
+            transition: all 0.3s ease;
+        }
+    </style>
 </x-app-layout>
