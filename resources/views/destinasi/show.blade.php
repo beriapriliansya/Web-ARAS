@@ -124,23 +124,6 @@
                             </div>
                         </div>
 
-                        <!-- TOMBOL ACTION (LOGIKA KUNCI) -->
-                        <div class="d-grid gap-2 mb-3">
-                            @auth
-                                <a href="{{ route('booking.create', $destinasi->id) }}" class="btn btn-primary btn-lg fw-bold py-3 shadow-sm">
-                                    <i class="bi bi-ticket-perforated me-2"></i> Pesan Tiket Sekarang
-                                </a>
-                            @else
-                                <a href="{{ route('login') }}" class="btn btn-primary btn-lg fw-bold py-3 shadow-sm"
-                                   onclick="return confirm('Anda harus Login terlebih dahulu untuk memesan tiket. Lanjutkan ke halaman Login?');">
-                                    <i class="bi bi-lock-fill me-2"></i> Login untuk Memesan
-                                </a>
-                                <div class="text-center mt-2">
-                                    <small class="text-muted">Belum punya akun? <a href="{{ route('register') }}" class="text-primary fw-bold">Daftar disini</a></small>
-                                </div>
-                            @endauth
-                        </div>
-
                         <div class="mt-4 pt-3 border-top text-center">
                             <span class="text-muted small d-block mb-2">Bagikan destinasi ini:</span>
                             <div class="d-flex justify-content-center gap-2">
