@@ -236,8 +236,8 @@
             <p>Mengetahui,</p>
             <p class="fw-bold">Kepala Dinas Pariwisata</p>
             <div class="signature-space"></div>
-            <p class="mb-0 text-decoration-underline fw-bold">Drs. H. M. Yusuf, M.M.</p>
-            <p class="text-muted small">NIP. 19720512 199803 1 003</p>
+            <p class="mb-0 text-decoration-underline fw-bold">Berry, S. Kom</p>
+            <p class="text-muted small">NIM. 2271020089</p>
         </div>
         <div class="signature-box">
             <p>Pesawaran, {{ date('d F Y') }}</p>

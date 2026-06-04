@@ -151,8 +151,11 @@ class DestinasiController extends Controller
         $alternatifValues = \App\Models\Alternatif::where('destinasi_id', $id)
             ->pluck('nilai', 'kriteria_id')
             ->toArray();
+
+        // Ambil sub kriteria dikelompokkan berdasarkan kriteria_id
+        $subKriteria = \App\Models\SubKriteria::orderBy('nilai', 'desc')->get()->groupBy('kriteria_id');
             
-        return view('admin.destinasi.nilai', compact('destinasi', 'kriteria', 'alternatifValues'));
+        return view('admin.destinasi.nilai', compact('destinasi', 'kriteria', 'alternatifValues', 'subKriteria'));
     }
 
     /**
@@ -163,26 +166,37 @@ class DestinasiController extends Controller
         $destinasi = DestinasiWisata::findOrFail($id);
         $kriteria = \App\Models\Kriteria::all();
 
-        $rules = [];
-        foreach ($kriteria as $k) {
-            $rules['nilai_' . $k->id] = 'required|numeric|min:0';
-        }
-        
-        $request->validate($rules);
-
         \Illuminate\Support\Facades\DB::beginTransaction();
         try {
             foreach ($kriteria as $k) {
-                \App\Models\Alternatif::updateOrCreate(
-                    [
-                        'destinasi_id' => $destinasi->id,
-                        'kriteria_id' => $k->id,
-                    ],
-                    [
-                        'nilai' => $request->input('nilai_' . $k->id),
-                        'catatan' => 'Diupdate oleh admin pada ' . now(),
-                    ]
-                );
+                $subKriteriaId = $request->input('nilai_' . $k->id);
+                $rawNilai = $request->input('nilai_' . $k->id . '_raw');
+
+                if ($subKriteriaId) {
+                    $sub = \App\Models\SubKriteria::findOrFail($subKriteriaId);
+                    
+                    \App\Models\Alternatif::updateOrCreate(
+                        [
+                            'destinasi_id' => $destinasi->id,
+                            'kriteria_id' => $k->id,
+                        ],
+                        [
+                            'nilai' => $sub->nilai,
+                            'catatan' => 'Diberikan opsi sub-kriteria: ' . $sub->keterangan,
+                        ]
+                    );
+                } elseif ($rawNilai !== null) {
+                    \App\Models\Alternatif::updateOrCreate(
+                        [
+                            'destinasi_id' => $destinasi->id,
+                            'kriteria_id' => $k->id,
+                        ],
+                        [
+                            'nilai' => $rawNilai,
+                            'catatan' => 'Diberikan nilai manual',
+                        ]
+                    );
+                }
             }
             \Illuminate\Support\Facades\DB::commit();
             return redirect()->route('admin.destinasi.show', $destinasi->id)

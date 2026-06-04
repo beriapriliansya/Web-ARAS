@@ -21,7 +21,7 @@ class ArasController extends Controller
         $destinasi = DestinasiWisata::aktif()->count();
 
         // Ambil hasil perhitungan terakhir jika ada
-        $hasil = HasilAras::with('destinasi')->orderBy('ranking')->get();
+        $hasil = HasilAras::with('destinasi.alternatif')->orderBy('ranking')->get();
 
         return view('admin.aras.index', compact('kriteria', 'destinasi', 'hasil'));
     }

@@ -36,13 +36,10 @@
                             </div>
                         </div>
 
-                        <!-- TOMBOL HITUNG (Form ke Route Admin) -->
-                        <form action="{{ route('admin.aras.hitung') }}" method="POST" onsubmit="return confirm('Mulai perhitungan ARAS? Data ranking lama akan ditimpa.');">
-                            @csrf
-                            <button type="submit" class="btn btn-primary w-100 py-2 fw-bold">
-                                <i class="bi bi-calculator me-2"></i> Hitung Sekarang
-                            </button>
-                        </form>
+                        <!-- TOMBOL HITUNG (Memicu Modal Konfirmasi) -->
+                        <button type="button" class="btn btn-primary w-100 py-2 fw-bold" data-bs-toggle="modal" data-bs-target="#modalKonfirmasiHitung">
+                            <i class="bi bi-calculator me-2"></i> Hitung Sekarang
+                        </button>
                     </div>
                 </div>
 
@@ -77,13 +74,19 @@
                     </div>
                     <div class="card-body p-0">
                         <div class="table-responsive">
-                            <table class="table table-hover align-middle mb-0">
-                                <thead class="table-light">
+                            <table class="table table-hover align-middle mb-0" id="rankingTable">
+                                <thead class="table-light align-middle text-center">
                                     <tr>
-                                        <th class="text-center" width="10%">Rank</th>
-                                        <th>Nama Destinasi</th>
-                                        <th class="text-center">Nilai S (Optimalitas)</th>
-                                        <th class="text-center">Nilai K (Utilitas)</th>
+                                        <th rowspan="2" class="text-center" width="8%">Rank</th>
+                                        <th rowspan="2" class="text-start" width="22%">Nama Destinasi</th>
+                                        <th colspan="{{ $kriteria->count() }}" class="text-center">Nilai Kriteria (Bobot)</th>
+                                        <th rowspan="2" class="text-center" width="12%">Nilai S (Optimalitas)</th>
+                                        <th rowspan="2" class="text-center" width="12%">Nilai K (Utilitas)</th>
+                                    </tr>
+                                    <tr>
+                                        @foreach($kriteria as $k)
+                                            <th class="small fw-semibold text-center">{{ $k->nama_kriteria }} ({{ $k->bobot }})</th>
+                                        @endforeach
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -97,14 +100,25 @@
                                                 @endif
                                             </td>
                                             <td>
-                                                <span class="fw-bold">{{ $h->destinasi->nama }}</span>
+                                                <span class="fw-bold text-dark">{{ $h->destinasi->nama }}</span>
                                             </td>
+                                            
+                                            <!-- Kriteria Columns -->
+                                            @foreach($kriteria as $k)
+                                                @php
+                                                    $val = $h->destinasi->alternatif->firstWhere('kriteria_id', $k->id);
+                                                @endphp
+                                                <td class="text-center text-secondary">
+                                                    {{ $val ? number_format($val->nilai, 2) : '0.00' }}
+                                                </td>
+                                            @endforeach
+
                                             <td class="text-center">{{ number_format($h->nilai_s, 4) }}</td>
                                             <td class="text-center fw-bold text-primary">{{ number_format($h->nilai_k, 4) }}</td>
                                         </tr>
                                     @empty
                                         <tr>
-                                            <td colspan="4" class="text-center py-5 text-muted">
+                                            <td colspan="{{ 4 + $kriteria->count() }}" class="text-center py-5 text-muted">
                                                 <i class="bi bi-clipboard-x fs-1"></i>
                                                 <p class="mt-2">Belum ada hasil perhitungan. Silakan klik tombol hitung.</p>
                                             </td>
@@ -114,8 +128,84 @@
                             </table>
                         </div>
                     </div>
+                    <div class="card-footer bg-white py-3 d-flex justify-content-end align-items-center flex-wrap gap-2 border-top">
+                        <button type="button" class="btn btn-sm btn-success fw-bold text-white px-3" data-bs-toggle="modal" data-bs-target="#modalKonfirmasiHitung">
+                            <i class="bi bi-save me-1"></i> Simpan/Update Hasil
+                        </button>
+                        <button type="button" onclick="exportRankingToCSV()" class="btn btn-sm btn-outline-secondary fw-bold px-3">
+                            <i class="bi bi-file-earmark-spreadsheet me-1"></i> Unduh CSV
+                        </button>
+                        <a href="{{ route('admin.aras.cetak') }}" target="_blank" class="btn btn-sm btn-danger fw-bold text-white px-3">
+                            <i class="bi bi-file-pdf me-1"></i> Unduh PDF
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
+
+    <!-- Modal Konfirmasi Hitung -->
+    <div class="modal fade" id="modalKonfirmasiHitung" tabindex="-1" aria-labelledby="modalKonfirmasiHitungLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content rounded-4 border-0 shadow">
+                <div class="modal-header bg-primary text-white py-3">
+                    <h5 class="modal-title fw-bold" id="modalKonfirmasiHitungLabel">
+                        <i class="bi bi-calculator me-2"></i> Konfirmasi Perhitungan
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-4 text-center">
+                    <div class="text-primary fs-1 mb-3">
+                        <i class="bi bi-calculator-fill"></i>
+                    </div>
+                    <h5 class="fw-bold mb-2">Mulai Perhitungan ARAS?</h5>
+                    <p class="text-secondary small mb-0">
+                        Sistem akan menghitung ulang ranking seluruh destinasi aktif berdasarkan bobot kriteria saat ini. Data ranking sebelumnya akan ditimpa.
+                    </p>
+                </div>
+                <div class="modal-footer border-0 p-3 bg-light d-flex justify-content-end gap-2 rounded-bottom-4">
+                    <button type="button" class="btn btn-secondary px-4 fw-semibold" data-bs-dismiss="modal">Batal</button>
+                    <form action="{{ route('admin.aras.hitung') }}" method="POST" class="m-0">
+                        @csrf
+                        <button type="submit" class="btn btn-primary px-4 fw-bold">
+                            Ya, Hitung Sekarang
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Client-Side CSV Export Script -->
+    <script>
+        function exportRankingToCSV() {
+            let csv = [];
+            let table = document.querySelector('#rankingTable');
+            if (!table) return;
+
+            let rows = table.querySelectorAll('tr');
+            for (let i = 0; i < rows.length; i++) {
+                let row = [], cols = rows[i].querySelectorAll('td, th');
+                
+                for (let j = 0; j < cols.length; j++) {
+                    // Clean text (remove emojis, line breaks and multiple spaces)
+                    let data = cols[j].innerText.replace(/🥇|🥈|🥉/g, '').replace(/(\r\n|\n|\r)/gm, '').replace(/(\s\s+)/gm, ' ').trim();
+                    // Escape double quotes
+                    data = data.replace(/"/g, '""');
+                    row.push('"' + data + '"');
+                }
+                csv.push(row.join(','));
+            }
+
+            let csvString = csv.join('\n');
+            let filename = 'laporan_ranking_aras_' + new Date().toISOString().slice(0,10) + '.csv';
+            let link = document.createElement('a');
+            link.style.display = 'none';
+            link.setAttribute('href', 'data:text/csv;charset=utf-8,\uFEFF' + encodeURIComponent(csvString));
+            link.setAttribute('download', filename);
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+    </script>
 </x-app-layout>
