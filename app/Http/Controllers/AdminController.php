@@ -78,6 +78,37 @@ class AdminController extends Controller
         return back()->with('success', 'User berhasil dihapus.');
     }
 
+    /**
+     * Mengupdate User
+     */
+    public function updateUser(Request $request, $id)
+    {
+        $user = User::findOrFail($id);
+
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:users,email,' . $user->id,
+            'password' => 'nullable|min:8',
+            'role' => 'required|in:superadmin,admin,user',
+            'destinasi_id' => 'nullable|required_if:role,admin|exists:destinasi_wisata,id',
+        ]);
+
+        $data = [
+            'name' => $request->name,
+            'email' => $request->email,
+            'role' => $request->role,
+            'destinasi_id' => ($request->role === 'admin') ? $request->destinasi_id : null,
+        ];
+
+        if ($request->filled('password')) {
+            $data['password'] = Hash::make($request->password);
+        }
+
+        $user->update($data);
+
+        return redirect()->back()->with('success', 'User berhasil diperbarui!');
+    }
+
     // ==========================================
     // TAMBAHAN: MANAJEMEN DESTINASI
     // ==========================================

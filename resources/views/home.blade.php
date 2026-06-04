@@ -89,14 +89,14 @@
 
                             <div class="progress mb-3" style="height: 25px;">
                                 <div class="progress-bar bg-success" role="progressbar"
-                                     style="width: {{ $hasil->persentase }}%">
-                                    {{ number_format($hasil->persentase, 2) }}%
+                                     style="width: {{ min(100, $hasil->nilai_k * 100) }}%">
+                                    {{ number_format($hasil->nilai_k * 100, 2) }}%
                                 </div>
                             </div>
 
                             <p class="mb-3">
                                 <span class="badge bg-primary rounded-pill px-3">Ranking {{ $hasil->ranking }}</span>
-                                <span class="badge bg-info text-dark rounded-pill px-3">Nilai: {{ number_format($hasil->utilitas, 4) }}</span>
+                                <span class="badge bg-info text-dark rounded-pill px-3">Nilai K: {{ number_format($hasil->nilai_k, 4) }}</span>
                             </p>
 
                             <a href="{{ route('destinasi.show', $hasil->destinasi_id) }}" class="btn btn-outline-primary w-100">

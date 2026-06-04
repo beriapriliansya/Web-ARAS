@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\DestinasiWisata;
 use App\Models\Kriteria;
-use App\Models\Alternatif; // Pastikan model ini menyimpan nilai kriteria per destinasi
+use App\Models\Alternatif;
 use App\Models\HasilAras;
 use Illuminate\Support\Facades\DB;
 
@@ -13,12 +13,11 @@ class ArasController extends Controller
 {
     /**
      * [ADMIN] Halaman Utama Perhitungan
-     * Menampilkan data kriteria dan tombol hitung
      */
     public function index()
     {
         $kriteria = Kriteria::all();
-        $destinasi = DestinasiWisata::where('status', 'aktif')->count();
+        $destinasi = DestinasiWisata::aktif()->count();
 
         // Ambil hasil perhitungan terakhir jika ada
         $hasil = HasilAras::with('destinasi')->orderBy('ranking')->get();
@@ -27,26 +26,218 @@ class ArasController extends Controller
     }
 
     /**
-     * [ADMIN] Proses Hitung Metode ARAS
+     * [ADMIN] Proses Hitung Metode ARAS & Simpan ke DB
      */
     public function hitung()
     {
-        // 1. Ambil Data
-        $destinasi = DestinasiWisata::where('status', 'aktif')->get();
+        $destinasi = DestinasiWisata::aktif()->get();
         $kriteria = Kriteria::all();
 
-        // Cek kelengkapan data
         if ($destinasi->isEmpty() || $kriteria->isEmpty()) {
             return back()->with('error', 'Data Destinasi atau Kriteria masih kosong!');
         }
 
-        // Cek apakah setiap destinasi sudah punya nilai alternatif
-        // (Asumsi: Tabel 'alternatif' menyimpan nilai murni per kriteria)
-        // Jika belum ada sistem input nilai alternatif, kamu harus membuatnya di menu Destinasi.
+        // Jalankan perhitungan ARAS
+        $result = $this->runArasCalculation($destinasi, $kriteria);
 
-        // --- MULAI PERHITUNGAN ---
+        DB::beginTransaction();
+        try {
+            HasilAras::query()->delete(); // Hapus hasil lama
 
-        // 2. Buat Matriks Keputusan (X) & Tentukan Nilai Optimal (X0)
+            $rank = 1;
+            foreach ($result['hasilSorted'] as $id => $nilaiK) {
+                HasilAras::create([
+                    'destinasi_id' => $id,
+                    'nilai_s'      => $result['nilaiS'][$id],
+                    'nilai_k'      => $nilaiK,
+                    'ranking'      => $rank++
+                ]);
+            }
+            DB::commit();
+            return back()->with('success', 'Perhitungan ARAS selesai! Ranking di database telah diperbarui.');
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return back()->with('error', 'Terjadi kesalahan hitung: ' . $e->getMessage());
+        }
+    }
+
+    /**
+     * [ADMIN] Halaman Kelola Kriteria (Edit Bobot & Tipe)
+     */
+    public function editKriteria()
+    {
+        $kriteria = Kriteria::all();
+        return view('admin.aras.kriteria', compact('kriteria'));
+    }
+
+    /**
+     * [ADMIN] Update Bobot & Tipe Kriteria
+     */
+    public function updateKriteria(Request $request)
+    {
+        $kriteria = Kriteria::all();
+
+        // Validasi input
+        $rules = [];
+        $messages = [];
+        foreach ($kriteria as $k) {
+            $rules['bobot_' . $k->id] = 'required|numeric|min:0';
+            $rules['tipe_' . $k->id] = 'required|in:benefit,cost';
+            $messages['bobot_' . $k->id . '.required'] = 'Bobot kriteria ' . $k->nama_kriteria . ' wajib diisi.';
+            $messages['bobot_' . $k->id . '.numeric'] = 'Bobot kriteria ' . $k->nama_kriteria . ' harus angka.';
+            $messages['bobot_' . $k->id . '.min'] = 'Bobot kriteria ' . $k->nama_kriteria . ' minimal 0.';
+        }
+
+        $request->validate($rules, $messages);
+
+        // Hitung total bobot
+        $totalBobot = 0;
+        foreach ($kriteria as $k) {
+            $totalBobot += (float)$request->input('bobot_' . $k->id);
+        }
+
+        // Toleransi selisih float kecil (misal 0.999 - 1.001)
+        // Kita dukung format persen (total = 100) atau desimal (total = 1.0)
+        $isPercent = false;
+        if (abs($totalBobot - 100) < 0.001) {
+            $isPercent = true;
+        } elseif (abs($totalBobot - 1.0) > 0.001) {
+            return back()->with('error', 'Total bobot kriteria harus sama dengan 100% atau 1.0! Total input saat ini: ' . $totalBobot)
+                ->withInput();
+        }
+
+        DB::beginTransaction();
+        try {
+            foreach ($kriteria as $k) {
+                $bobotVal = (float)$request->input('bobot_' . $k->id);
+                // Jika input dalam persen, ubah ke desimal untuk disimpan ke database
+                if ($isPercent) {
+                    $bobotVal = $bobotVal / 100;
+                }
+
+                $k->update([
+                    'bobot' => $bobotVal,
+                    'tipe' => $request->input('tipe_' . $k->id),
+                ]);
+            }
+            DB::commit();
+            return redirect()->route('admin.aras.index')->with('success', 'Bobot dan tipe kriteria berhasil diperbarui!');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return back()->with('error', 'Gagal memperbarui kriteria: ' . $e->getMessage());
+        }
+    }
+
+    /**
+     * [ADMIN] Cetak Laporan Detail Perhitungan ARAS
+     */
+    public function cetakLaporan()
+    {
+        $destinasi = DestinasiWisata::aktif()->get();
+        $kriteria = Kriteria::all();
+
+        if ($destinasi->isEmpty() || $kriteria->isEmpty()) {
+            return redirect()->route('admin.aras.index')->with('error', 'Data destinasi atau kriteria kosong!');
+        }
+
+        // Jalankan perhitungan untuk mendapatkan matriks lengkap
+        $result = $this->runArasCalculation($destinasi, $kriteria);
+
+        return view('admin.aras.cetak', compact('destinasi', 'kriteria', 'result'));
+    }
+
+    /**
+     * [PUBLIC] Halaman Ranking Statis
+     */
+    public function ranking()
+    {
+        $hasil = HasilAras::with('destinasi')
+                    ->orderBy('ranking', 'asc')
+                    ->get();
+
+        return view('aras.ranking', compact('hasil'));
+    }
+
+    /**
+     * [PUBLIC] Halaman Kalkulator Rekomendasi Dinamis
+     */
+    public function rekomendasiForm()
+    {
+        $kriteria = Kriteria::all();
+        // Ambil ranking default sebagai referensi awal
+        $hasilDefault = HasilAras::with('destinasi')->orderBy('ranking')->get();
+
+        return view('aras.rekomendasi', compact('kriteria', 'hasilDefault'));
+    }
+
+    /**
+     * [PUBLIC] Hitung Rekomendasi Dinamis (In-Memory)
+     */
+    public function rekomendasiHitung(Request $request)
+    {
+        $kriteria = Kriteria::all();
+        $destinasi = DestinasiWisata::aktif()->get();
+
+        if ($destinasi->isEmpty() || $kriteria->isEmpty()) {
+            return back()->with('error', 'Data Destinasi atau Kriteria masih kosong!');
+        }
+
+        // Validasi input bobot dari form
+        $rules = [];
+        foreach ($kriteria as $k) {
+            $rules['weight_' . $k->id] = 'required|numeric|min:0';
+        }
+        $request->validate($rules);
+
+        // Hitung total bobot inputan user
+        $totalInputWeight = 0;
+        $customWeightsInput = [];
+        foreach ($kriteria as $k) {
+            $val = (float)$request->input('weight_' . $k->id);
+            $customWeightsInput[$k->id] = $val;
+            $totalInputWeight += $val;
+        }
+
+        // Cek apakah total = 100% atau 1.0
+        $isPercent = false;
+        if (abs($totalInputWeight - 100) < 0.001) {
+            $isPercent = true;
+        } elseif (abs($totalInputWeight - 1.0) > 0.001) {
+            return back()->with('error', 'Total bobot preferensi harus sama dengan 100% atau 1.0! Total saat ini: ' . $totalInputWeight)
+                ->withInput();
+        }
+
+        // Jika input persen, konversi ke desimal untuk kalkulasi ARAS
+        $customWeights = [];
+        foreach ($customWeightsInput as $id => $val) {
+            $customWeights[$id] = $isPercent ? ($val / 100) : $val;
+        }
+
+        // Jalankan kalkulasi ARAS in-memory dengan custom weights
+        $result = $this->runArasCalculation($destinasi, $kriteria, $customWeights);
+
+        // Bentuk data ranking untuk ditampilkan
+        $hasilRekomendasi = [];
+        $rank = 1;
+        foreach ($result['hasilSorted'] as $id => $nilaiK) {
+            $hasilRekomendasi[] = (object)[
+                'destinasi' => $destinasi->firstWhere('id', $id),
+                'nilai_s' => $result['nilaiS'][$id],
+                'nilai_k' => $nilaiK,
+                'ranking' => $rank++
+            ];
+        }
+
+        return view('aras.rekomendasi', compact('kriteria', 'hasilRekomendasi', 'customWeightsInput'));
+    }
+
+    /**
+     * Reusable ARAS calculation logic
+     */
+    private function runArasCalculation($destinasi, $kriteria, $customWeights = null)
+    {
+        // 1. Buat Matriks Keputusan (X) & Tentukan Nilai Optimal (X0)
         $matriks = [];
         $x0 = []; // Nilai optimal untuk baris ke-0 (A0)
 
@@ -60,8 +251,8 @@ class ArasController extends Controller
                             ->where('kriteria_id', $k->id)
                             ->value('nilai');
 
-                // Jika nilai kosong, beri default (misal 0 atau nilai min)
-                $nilai = $nilai ?? 0;
+                // Jika nilai kosong, beri default
+                $nilai = $nilai !== null ? (float)$nilai : 0.0;
 
                 $matriks[$d->id][$k->id] = $nilai;
                 $nilaiKolom[] = $nilai;
@@ -69,18 +260,19 @@ class ArasController extends Controller
 
             // Tentukan X0 berdasarkan tipe kriteria
             if ($k->tipe == 'benefit') {
-                $x0[$k->id] = max($nilaiKolom); // Benefit cari MAX
+                $x0[$k->id] = count($nilaiKolom) > 0 ? max($nilaiKolom) : 0; // Benefit cari MAX
             } else {
                 // Cost cari MIN (Hati-hati jika 0)
-                $x0[$k->id] = min(array_filter($nilaiKolom)) ?? 0;
+                $filtered = array_filter($nilaiKolom);
+                $x0[$k->id] = count($filtered) > 0 ? min($filtered) : 0;
             }
         }
 
-        // 3. Normalisasi Matriks (R)
+        // 2. Normalisasi Matriks (R)
         $matriksR = [];
 
         foreach ($kriteria as $k) {
-            $pembagi = 0;
+            $totalKolom = 0;
 
             // Hitung sigma (pembagi) sesuai rumus ARAS
             if ($k->tipe == 'benefit') {
@@ -88,11 +280,19 @@ class ArasController extends Controller
                 $totalKolom = array_sum(array_column($matriks, $k->id)) + $x0[$k->id];
             } else {
                 // Untuk Cost: Sigma (1/Xij) + (1/X0j)
-                $totalKolom = 0;
-                if ($x0[$k->id] > 0) $totalKolom += (1 / $x0[$k->id]);
-                foreach ($matriks as $d_id => $kols) {
-                    if ($kols[$k->id] > 0) $totalKolom += (1 / $kols[$k->id]);
+                if ($x0[$k->id] > 0) {
+                    $totalKolom += (1 / $x0[$k->id]);
                 }
+                foreach ($matriks as $d_id => $kols) {
+                    if ($kols[$k->id] > 0) {
+                        $totalKolom += (1 / $kols[$k->id]);
+                    }
+                }
+            }
+
+            // Jika total kolom 0, hindari pembagian dengan nol
+            if ($totalKolom == 0) {
+                $totalKolom = 1.0;
             }
 
             // Hitung nilai normalisasi per sel
@@ -100,7 +300,7 @@ class ArasController extends Controller
             if ($k->tipe == 'benefit') {
                 $matriksR['A0'][$k->id] = $x0[$k->id] / $totalKolom;
             } else {
-                $matriksR['A0'][$k->id] = (1 / $x0[$k->id]) / $totalKolom;
+                $matriksR['A0'][$k->id] = ($x0[$k->id] > 0 ? (1 / $x0[$k->id]) : 0) / $totalKolom;
             }
 
             // Normalisasi Ai (Baris Destinasi)
@@ -110,76 +310,67 @@ class ArasController extends Controller
                 if ($k->tipe == 'benefit') {
                     $matriksR[$d->id][$k->id] = $nilaiAsli / $totalKolom;
                 } else {
-                    // Cost
                     $val = ($nilaiAsli > 0) ? (1 / $nilaiAsli) : 0;
                     $matriksR[$d->id][$k->id] = $val / $totalKolom;
                 }
             }
         }
 
-        // 4. Matriks Terbobot (D) & Nilai Fungsi Optimalitas (S)
+        // 3. Matriks Terbobot (V) & Nilai Fungsi Optimalitas (S)
         $nilaiS = [];
+        $matriksV = [];
+
+        // Gunakan bobot kustom jika disediakan, jika tidak gunakan bobot default dari DB
+        $bobotArray = [];
+        foreach ($kriteria as $k) {
+            if ($customWeights !== null && isset($customWeights[$k->id])) {
+                $bobotArray[$k->id] = (float)$customWeights[$k->id];
+            } else {
+                $bobotArray[$k->id] = (float)$k->bobot;
+            }
+        }
 
         // Hitung S0 (Optimality Function untuk A0)
         $S0 = 0;
         foreach ($kriteria as $k) {
-            $bobot = $k->bobot; // Asumsi bobot dalam desimal (0.1, 0.2), jika persen bagi 100
-            $S0 += $matriksR['A0'][$k->id] * $bobot;
+            $bobot = $bobotArray[$k->id];
+            $weightedVal = $matriksR['A0'][$k->id] * $bobot;
+            $matriksV['A0'][$k->id] = $weightedVal;
+            $S0 += $weightedVal;
         }
 
         // Hitung Si (Optimality Function untuk setiap Destinasi)
         foreach ($destinasi as $d) {
             $Si = 0;
             foreach ($kriteria as $k) {
-                $bobot = $k->bobot;
-                $Si += $matriksR[$d->id][$k->id] * $bobot;
+                $bobot = $bobotArray[$k->id];
+                $weightedVal = $matriksR[$d->id][$k->id] * $bobot;
+                $matriksV[$d->id][$k->id] = $weightedVal;
+                $Si += $weightedVal;
             }
             $nilaiS[$d->id] = $Si;
         }
 
-        // 5. Perhitungan Tingkat Utilitas (K) & Ranking
-        $hasilAkhir = [];
+        // 4. Perhitungan Tingkat Utilitas (K) & Ranking
+        $hasilK = [];
         foreach ($nilaiS as $id => $Si) {
             $Ki = ($S0 > 0) ? $Si / $S0 : 0; // Rumus Degree of Utility
-            $hasilAkhir[$id] = $Ki;
+            $hasilK[$id] = $Ki;
         }
 
         // Urutkan dari nilai K terbesar (Ranking 1)
-        arsort($hasilAkhir);
+        $hasilSorted = $hasilK;
+        arsort($hasilSorted);
 
-        // 6. Simpan ke Database (Reset dulu data lama)
-        DB::beginTransaction();
-        try {
-            HasilAras::query()->delete(); // Hapus hasil lama agar bersih
-
-            $rank = 1;
-            foreach ($hasilAkhir as $id => $nilaiK) {
-                HasilAras::create([
-                    'destinasi_id' => $id,
-                    'nilai_s'      => $nilaiS[$id],
-                    'nilai_k'      => $nilaiK, // Ini nilai akhir (Utility)
-                    'ranking'      => $rank++
-                ]);
-            }
-            DB::commit();
-            return back()->with('success', 'Perhitungan ARAS selesai! Ranking telah diperbarui.');
-
-        } catch (\Exception $e) {
-            DB::rollBack();
-            return back()->with('error', 'Terjadi kesalahan hitung: ' . $e->getMessage());
-        }
-    }
-
-    /**
-     * [PUBLIC] Halaman Ranking
-     * Hanya menampilkan data dari tabel hasil_aras
-     */
-    public function ranking()
-    {
-        $hasil = HasilAras::with('destinasi')
-                    ->orderBy('ranking', 'asc')
-                    ->get();
-
-        return view('aras.ranking', compact('hasil'));
+        return [
+            'matriks' => $matriks,
+            'x0' => $x0,
+            'matriksR' => $matriksR,
+            'matriksV' => $matriksV,
+            'nilaiS' => $nilaiS,
+            'S0' => $S0,
+            'hasilSorted' => $hasilSorted,
+            'bobotUsed' => $bobotArray
+        ];
     }
 }

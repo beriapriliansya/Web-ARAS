@@ -21,15 +21,15 @@
                     @else
                         {{-- Placeholder jika tidak ada gambar --}}
                         <div class="bg-light d-flex align-items-center justify-content-center" style="height: 200px;">
-                            <i class="fas fa-image fa-3x text-muted"></i>
+                            <i class="bi bi-image fs-1 text-muted"></i>
                         </div>
                     @endif
 
                     <div class="card-body d-flex flex-column">
                         <small class="text-muted mb-2">
-                            <i class="far fa-calendar-alt"></i> {{ $article->published_at ? $article->published_at->format('d M Y') : 'N/A' }}
+                            <i class="bi bi-calendar-event"></i> {{ $article->published_at ? $article->published_at->format('d M Y') : 'N/A' }}
                             &middot;
-                            <i class="far fa-eye"></i> {{ number_format($article->views) }}
+                            <i class="bi bi-eye"></i> {{ number_format($article->views) }}
                         </small>
 
                         {{-- Judul --}}

@@ -45,6 +45,8 @@ Route::get('/destinasi/{id}', [DestinasiController::class, 'show'])->name('desti
 
 // ARAS - Public view
 Route::get('/aras/ranking', [ArasController::class, 'ranking'])->name('aras.ranking');
+Route::get('/rekomendasi', [ArasController::class, 'rekomendasiForm'])->name('aras.rekomendasi.form');
+Route::post('/rekomendasi', [ArasController::class, 'rekomendasiHitung'])->name('aras.rekomendasi.hitung');
 
 // API untuk maps
 Route::get('/api/destinasi/{id}/koordinat', function($id) {
@@ -106,6 +108,7 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
 
     // 2. Manajemen User (CRUD)
     Route::post('/users', [AdminController::class, 'storeUser'])->name('users.store');
+    Route::put('/users/{id}', [AdminController::class, 'updateUser'])->name('users.update');
     Route::delete('/users/{id}', [AdminController::class, 'destroyUser'])->name('users.destroy');
 
     // 3. Manajemen Destinasi (CRUD Lengkap)
@@ -116,6 +119,13 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
     // 4. ARAS Management
     Route::get('/aras', [ArasController::class, 'index'])->name('aras.index');
     Route::post('/aras/hitung', [ArasController::class, 'hitung'])->name('aras.hitung');
+    Route::get('/aras/kriteria', [ArasController::class, 'editKriteria'])->name('aras.kriteria.edit');
+    Route::post('/aras/kriteria', [ArasController::class, 'updateKriteria'])->name('aras.kriteria.update');
+    Route::get('/aras/cetak', [ArasController::class, 'cetakLaporan'])->name('aras.cetak');
+
+    // Manajemen Nilai Alternatif per Destinasi
+    Route::get('/destinasi/{id}/nilai', [App\Http\Controllers\Admin\DestinasiController::class, 'editNilai'])->name('destinasi.nilai.edit');
+    Route::post('/destinasi/{id}/nilai', [App\Http\Controllers\Admin\DestinasiController::class, 'updateNilai'])->name('destinasi.nilai.update');
 
     // 5. Booking Management (Admin View)
     Route::get('/bookings', function() {

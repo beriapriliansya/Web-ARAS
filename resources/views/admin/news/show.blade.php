@@ -7,7 +7,7 @@
                     <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
                         <h2 class="h5 mb-0">{{ __('Detail Berita') }}</h2>
                         <a href="{{ route('admin.news.edit', $news->id) }}" class="btn btn-warning btn-sm fw-bold shadow-sm">
-                            <i class="fas fa-edit me-1"></i> {{ __('Edit Berita') }}
+                            <i class="bi bi-pencil-square me-1"></i> {{ __('Edit Berita') }}
                         </a>
                     </div>
                     <div class="card-body p-4">
@@ -15,11 +15,11 @@
                         <!-- Judul dan Metadata -->
                         <h1 class="h3 fw-bold mb-3">{{ $news->title }}</h1>
                         <div class="text-muted small mb-4 border-bottom pb-2">
-                            <span><i class="fas fa-user me-1"></i> {{ $news->author->name ?? 'N/A' }}</span>
+                            <span><i class="bi bi-person me-1"></i> {{ $news->author->name ?? 'N/A' }}</span>
                             <span class="mx-2">|</span>
-                            <span><i class="fas fa-calendar-alt me-1"></i> {{ $news->created_at->format('d M Y H:i') }}</span>
+                            <span><i class="bi bi-calendar-event me-1"></i> {{ $news->created_at->format('d M Y H:i') }}</span>
                             <span class="mx-2">|</span>
-                            <span><i class="fas fa-eye me-1"></i> {{ number_format($news->views) }}</span>
+                            <span><i class="bi bi-eye me-1"></i> {{ number_format($news->views) }}</span>
                             <span class="mx-2">|</span>
                             <span>
                                 @if($news->status == 'published')

@@ -128,6 +128,57 @@
                     </div>
                 </div>
                 @endif
+
+                <!-- Nilai Kriteria ARAS -->
+                <div class="card mb-4 shadow-sm border-0">
+                    <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0 fw-bold"><i class="bi bi-calculator-fill me-2 text-success"></i> Nilai Kriteria (Alternatif ARAS)</h5>
+                        <a href="{{ route('admin.destinasi.nilai.edit', $destinasi->id) }}" class="btn btn-sm btn-outline-success fw-bold">
+                            <i class="bi bi-pencil-square"></i> Kelola Nilai
+                        </a>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-striped table-hover align-middle mb-0">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th width="15%" class="text-center">Kode</th>
+                                        <th>Nama Kriteria</th>
+                                        <th width="20%" class="text-center">Tipe</th>
+                                        <th width="25%" class="text-end">Nilai Input</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @forelse($destinasi->alternatif as $alt)
+                                        <tr>
+                                            <td class="fw-bold font-monospace text-primary text-center">{{ $alt->kriteria->kode }}</td>
+                                            <td class="fw-medium text-dark">{{ $alt->kriteria->nama_kriteria }}</td>
+                                            <td class="text-center">
+                                                <span class="badge {{ $alt->kriteria->tipe == 'benefit' ? 'bg-success' : 'bg-danger' }}">
+                                                    {{ ucfirst($alt->kriteria->tipe) }}
+                                                </span>
+                                            </td>
+                                            <td class="text-end fw-bold text-dark font-monospace">
+                                                @if($alt->kriteria->satuan == 'Rp')
+                                                    Rp {{ number_format($alt->nilai, 0, ',', '.') }}
+                                                @else
+                                                    {{ number_format($alt->nilai, 1) }} {{ $alt->kriteria->satuan }}
+                                                @endif
+                                            </td>
+                                        </tr>
+                                    @empty
+                                        <tr>
+                                            <td colspan="4" class="text-center py-4 text-muted">
+                                                <i class="bi bi-exclamation-circle fs-3 d-block mb-2 text-warning"></i>
+                                                Belum ada nilai kriteria yang diinput. Klik tombol <strong>Kelola Nilai</strong> untuk mengisi.
+                                            </td>
+                                        </tr>
+                                    @endforelse
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <!-- Right Column: Media & Map -->

@@ -18,46 +18,44 @@ class AlternatifSeeder extends Seeder
         // Format: [destinasi_nama => [kriteria_kode => nilai]]
         $nilaiData = [
             'Pantai Mutun' => [
-                'C1' => 15000,  // Harga Tiket (Rp)
-                'C2' => 25,     // Jarak (Km)
-                'C3' => 5,      // Fasilitas (Jumlah)
-                'C4' => 4.5,    // Rating (Bintang)
-                'C5' => 5,      // Aksesibilitas (Skor)
-            ],
-            'Teluk Kiluan' => [
-                'C1' => 10000,  // Harga Tiket (Rp)
-                'C2' => 60,     // Jarak (Km)
-                'C3' => 5,      // Fasilitas (Jumlah)
-                'C4' => 4.8,    // Rating (Bintang)
-                'C5' => 3,      // Aksesibilitas (Skor)
-            ],
-            'Way Lalaan' => [
-                'C1' => 5000,   // Harga Tiket (Rp)
-                'C2' => 15,     // Jarak (Km)
-                'C3' => 4,      // Fasilitas (Jumlah)
-                'C4' => 4.2,    // Rating (Bintang)
-                'C5' => 4,      // Aksesibilitas (Skor)
-            ],
-            'Goa Landak' => [
-                'C1' => 10000,  // Harga Tiket (Rp)
-                'C2' => 30,     // Jarak (Km)
-                'C3' => 4,      // Fasilitas (Jumlah)
-                'C4' => 4.0,    // Rating (Bintang)
-                'C5' => 3,      // Aksesibilitas (Skor)
+                'C1' => 4.5,
+                'C2' => 4.0,
+                'C3' => 3.8,
+                'C4' => 4.2,
+                'C5' => 15000,
+                'C6' => 4.5,
             ],
             'Pantai Sari Ringgung' => [
-                'C1' => 20000,  // Harga Tiket (Rp)
-                'C2' => 35,     // Jarak (Km)
-                'C3' => 7,      // Fasilitas (Jumlah)
-                'C4' => 4.7,    // Rating (Bintang)
-                'C5' => 5,      // Aksesibilitas (Skor)
+                'C1' => 4.2,
+                'C2' => 4.5,
+                'C3' => 4.0,
+                'C4' => 4.3,
+                'C5' => 20000,
+                'C6' => 4.8,
             ],
-            'Puncak Mas' => [
-                'C1' => 8000,   // Harga Tiket (Rp)
-                'C2' => 20,     // Jarak (Km)
-                'C3' => 5,      // Fasilitas (Jumlah)
-                'C4' => 4.4,    // Rating (Bintang)
-                'C5' => 4,      // Aksesibilitas (Skor)
+            'Pulau Pahawang' => [
+                'C1' => 3.5,
+                'C2' => 4.5,
+                'C3' => 4.5,
+                'C4' => 4.5,
+                'C5' => 10000,
+                'C6' => 4.2,
+            ],
+            'Pantai Klara' => [
+                'C1' => 4.8,
+                'C2' => 3.8,
+                'C3' => 3.9,
+                'C4' => 4.6,
+                'C5' => 15000,
+                'C6' => 4.0,
+            ],
+            'Teluk Hantu' => [
+                'C1' => 2.0,
+                'C2' => 2.0,
+                'C3' => 4.8,
+                'C4' => 3.0,
+                'C5' => 5000,
+                'C6' => 2.0,
             ],
         ];
 

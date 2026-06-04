@@ -23,6 +23,11 @@ return new class extends Migration
                   ->constrained('destinasi_wisata')
                   ->onDelete('cascade');
 
+            // Relasi ke Booking
+            $table->foreignId('booking_id')
+                  ->constrained('bookings')
+                  ->onDelete('cascade');
+
             // Rating (1-5 bintang)
             $table->tinyInteger('rating')->unsigned(); // 1, 2, 3, 4, 5
 

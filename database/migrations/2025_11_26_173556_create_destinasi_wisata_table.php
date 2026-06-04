@@ -32,7 +32,8 @@ return new class extends Migration
                 'Budaya',
                 'Kuliner',
                 'Religi',
-                'Edukasi'
+                'Edukasi',
+                'Pulau'
             ])->default('Alam');
 
             // Informasi Tambahan

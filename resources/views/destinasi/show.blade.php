@@ -74,12 +74,60 @@
                     </div>
                 </div>
 
-                <!-- Ulasan (Placeholder) -->
+                <!-- Ulasan Pengunjung -->
                 <div class="card shadow-sm border-0">
                     <div class="card-body p-4">
-                        <h5 class="fw-bold mb-3"><i class="bi bi-star-fill text-warning me-2"></i>Ulasan Pengunjung</h5>
-                        <!-- Logika ulasan bisa ditambahkan nanti -->
-                        <p class="text-muted">Belum ada ulasan untuk destinasi ini.</p>
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h5 class="fw-bold mb-0 text-dark">
+                                <i class="bi bi-chat-left-text-fill text-primary me-2"></i>Ulasan Pengunjung 
+                                <span class="badge bg-secondary ms-2" style="font-size: 0.8rem;">{{ $destinasi->ulasan->count() }}</span>
+                            </h5>
+                            @if($destinasi->ulasan->count() > 0)
+                                <div class="text-warning fw-bold">
+                                    <i class="bi bi-star-fill"></i> {{ number_format($destinasi->ulasan->avg('rating'), 1) }} / 5.0
+                                </div>
+                            @endif
+                        </div>
+                        
+                        <div class="ulasan-list">
+                            @forelse($destinasi->ulasan as $ulasan)
+                                <div class="ulasan-item pb-3 mb-3 border-bottom">
+                                    <div class="d-flex justify-content-between align-items-start flex-wrap">
+                                        <div class="d-flex align-items-center mb-2">
+                                            <div class="bg-light text-secondary rounded-circle d-flex justify-content-center align-items-center me-3 fw-bold" style="width: 40px; height: 40px; font-size: 0.9rem;">
+                                                {{ substr($ulasan->user->name, 0, 1) }}
+                                            </div>
+                                            <div>
+                                                <h6 class="fw-bold mb-0 text-dark">{{ $ulasan->user->name }}</h6>
+                                                <small class="text-muted" style="font-size: 0.75rem;">
+                                                    <i class="bi bi-clock me-1"></i> {{ $ulasan->created_at->diffForHumans() }}
+                                                </small>
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- Bintang -->
+                                        <div class="text-warning mb-2">
+                                            @for($i = 1; $i <= 5; $i++)
+                                                @if($i <= $ulasan->rating)
+                                                    <i class="bi bi-star-fill"></i>
+                                                @else
+                                                    <i class="bi bi-star"></i>
+                                                @endif
+                                            @endfor
+                                        </div>
+                                    </div>
+                                    
+                                    <p class="text-secondary mb-0 small" style="text-align: justify; line-height: 1.6;">
+                                        {!! nl2br(e($ulasan->komentar)) !!}
+                                    </p>
+                                </div>
+                            @empty
+                                <div class="text-center py-4 text-muted">
+                                    <i class="bi bi-chat-square-quote fs-2 text-secondary mb-2"></i>
+                                    <p class="mb-0 small">Belum ada ulasan untuk destinasi ini. Kunjungi destinasi ini dan jadilah yang pertama memberikan ulasan!</p>
+                                </div>
+                            @endforelse
+                        </div>
                     </div>
                 </div>
             </div>

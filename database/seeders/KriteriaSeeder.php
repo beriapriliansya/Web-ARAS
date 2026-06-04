@@ -16,46 +16,55 @@ class KriteriaSeeder extends Seeder
         $kriteriaData = [
             [
                 'kode' => 'C1',
-                'nama_kriteria' => 'Harga Tiket Masuk',
-                'bobot' => 0.20, // 20%
-                'tipe' => 'cost', // Semakin murah semakin baik
-                'keterangan' => 'Biaya yang harus dikeluarkan untuk masuk ke destinasi wisata',
-                'satuan' => 'Rp',
+                'nama_kriteria' => 'Aksesibilitas',
+                'bobot' => 0.15,
+                'tipe' => 'benefit',
+                'keterangan' => 'Kemudahan akses jalan menuju lokasi wisata',
+                'satuan' => 'Skor',
                 'status' => 'aktif',
             ],
             [
                 'kode' => 'C2',
-                'nama_kriteria' => 'Jarak dari Pusat Kota',
-                'bobot' => 0.15, // 15%
-                'tipe' => 'cost', // Semakin dekat semakin baik
-                'keterangan' => 'Jarak tempuh dari pusat Kota Pesawaran ke destinasi',
-                'satuan' => 'Km',
+                'nama_kriteria' => 'Fasilitas',
+                'bobot' => 0.20,
+                'tipe' => 'benefit',
+                'keterangan' => 'Kelengkapan sarana dan fasilitas penunjang di lokasi',
+                'satuan' => 'Skor',
                 'status' => 'aktif',
             ],
             [
                 'kode' => 'C3',
-                'nama_kriteria' => 'Fasilitas',
-                'bobot' => 0.25, // 25%
-                'tipe' => 'benefit', // Semakin banyak semakin baik
-                'keterangan' => 'Kelengkapan fasilitas yang tersedia (parkir, toilet, mushola, dll)',
-                'satuan' => 'Jumlah',
+                'nama_kriteria' => 'Kebersihan',
+                'bobot' => 0.15,
+                'tipe' => 'benefit',
+                'keterangan' => 'Tingkat kebersihan area wisata',
+                'satuan' => 'Skor',
                 'status' => 'aktif',
             ],
             [
                 'kode' => 'C4',
-                'nama_kriteria' => 'Rating Pengunjung',
-                'bobot' => 0.25, // 25%
-                'tipe' => 'benefit', // Semakin tinggi semakin baik
-                'keterangan' => 'Rating rata-rata dari pengunjung (skala 1-5)',
-                'satuan' => 'Bintang',
+                'nama_kriteria' => 'Keamanan',
+                'bobot' => 0.15,
+                'tipe' => 'benefit',
+                'keterangan' => 'Tingkat keamanan di area lokasi wisata',
+                'satuan' => 'Skor',
                 'status' => 'aktif',
             ],
             [
                 'kode' => 'C5',
-                'nama_kriteria' => 'Aksesibilitas Jalan',
-                'bobot' => 0.15, // 15%
-                'tipe' => 'benefit', // Semakin baik semakin baik
-                'keterangan' => 'Kualitas akses jalan menuju destinasi (skala 1-5)',
+                'nama_kriteria' => 'Harga Tiket',
+                'bobot' => 0.20,
+                'tipe' => 'cost',
+                'keterangan' => 'Biaya masuk / tiket masuk tempat wisata',
+                'satuan' => 'Rp',
+                'status' => 'aktif',
+            ],
+            [
+                'kode' => 'C6',
+                'nama_kriteria' => 'Jumlah Pengunjung',
+                'bobot' => 0.15,
+                'tipe' => 'benefit',
+                'keterangan' => 'Rata-rata kepadatan atau jumlah pengunjung wisata',
                 'satuan' => 'Skor',
                 'status' => 'aktif',
             ],

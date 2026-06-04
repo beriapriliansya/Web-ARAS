@@ -61,7 +61,7 @@
 
                 <!-- MENU KHUSUS SUPERADMIN: Manage Berita -->
                 <!-- Ini yang tadi ketinggalan -->
-                @if(auth()->check() && auth()->user()->role === 'superadmin' || auth()->user()->role === 'admin')
+                @if(auth()->check() && (auth()->user()->role === 'superadmin' || auth()->user()->role === 'admin'))
                 <li class="nav-item">
                     <a class="nav-link px-3 {{ request()->routeIs('admin.news.*') ? 'active fw-bold text-primary' : '' }}" href="{{ route('admin.news.index') }}">
                         Manajemen Berita

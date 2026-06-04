@@ -36,7 +36,7 @@ class NewsController extends Controller
             'title' => 'required|string|max:255',
             'content' => 'required',
             'status' => 'required|in:draft,published',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:10240',
         ]);
 
         $imagePath = null;
@@ -75,7 +75,7 @@ class NewsController extends Controller
             'title' => 'required|string|max:255',
             'content' => 'required',
             'status' => 'required|in:draft,published',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:10240',
         ]);
 
         $imagePath = $news->image;

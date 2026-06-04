@@ -9,7 +9,7 @@
                 <div class="d-flex justify-content-between align-items-center mb-4 border-bottom pb-3">
                     <h1 class="h3 mb-0 text-gray-800 fw-bold">{{ __('Manajemen Berita') }}</h1>
                     <a href="{{ route('admin.news.create') }}" class="btn btn-primary shadow-sm fw-bold rounded-pill px-4">
-                        <i class="fas fa-plus me-1"></i> {{ __('Tambah Berita Baru') }}
+                        <i class="bi bi-plus-lg me-1"></i> {{ __('Tambah Berita Baru') }}
                     </a>
                 </div>
 
@@ -48,13 +48,13 @@
                                         </td>
                                         <td class="small">{{ number_format($article->views) }}</td>
                                         <td class="small d-flex flex-wrap gap-1">
-                                            <a href="{{ route('admin.news.show', $article->id) }}" class="btn btn-info btn-sm text-white" title="Lihat"><i class="fas fa-eye"></i></a>
-                                            <a href="{{ route('admin.news.edit', $article->id) }}" class="btn btn-warning btn-sm" title="Edit"><i class="fas fa-edit"></i></a>
+                                            <a href="{{ route('admin.news.show', $article->id) }}" class="btn btn-info btn-sm text-white" title="Lihat"><i class="bi bi-eye"></i></a>
+                                            <a href="{{ route('admin.news.edit', $article->id) }}" class="btn btn-warning btn-sm" title="Edit"><i class="bi bi-pencil text-dark"></i></a>
 
                                             <form action="{{ route('admin.news.destroy', $article->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Yakin ingin menghapus berita ini?');">
                                                 @csrf
                                                 @method('DELETE')
-                                                <button type="submit" class="btn btn-danger btn-sm" title="Hapus"><i class="fas fa-trash"></i></button>
+                                                <button type="submit" class="btn btn-danger btn-sm" title="Hapus"><i class="bi bi-trash"></i></button>
                                             </form>
                                         </td>
                                     </tr>

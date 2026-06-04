@@ -20,6 +20,7 @@ class Ulasan extends Model
     protected $fillable = [
         'user_id',
         'destinasi_id',
+        'booking_id',
         'rating',
         'komentar',
         'foto_ulasan',
@@ -52,6 +53,14 @@ class Ulasan extends Model
     public function destinasi()
     {
         return $this->belongsTo(DestinasiWisata::class, 'destinasi_id');
+    }
+
+    /**
+     * Relasi ke Booking
+     */
+    public function booking()
+    {
+        return $this->belongsTo(Booking::class, 'booking_id');
     }
 
     /**

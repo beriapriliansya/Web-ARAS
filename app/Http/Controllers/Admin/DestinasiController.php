@@ -19,6 +19,15 @@ class DestinasiController extends Controller
     }
 
     /**
+     * Menampilkan DETAIL destinasi
+     */
+    public function show($id)
+    {
+        $destinasi = DestinasiWisata::with(['alternatif.kriteria', 'ulasan.user'])->findOrFail($id);
+        return view('admin.destinasi.show', compact('destinasi'));
+    }
+
+    /**
      * Menampilkan FORM tambah destinasi baru
      * (Fungsi ini yang menyebabkan error jika hilang)
      */
@@ -99,7 +108,7 @@ class DestinasiController extends Controller
             'jam_tutup' => 'nullable',
             'website' => 'nullable|url',
             'telepon' => 'nullable|string',
-            'foto' => 'nullable|image|mimes:jpeg,jpg,png|max:2048', // Max 2MB
+            'foto' => 'nullable|image|mimes:jpeg,jpg,png|max:10240', // Max 10MB
         ];
 
         $validated = $request->validate($rules);
@@ -127,6 +136,60 @@ class DestinasiController extends Controller
         } else {
             // Mode Create
             DestinasiWisata::create($validated);
+        }
+    }
+
+    /**
+     * Menampilkan form edit nilai kriteria (alternatif)
+     */
+    public function editNilai($id)
+    {
+        $destinasi = DestinasiWisata::findOrFail($id);
+        $kriteria = \App\Models\Kriteria::all();
+        
+        // Ambil nilai alternatif yang sudah ada
+        $alternatifValues = \App\Models\Alternatif::where('destinasi_id', $id)
+            ->pluck('nilai', 'kriteria_id')
+            ->toArray();
+            
+        return view('admin.destinasi.nilai', compact('destinasi', 'kriteria', 'alternatifValues'));
+    }
+
+    /**
+     * Mengupdate nilai kriteria (alternatif)
+     */
+    public function updateNilai(Request $request, $id)
+    {
+        $destinasi = DestinasiWisata::findOrFail($id);
+        $kriteria = \App\Models\Kriteria::all();
+
+        $rules = [];
+        foreach ($kriteria as $k) {
+            $rules['nilai_' . $k->id] = 'required|numeric|min:0';
+        }
+        
+        $request->validate($rules);
+
+        \Illuminate\Support\Facades\DB::beginTransaction();
+        try {
+            foreach ($kriteria as $k) {
+                \App\Models\Alternatif::updateOrCreate(
+                    [
+                        'destinasi_id' => $destinasi->id,
+                        'kriteria_id' => $k->id,
+                    ],
+                    [
+                        'nilai' => $request->input('nilai_' . $k->id),
+                        'catatan' => 'Diupdate oleh admin pada ' . now(),
+                    ]
+                );
+            }
+            \Illuminate\Support\Facades\DB::commit();
+            return redirect()->route('admin.destinasi.show', $destinasi->id)
+                ->with('success', 'Nilai kriteria berhasil diperbarui!');
+        } catch (\Exception $e) {
+            \Illuminate\Support\Facades\DB::rollBack();
+            return back()->with('error', 'Gagal menyimpan nilai: ' . $e->getMessage());
         }
     }
 }

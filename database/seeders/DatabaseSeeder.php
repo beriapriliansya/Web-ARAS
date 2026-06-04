@@ -29,6 +29,10 @@ class DatabaseSeeder extends Seeder
         $this->call(AlternatifSeeder::class);
         $this->command->info('');
 
+        $this->command->info('4️⃣ Seeding Admin & User Default...');
+        $this->call(AdminSeeder::class);
+        $this->command->info('');
+
         $this->command->info('✅ Semua seeder berhasil dijalankan!');
         $this->command->info('🎉 Database siap digunakan!');
     }

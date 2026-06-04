@@ -84,7 +84,7 @@ class BookingController extends Controller
     public function uploadPayment(Request $request, $id)
     {
         $request->validate([
-            'bukti_bayar' => 'required|image|mimes:jpeg,png,jpg|max:2048', // Max 2MB
+            'bukti_bayar' => 'required|image|mimes:jpeg,png,jpg|max:10240', // Max 10MB
         ]);
 
         $booking = Booking::where('user_id', Auth::id())->findOrFail($id);
