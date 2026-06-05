@@ -41,9 +41,9 @@
                 </div>
                 <div class="col-md-3">
                     <div class="p-4 rounded bg-light h-100">
-                        <i class="bi bi-star-fill text-warning" style="font-size: 3rem;"></i>
-                        <h3 class="fw-bold mt-3 mb-0">4.8/5</h3>
-                        <p class="text-muted">Rating Pengguna</p>
+                        <i class="bi bi-people text-warning" style="font-size: 3rem;"></i>
+                        <h3 class="fw-bold mt-3 mb-0">60++</h3>
+                        <p class="text-muted">Pengguna terdaftar</p>
                     </div>
                 </div>
                 <div class="col-md-3">
