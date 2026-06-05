@@ -15,7 +15,7 @@ class NewsController extends Controller
      */
     public function index()
     {
-        $news = News::with('author')->latest()->paginate(15);
+        $news = News::with('author')->withCount(['likes', 'comments'])->latest()->paginate(15);
         return view('admin.news.index', compact('news'));
     }
 
@@ -112,10 +112,10 @@ class NewsController extends Controller
         return redirect()->route('admin.news.index')->with('success', 'Berita berhasil dihapus!');
     }
 
-    // Metode show tidak diperlukan untuk admin karena sudah ada edit
     public function show(News $news)
     {
-        // Redirect ke edit atau tampilkan detail sederhana
+        $news->load(['author', 'comments.user', 'likes']);
+        $news->loadCount(['likes', 'comments']);
         return view('admin.news.show', compact('news'));
     }
 }

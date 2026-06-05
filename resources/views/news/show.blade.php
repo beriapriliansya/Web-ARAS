@@ -59,15 +59,15 @@
                                 @php
                                     $hasLiked = $article->likes->where('user_id', auth()->id())->isNotEmpty();
                                 @endphp
-                                <form action="{{ route('admin.news.like', $article->id) }}" method="POST" class="m-0">
+                                <form action="{{ route('news.like', $article->id) }}" method="POST" class="m-0">
                                     @csrf
-                                    <button type="submit" class="btn btn-sm {{ $hasLiked ? 'btn-danger' : 'btn-outline-danger' }} rounded-pill px-3 fw-bold d-flex align-items-center gap-1.5">
+                                    <button type="submit" class="btn btn-sm {{ $hasLiked ? 'btn-danger' : 'btn-outline-danger' }} rounded-pill px-3 fw-bold d-flex align-items-center gap-2">
                                         <i class="bi {{ $hasLiked ? 'bi-heart-fill' : 'bi-heart' }}"></i>
                                         {{ $hasLiked ? 'Batal Suka' : 'Suka' }}
                                     </button>
                                 </form>
                             @else
-                                <a href="{{ route('login') }}" class="btn btn-sm btn-outline-danger rounded-pill px-3 fw-bold d-flex align-items-center gap-1.5">
+                                <a href="{{ route('login') }}" class="btn btn-sm btn-outline-danger rounded-pill px-3 fw-bold d-flex align-items-center gap-2">
                                     <i class="bi bi-heart"></i> Suka
                                 </a>
                             @endauth
@@ -104,7 +104,7 @@
 
                         <!-- Form Input Komentar -->
                         @auth
-                            <form action="{{ route('admin.news.comment', $article->id) }}" method="POST" class="mb-4 pb-4 border-bottom">
+                            <form action="{{ route('news.comment', $article->id) }}" method="POST" class="mb-4 pb-4 border-bottom">
                                 @csrf
                                 <div class="mb-3">
                                     <label for="comment_content" class="form-label fw-bold text-secondary small">Tulis Komentar Anda:</label>
@@ -139,7 +139,7 @@
                                             </div>
                                         </div>
                                         @if(auth()->check() && auth()->id() === $comment->user_id)
-                                            <form action="{{ route('admin.news.comment.destroy', $comment->id) }}" method="POST" onsubmit="return confirm('Hapus komentar ini?')">
+                                            <form action="{{ route('news.comment.destroy', $comment->id) }}" method="POST" onsubmit="return confirm('Hapus komentar ini?')">
                                                 @csrf
                                                 @method('DELETE')
                                                 <button type="submit" class="btn btn-sm text-danger p-0 border-0" title="Hapus Komentar">

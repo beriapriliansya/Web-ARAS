@@ -119,9 +119,6 @@ class DestinasiController extends Controller
         return view('destinasi.index', compact('destinasi', 'kategoriList', 'kriteriaFilter'));
     }
 
-    /**
-     * PUBLIC VIEW: Menampilkan detail satu destinasi
-     */
     public function show($id)
     {
         // Auto-update Pantai Mutun image filename in DB to match user's file
@@ -130,8 +127,30 @@ class DestinasiController extends Controller
             ->update(['foto' => 'pantaimutun.jpg']);
 
         // Relasi dimuat agar halaman detail lengkap
-        $destinasi = DestinasiWisata::with(['ulasan.user'])->findOrFail($id);
+        $destinasi = DestinasiWisata::with(['ulasan.user', 'alternatif.kriteria'])->findOrFail($id);
 
-        return view('destinasi.show', compact('destinasi'));
+        $aksesibilitasAlternatif = $destinasi->alternatif->first(function($alt) {
+            return $alt->kriteria && $alt->kriteria->kode === 'C1';
+        });
+
+        $nilaiC1 = $aksesibilitasAlternatif ? (float)$aksesibilitasAlternatif->nilai : null;
+        $jarakText = 'Tidak diketahui';
+        if ($nilaiC1 !== null) {
+            if ($nilaiC1 >= 50.0) {
+                $jarakText = $nilaiC1 . ' km';
+            } elseif ($nilaiC1 === 0.25 || ($nilaiC1 >= 1.0 && $nilaiC1 <= 2.5)) {
+                $jarakText = '50 - 60 km';
+            } elseif ($nilaiC1 === 0.50 || ($nilaiC1 >= 2.6 && $nilaiC1 <= 3.7)) {
+                $jarakText = '61 - 70 km';
+            } elseif ($nilaiC1 === 0.75 || ($nilaiC1 >= 3.8 && $nilaiC1 <= 4.5)) {
+                $jarakText = '71 - 80 km';
+            } elseif ($nilaiC1 === 1.00 || $nilaiC1 >= 4.6) {
+                $jarakText = '> 80 km';
+            } else {
+                $jarakText = $nilaiC1 . ' km';
+            }
+        }
+
+        return view('destinasi.show', compact('destinasi', 'jarakText'));
     }
 }

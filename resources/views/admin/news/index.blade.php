@@ -29,9 +29,11 @@
                                     <tr>
                                         <th class="small py-3">{{ __('Judul') }}</th>
                                         <th class="small py-3">{{ __('Penulis') }}</th>
-                                        <th class="small py-3">{{ __('Status') }}</th>
-                                        <th class="small py-3">{{ __('Views') }}</th>
-                                        <th class="small py-3">{{ __('Aksi') }}</th>
+                                        <th class="small py-3 text-center">{{ __('Status') }}</th>
+                                        <th class="small py-3 text-center"><i class="bi bi-eye"></i> {{ __('Views') }}</th>
+                                        <th class="small py-3 text-center"><i class="bi bi-heart"></i> {{ __('Likes') }}</th>
+                                        <th class="small py-3 text-center"><i class="bi bi-chat-left-text"></i> {{ __('Comments') }}</th>
+                                        <th class="small py-3 text-center">{{ __('Aksi') }}</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -39,23 +41,35 @@
                                     <tr class="align-middle">
                                         <td class="small fw-bold">{{ Str::limit($article->title, 50) }}</td>
                                         <td class="small">{{ $article->author->name ?? 'N/A' }}</td>
-                                        <td class="small">
+                                        <td class="small text-center">
                                             @if($article->status == 'published')
                                                 <span class="badge bg-success py-2 px-3">{{ __('Published') }}</span>
                                             @else
                                                 <span class="badge bg-warning text-dark py-2 px-3">{{ __('Draft') }}</span>
                                             @endif
                                         </td>
-                                        <td class="small">{{ number_format($article->views) }}</td>
-                                        <td class="small d-flex flex-wrap gap-1">
-                                            <a href="{{ route('admin.news.show', $article->id) }}" class="btn btn-info btn-sm text-white" title="Lihat"><i class="bi bi-eye"></i></a>
-                                            <a href="{{ route('admin.news.edit', $article->id) }}" class="btn btn-warning btn-sm" title="Edit"><i class="bi bi-pencil text-dark"></i></a>
+                                        <td class="small text-center fw-semibold text-secondary">{{ number_format($article->views) }}</td>
+                                        <td class="small text-center">
+                                            <span class="badge py-2 px-3 rounded-pill fw-bold" style="background-color: rgba(220, 53, 69, 0.1); color: #dc3545;">
+                                                <i class="bi bi-heart-fill me-1"></i> {{ number_format($article->likes_count) }}
+                                            </span>
+                                        </td>
+                                        <td class="small text-center">
+                                            <span class="badge py-2 px-3 rounded-pill fw-bold" style="background-color: rgba(40, 167, 69, 0.1); color: #28a745;">
+                                                <i class="bi bi-chat-left-text-fill me-1"></i> {{ number_format($article->comments_count) }}
+                                            </span>
+                                        </td>
+                                        <td class="small text-center">
+                                            <div class="d-flex justify-content-center gap-1">
+                                                <a href="{{ route('admin.news.show', $article->id) }}" class="btn btn-info btn-sm text-white" title="Lihat"><i class="bi bi-eye"></i></a>
+                                                <a href="{{ route('admin.news.edit', $article->id) }}" class="btn btn-warning btn-sm" title="Edit"><i class="bi bi-pencil text-dark"></i></a>
 
-                                            <form action="{{ route('admin.news.destroy', $article->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Yakin ingin menghapus berita ini?');">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="submit" class="btn btn-danger btn-sm" title="Hapus"><i class="bi bi-trash"></i></button>
-                                            </form>
+                                                <form action="{{ route('admin.news.destroy', $article->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Yakin ingin menghapus berita ini?');">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="submit" class="btn btn-danger btn-sm" title="Hapus"><i class="bi bi-trash"></i></button>
+                                                </form>
+                                            </div>
                                         </td>
                                     </tr>
                                     @endforeach
