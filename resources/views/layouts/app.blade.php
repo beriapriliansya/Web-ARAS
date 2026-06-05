@@ -55,5 +55,97 @@
         <!-- TAMBAHAN WAJIB: BOOTSTRAP 5 JS BUNDLE -->
         <!-- ======================================================= -->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+        <!-- SweetAlert2 library -->
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <!-- Custom script to convert standard confirm() dialogs to beautiful centered SweetAlert2 modals -->
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                // Function to replace confirm prompts on form submit
+                function initFormConfirmations() {
+                    document.querySelectorAll('form').forEach(form => {
+                        const onsubmitAttr = form.getAttribute('onsubmit');
+                        if (onsubmitAttr && onsubmitAttr.includes('confirm(')) {
+                            const match = onsubmitAttr.match(/confirm\(['"](.+?)['"]\)/);
+                            if (match) {
+                                const message = match[1];
+                                form.removeAttribute('onsubmit');
+                                
+                                let confirmed = false;
+                                form.addEventListener('submit', function(e) {
+                                    if (confirmed) return;
+                                    e.preventDefault();
+                                    
+                                    Swal.fire({
+                                        title: 'Konfirmasi Tindakan',
+                                        text: message,
+                                        icon: 'question',
+                                        showCancelButton: true,
+                                        confirmButtonColor: '#3085d6',
+                                        cancelButtonColor: '#aaa',
+                                        confirmButtonText: 'Ya, Lanjutkan',
+                                        cancelButtonText: 'Batal',
+                                        customClass: {
+                                            popup: 'rounded-4 shadow'
+                                        }
+                                    }).then((result) => {
+                                        if (result.isConfirmed) {
+                                            confirmed = true;
+                                            form.submit();
+                                        }
+                                    });
+                                });
+                            }
+                        }
+                    });
+
+                    // Function to replace confirm prompts on button/link click
+                    document.querySelectorAll('[onclick]').forEach(el => {
+                        const onclickAttr = el.getAttribute('onclick');
+                        if (onclickAttr && onclickAttr.includes('confirm(')) {
+                            const match = onclickAttr.match(/confirm\(['"](.+?)['"]\)/);
+                            if (match) {
+                                const message = match[1];
+                                el.removeAttribute('onclick');
+                                el.addEventListener('click', function(e) {
+                                    e.preventDefault();
+                                    
+                                    Swal.fire({
+                                        title: 'Konfirmasi Tindakan',
+                                        text: message,
+                                        icon: 'question',
+                                        showCancelButton: true,
+                                        confirmButtonColor: '#3085d6',
+                                        cancelButtonColor: '#aaa',
+                                        confirmButtonText: 'Ya, Lanjutkan',
+                                        cancelButtonText: 'Batal',
+                                        customClass: {
+                                            popup: 'rounded-4 shadow'
+                                        }
+                                    }).then((result) => {
+                                        if (result.isConfirmed) {
+                                            const form = el.closest('form');
+                                            if (form) {
+                                                form.submit();
+                                            } else if (el.tagName === 'A') {
+                                                window.location.href = el.getAttribute('href');
+                                            }
+                                        }
+                                    });
+                                });
+                            }
+                        }
+                    });
+                }
+
+                initFormConfirmations();
+
+                // Re-run for dynamic forms inside modals if they are initialized/rendered
+                const observer = new MutationObserver(function(mutations) {
+                    initFormConfirmations();
+                });
+                observer.observe(document.body, { childList: true, subtree: true });
+            });
+        </script>
     </body>
 </html>

@@ -42,7 +42,7 @@
                             </div>
                         </div>
 
-                        <form action="{{ route('ulasan.store') }}" method="POST">
+                        <form action="{{ route('ulasan.store') }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin mengirim ulasan dan penilaian ini?');">
                             @csrf
                             <input type="hidden" name="booking_id" value="{{ $booking->id }}">
 

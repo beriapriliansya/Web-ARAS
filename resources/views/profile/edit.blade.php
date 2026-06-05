@@ -46,7 +46,7 @@
                             {{ __("Perbarui nama dan alamat email akun Anda.") }}
                         </p>
 
-                        <form method="post" action="{{ route('profile.update') }}">
+                        <form method="post" action="{{ route('profile.update') }}" onsubmit="return confirm('Apakah Anda yakin ingin menyimpan perubahan informasi profil Anda?');">
                             @csrf
                             @method('patch')
 
@@ -104,7 +104,7 @@
                             {{ __('Pastikan akun Anda menggunakan kata sandi yang kuat dan aman.') }}
                         </p>
 
-                        <form method="post" action="{{ route('password.update') }}">
+                        <form method="post" action="{{ route('password.update') }}" onsubmit="return confirm('Apakah Anda yakin ingin memperbarui kata sandi Anda?');">
                             @csrf
                             @method('put')
 

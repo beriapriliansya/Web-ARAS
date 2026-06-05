@@ -61,13 +61,13 @@
                                         </td>
                                         <td class="small text-center">
                                             <div class="d-flex justify-content-center gap-1">
-                                                <a href="{{ route('admin.news.show', $article->id) }}" class="btn btn-info btn-sm text-white" title="Lihat"><i class="bi bi-eye"></i></a>
-                                                <a href="{{ route('admin.news.edit', $article->id) }}" class="btn btn-warning btn-sm" title="Edit"><i class="bi bi-pencil text-dark"></i></a>
+                                                <a href="{{ route('admin.news.show', $article->id) }}" class="btn btn-sm text-white d-inline-flex align-items-center justify-content-center" style="background: #0ea5e9 !important; width: 36px; height: 36px; border-radius: 50% !important;" title="Lihat"><i class="bi bi-eye"></i></a>
+                                                <a href="{{ route('admin.news.edit', $article->id) }}" class="btn btn-sm text-dark d-inline-flex align-items-center justify-content-center" style="background: #ffc107 !important; width: 36px; height: 36px; border-radius: 50% !important;" title="Edit"><i class="bi bi-pencil"></i></a>
 
                                                 <form action="{{ route('admin.news.destroy', $article->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Yakin ingin menghapus berita ini?');">
                                                     @csrf
                                                     @method('DELETE')
-                                                    <button type="submit" class="btn btn-danger btn-sm" title="Hapus"><i class="bi bi-trash"></i></button>
+                                                    <button type="submit" class="btn btn-sm text-white d-inline-flex align-items-center justify-content-center" style="background: #dc3545 !important; width: 36px; height: 36px; border-radius: 50% !important;" title="Hapus"><i class="bi bi-trash"></i></button>
                                                 </form>
                                             </div>
                                         </td>

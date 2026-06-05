@@ -45,7 +45,7 @@ class NewsController extends Controller
             $imagePath = $request->file('image')->store('news_images', 'public');
         }
 
-        News::create([
+        $article = News::create([
             'title' => $validated['title'],
             'slug' => Str::slug($validated['title']) . '-' . time(), // Tambah timestamp agar slug unik
             'content' => $validated['content'],
@@ -54,6 +54,19 @@ class NewsController extends Controller
             'status' => $validated['status'],
             'published_at' => ($validated['status'] == 'published') ? now() : null,
         ]);
+
+        if ($validated['status'] == 'published') {
+            \App\Models\UserNotification::ensureTableExists();
+            $users = \App\Models\User::all();
+            foreach ($users as $u) {
+                \App\Models\UserNotification::create([
+                    'user_id' => $u->id,
+                    'type' => 'news',
+                    'title' => 'Berita Baru Telah Terbit',
+                    'message' => 'Artikel baru "' . $validated['title'] . '" baru saja dipublikasikan. Yuk, baca sekarang!',
+                ]);
+            }
+        }
 
         return redirect()->route('admin.news.index')->with('success', 'Berita berhasil ditambahkan!');
     }
@@ -87,6 +100,7 @@ class NewsController extends Controller
             $imagePath = $request->file('image')->store('news_images', 'public');
         }
 
+        $oldStatus = $news->status;
         $news->update([
             'title' => $validated['title'],
             'slug' => Str::slug($validated['title']) . '-' . time(),
@@ -95,6 +109,19 @@ class NewsController extends Controller
             'status' => $validated['status'],
             'published_at' => ($validated['status'] == 'published' && $news->published_at === null) ? now() : $news->published_at,
         ]);
+
+        if ($validated['status'] == 'published' && $oldStatus !== 'published') {
+            \App\Models\UserNotification::ensureTableExists();
+            $users = \App\Models\User::all();
+            foreach ($users as $u) {
+                \App\Models\UserNotification::create([
+                    'user_id' => $u->id,
+                    'type' => 'news',
+                    'title' => 'Berita Baru Telah Terbit',
+                    'message' => 'Artikel baru "' . $validated['title'] . '" baru saja dipublikasikan. Yuk, baca sekarang!',
+                ]);
+            }
+        }
 
         return redirect()->route('admin.news.index')->with('success', 'Berita berhasil diperbarui!');
     }

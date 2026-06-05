@@ -198,6 +198,35 @@
                 btnSubmit.innerText = 'Simpan Data';
                 btnCancel.classList.add('d-none');
             });
+
+            // Konfirmasi saat submit form (tambah/update) dengan SweetAlert2
+            let formConfirmed = false;
+            form.addEventListener('submit', function(e) {
+                if (formConfirmed) return;
+                e.preventDefault();
+
+                const isEdit = formMethod.value === 'PUT';
+                const msg = isEdit ? 'Apakah Anda yakin ingin memperbarui data sub-kriteria ini?' : 'Apakah Anda yakin ingin menambahkan sub-kriteria baru ini?';
+
+                Swal.fire({
+                    title: 'Konfirmasi Tindakan',
+                    text: msg,
+                    icon: 'question',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#aaa',
+                    confirmButtonText: 'Ya, Lanjutkan',
+                    cancelButtonText: 'Batal',
+                    customClass: {
+                        popup: 'rounded-4 shadow'
+                    }
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        formConfirmed = true;
+                        form.submit();
+                    }
+                });
+            });
         });
     </script>
 </x-app-layout>

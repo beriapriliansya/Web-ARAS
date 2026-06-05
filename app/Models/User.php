@@ -73,4 +73,12 @@ class User extends Authenticatable
     {
         return $this->hasMany(NewsComment::class, 'user_id');
     }
+
+    /**
+     * Relasi ke UserNotification
+     */
+    public function notifications()
+    {
+        return $this->hasMany(UserNotification::class, 'user_id');
+    }
 }

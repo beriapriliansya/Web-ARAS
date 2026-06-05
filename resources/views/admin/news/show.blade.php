@@ -6,7 +6,7 @@
                 <div class="card shadow-lg border-0 rounded-3">
                     <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
                         <h2 class="h5 mb-0">{{ __('Detail Berita') }}</h2>
-                        <a href="{{ route('admin.news.edit', $news->id) }}" class="btn btn-warning btn-sm fw-bold shadow-sm">
+                        <a href="{{ route('admin.news.edit', $news->id) }}" class="btn btn-sm fw-bold shadow-sm text-dark rounded-pill" style="background: #ffc107 !important; border: none; padding: 0.4rem 1.2rem;">
                             <i class="bi bi-pencil-square me-1"></i> {{ __('Edit Berita') }}
                         </a>
                     </div>

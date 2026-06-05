@@ -19,7 +19,7 @@
                 </div>
 
                 <!-- Form -->
-                <form action="{{ route('admin.destinasi.store') }}" method="POST" enctype="multipart/form-data">
+                <form action="{{ route('admin.destinasi.store') }}" method="POST" enctype="multipart/form-data" onsubmit="return confirm('Apakah Anda yakin ingin menyimpan destinasi wisata baru ini?');">
                     @csrf
 
                     <!-- Informasi Dasar -->

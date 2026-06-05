@@ -20,8 +20,17 @@ class PasswordController extends Controller
             'password' => ['required', Password::defaults(), 'confirmed'],
         ]);
 
-        $request->user()->update([
+        $user = $request->user();
+        $user->update([
             'password' => Hash::make($validated['password']),
+        ]);
+
+        \App\Models\UserNotification::ensureTableExists();
+        \App\Models\UserNotification::create([
+            'user_id' => $user->id,
+            'type' => 'security_password',
+            'title' => 'Kata Sandi Diubah',
+            'message' => 'Kata sandi akun Anda berhasil diperbarui demi menjaga keamanan akun Anda.',
         ]);
 
         return back()->with('status', 'password-updated');

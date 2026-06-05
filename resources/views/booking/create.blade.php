@@ -36,7 +36,7 @@
                             </div>
                         </div>
 
-                        <form action="{{ route('booking.store') }}" method="POST">
+                        <form action="{{ route('booking.store') }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin memproses pemesanan tiket ini?');">
                             @csrf
                             <input type="hidden" name="destinasi_id" value="{{ $destinasi->id }}">
 

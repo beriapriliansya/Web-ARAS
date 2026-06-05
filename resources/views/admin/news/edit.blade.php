@@ -10,7 +10,7 @@
                     </div>
                     <div class="card-body p-4">
 
-                        <form action="{{ route('admin.news.update', $news->id) }}" method="POST" enctype="multipart/form-data">
+                        <form action="{{ route('admin.news.update', $news->id) }}" method="POST" enctype="multipart/form-data" onsubmit="return confirm('Apakah Anda yakin ingin memperbarui berita ini?');">
                             @csrf
                             @method('PATCH')
 

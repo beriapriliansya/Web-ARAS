@@ -1,22 +1,18 @@
 <x-app-layout>
 
     <!-- Page Header -->
-    <div class="bg-primary text-white py-5">
-        <div class="container">
-            <div class="row align-items-center">
-                <div class="col-md-8">
-                    <h1 class="display-4 fw-bold mb-2">
+    <div class="container mt-4">
+        <div class="card shadow-sm border-0">
+            <div class="card-body d-flex justify-content-between align-items-center flex-wrap gap-3">
+                <div>
+                    <h2 class="fw-bold mb-1 text-primary m-0">
                         <i class="bi bi-pin-map-fill"></i> Destinasi Wisata
-                    </h1>
-                    <p class="lead mb-0">
-                        Total {{ $destinasi->total() }} destinasi wisata terdaftar dalam sistem.
-                    </p>
+                    </h2>
+                    <p class="text-muted mb-0 small">Total {{ $destinasi->total() }} destinasi wisata terdaftar dalam sistem.</p>
                 </div>
-                <div class="col-md-4 text-md-end">
-                    <a href="{{ route('admin.destinasi.create') }}" class="btn btn-light btn-lg text-primary fw-bold">
-                        <i class="bi bi-plus-circle"></i> Tambah Destinasi
-                    </a>
-                </div>
+                <a href="{{ route('admin.destinasi.create') }}" class="btn btn-primary fw-bold rounded-pill">
+                    <i class="bi bi-plus-circle"></i> Tambah Destinasi
+                </a>
             </div>
         </div>
     </div>

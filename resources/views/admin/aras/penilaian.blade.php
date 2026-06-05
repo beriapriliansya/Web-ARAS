@@ -49,7 +49,7 @@
                 <div class="card-header bg-primary text-white py-3">
                     <h6 class="mb-0 fw-bold"><i class="bi bi-pencil-square me-2"></i>Langkah 2: Beri Penilaian ({{ $selectedDestinasi->nama }})</h6>
                 </div>
-                <form action="{{ route('admin.aras.penilaian.store') }}" method="POST" class="m-0">
+                <form action="{{ route('admin.aras.penilaian.store') }}" method="POST" class="m-0" onsubmit="return confirm('Apakah Anda yakin ingin menyimpan penilaian objek wisata ini?');">
                     @csrf
                     <input type="hidden" name="destinasi_id" value="{{ $selectedDestinasi->id }}">
 

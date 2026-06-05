@@ -36,7 +36,7 @@
                             Pilih opsi sub-kriteria untuk alternatif destinasi ini. Nilai ini akan digunakan dalam perhitungan normalisasi dan optimasi matriks keputusan metode ARAS.
                         </p>
 
-                        <form action="{{ route('admin.destinasi.nilai.update', $destinasi->id) }}" method="POST">
+                        <form action="{{ route('admin.destinasi.nilai.update', $destinasi->id) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menyimpan nilai alternatif kriteria ini?');">
                             @csrf
                             
                             @foreach($kriteria as $k)

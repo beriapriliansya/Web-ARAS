@@ -170,7 +170,7 @@
                     <h5 class="modal-title fw-bold">Tambah Destinasi Wisata Baru</h5>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <form action="{{ route('admin.destinasi.store') }}" method="POST">
+                <form action="{{ route('admin.destinasi.store') }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menambahkan destinasi wisata baru ini?');">
                     @csrf
                     <div class="modal-body">
                         <div class="row">
@@ -225,7 +225,7 @@
                     <h5 class="modal-title fw-bold">Edit Destinasi Wisata</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <form id="formEditDestinasi" method="POST">
+                <form id="formEditDestinasi" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin memperbarui destinasi wisata ini?');">
                     @csrf
                     @method('PUT')
                     <div class="modal-body">
@@ -281,7 +281,7 @@
                     <h5 class="modal-title fw-bold">Tambah User / Admin Baru</h5>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <form action="{{ route('admin.users.store') }}" method="POST">
+                <form action="{{ route('admin.users.store') }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menambahkan user/admin baru ini?');">
                     @csrf
                     <div class="modal-body">
                         <div class="mb-3">
@@ -337,7 +337,7 @@
                     <h5 class="modal-title fw-bold">Edit User / Hak Akses</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <form id="formEditUser" method="POST">
+                <form id="formEditUser" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menyimpan perubahan data user ini?');">
                     @csrf
                     @method('PUT')
                     <div class="modal-body">

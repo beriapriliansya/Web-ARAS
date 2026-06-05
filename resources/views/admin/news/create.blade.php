@@ -11,7 +11,7 @@
                     </div>
                     <div class="card-body p-4">
 
-                        <form action="{{ route('admin.news.store') }}" method="POST" enctype="multipart/form-data">
+                        <form action="{{ route('admin.news.store') }}" method="POST" enctype="multipart/form-data" onsubmit="return confirm('Apakah Anda yakin ingin mempublikasikan berita baru ini?');">
                             @csrf
 
                             <!-- Judul Berita -->

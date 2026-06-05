@@ -140,7 +140,7 @@
                                     @endif
 
                                     @if($booking->status == 'pending')
-                                        <form action="{{ route('booking.upload_payment', $booking->id) }}" method="POST" enctype="multipart/form-data">
+                                        <form action="{{ route('booking.upload_payment', $booking->id) }}" method="POST" enctype="multipart/form-data" onsubmit="return confirm('Apakah Anda yakin bukti pembayaran yang Anda pilih sudah benar?');">
                                             @csrf
                                             <div class="mb-3">
                                                 <label for="bukti_bayar" class="form-label small text-secondary">Upload file gambar bukti transfer (JPG, JPEG, PNG, max 2MB):</label>

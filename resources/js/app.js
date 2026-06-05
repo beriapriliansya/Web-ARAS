@@ -7,8 +7,8 @@ import * as bootstrap from 'bootstrap';
 window.bootstrap = bootstrap;
 
 // Custom JavaScript
-console.log('%c🏝️ Pariwisata Pesawaran', 'font-size: 24px; color: #667eea; font-weight: bold;');
-console.log('%c✨ Website loaded successfully!', 'font-size: 14px; color: #764ba2;');
+console.log('%c🏝️ Pariwisata Pesawaran', 'font-size: 24px; color: #1e3c72; font-weight: bold;');
+console.log('%c✨ Website loaded successfully!', 'font-size: 14px; color: #2a5298;');
 
 // ==========================================
 // DOM Content Loaded Event

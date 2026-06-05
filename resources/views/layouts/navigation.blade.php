@@ -85,13 +85,6 @@
                 </li>
                 @endif
 
-                <!-- Menu Tentang -->
-                <li class="nav-item">
-                    <a class="nav-link px-3 {{ request()->routeIs('tentang') ? 'active fw-bold text-primary' : '' }}" href="{{ route('tentang') }}">
-                        Tentang
-                    </a>
-                </li>
-
                 <!-- MENU KHUSUS SUPERADMIN: Manage Berita -->
                 <!-- Ini yang tadi ketinggalan -->
                 @if(auth()->check() && (auth()->user()->role === 'superadmin' || auth()->user()->role === 'admin'))
@@ -111,13 +104,35 @@
                 </li>
                 @endif
 
+                <!-- Menu Tentang -->
+                <li class="nav-item">
+                    <a class="nav-link px-3 {{ request()->routeIs('tentang') ? 'active fw-bold text-primary' : '' }}" href="{{ route('tentang') }}">
+                        Tentang
+                    </a>
+                </li>
+
             </ul>
 
             <!-- MENU KANAN (User Authentication) -->
             <ul class="navbar-nav ms-auto align-items-lg-center mb-2 mb-lg-0">
                 @auth
+                    @php
+                        \App\Models\UserNotification::ensureTableExists();
+                        $userNotifications = \App\Models\UserNotification::getUserNotifications(auth()->id())->take(5);
+                        $unreadNotificationCount = \App\Models\UserNotification::getUnreadCount(auth()->id());
+                    @endphp
                     <!-- JIKA SUDAH LOGIN -->
                     <li class="nav-item d-flex align-items-center gap-3">
+
+                        <!-- Lonceng Notifikasi (Link ke Halaman Notifikasi) -->
+                        <a href="{{ route('notifications.index') }}" class="btn border rounded-circle d-flex justify-content-center align-items-center position-relative shadow-sm me-2" style="width: 40px; height: 40px; background-color: #ffffff;" title="Notifikasi">
+                            <i class="bi bi-bell text-dark fs-5"></i>
+                            @if($unreadNotificationCount > 0)
+                                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" id="unread-count-badge" style="font-size: 0.55rem; padding: 0.25em 0.5em; top: 5px !important; left: 32px !important;">
+                                    {{ $unreadNotificationCount }}
+                                </span>
+                            @endif
+                        </a>
 
                         <!-- Nama User (Link Cerdas: Admin ke Dashboard, User ke Profil) -->
                         <a href="{{ (auth()->user()->role === 'admin' || auth()->user()->role === 'superadmin') ? route('admin.dashboard') : route('profile.edit') }}"

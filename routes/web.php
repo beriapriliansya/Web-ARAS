@@ -101,6 +101,27 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/news/{id}/comment', [NewsController::class, 'storeComment'])->name('news.comment');
     Route::delete('/news/comment/{id}', [NewsController::class, 'destroyComment'])->name('news.comment.destroy');
 
+    // Notifikasi
+    Route::get('/notifications', function() {
+        \App\Models\UserNotification::ensureTableExists();
+        $notifications = \App\Models\UserNotification::where('user_id', auth()->id())->latest()->paginate(15);
+        return view('profile.notifications', compact('notifications'));
+    })->name('notifications.index');
+
+    Route::post('/notifications/read-all', function() {
+        \App\Models\UserNotification::ensureTableExists();
+        \App\Models\UserNotification::where('user_id', auth()->id())
+            ->whereNull('read_at')
+            ->update(['read_at' => now()]);
+        return redirect()->back()->with('success', 'Semua notifikasi berhasil ditandai sebagai dibaca.');
+    })->name('notifications.readAll');
+
+    Route::post('/notifications/{id}/read', function($id) {
+        \App\Models\UserNotification::ensureTableExists();
+        $notification = \App\Models\UserNotification::where('user_id', auth()->id())->findOrFail($id);
+        $notification->update(['read_at' => now()]);
+        return redirect()->back()->with('success', 'Notifikasi berhasil ditandai sebagai dibaca.');
+    })->name('notifications.read');
 });
 
 // ==========================================

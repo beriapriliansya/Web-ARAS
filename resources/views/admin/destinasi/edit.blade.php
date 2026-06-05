@@ -24,7 +24,7 @@
                 </div>
 
                 <!-- Form -->
-                <form action="{{ route('admin.destinasi.update', $destinasi->id) }}" method="POST" enctype="multipart/form-data">
+                <form action="{{ route('admin.destinasi.update', $destinasi->id) }}" method="POST" enctype="multipart/form-data" onsubmit="return confirm('Apakah Anda yakin ingin memperbarui data destinasi wisata ini?');">
                     @csrf
                     @method('PUT')
 

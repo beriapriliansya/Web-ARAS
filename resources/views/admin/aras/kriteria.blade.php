@@ -30,7 +30,7 @@
                     <strong>Total bobot wajib berjumlah 1.0 (jika desimal) atau 100 (jika persen).</strong>
                 </p>
 
-                <form action="{{ route('admin.aras.updateKriteria') }}" method="POST" id="formKriteria">
+                <form action="{{ route('admin.aras.updateKriteria') }}" method="POST" id="formKriteria" onsubmit="return confirm('Apakah Anda yakin ingin menyimpan perubahan bobot dan tipe kriteria ini?');">
                     @csrf
                     
                     <div class="table-responsive mb-4">
