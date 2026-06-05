@@ -96,6 +96,11 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/ulasan/create/{booking_id}', [UlasanController::class, 'create'])->name('ulasan.create');
     Route::post('/ulasan', [UlasanController::class, 'store'])->name('ulasan.store');
 
+    // Likes & Comments pada Berita (News)
+    Route::post('/news/{id}/like', [NewsController::class, 'toggleLike'])->name('news.like');
+    Route::post('/news/{id}/comment', [NewsController::class, 'storeComment'])->name('news.comment');
+    Route::delete('/news/comment/{id}', [NewsController::class, 'destroyComment'])->name('news.comment.destroy');
+
 });
 
 // ==========================================

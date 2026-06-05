@@ -57,4 +57,20 @@ class User extends Authenticatable
         // belongsTo artinya: User "milik" satu destinasi (karena ada destinasi_id di tabel users)
         return $this->belongsTo(DestinasiWisata::class, 'destinasi_id');
     }
+
+    /**
+     * Relasi ke NewsLike
+     */
+    public function newsLikes()
+    {
+        return $this->hasMany(NewsLike::class, 'user_id');
+    }
+
+    /**
+     * Relasi ke NewsComment
+     */
+    public function newsComments()
+    {
+        return $this->hasMany(NewsComment::class, 'user_id');
+    }
 }

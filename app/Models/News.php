@@ -41,6 +41,18 @@ class News extends Model
         return $this->belongsTo(User::class, 'user_id');
     }
 
+    // Relasi: Berita memiliki banyak Like
+    public function likes()
+    {
+        return $this->hasMany(NewsLike::class, 'news_id');
+    }
+
+    // Relasi: Berita memiliki banyak Komentar
+    public function comments()
+    {
+        return $this->hasMany(NewsComment::class, 'news_id');
+    }
+
     // Scope untuk mengambil berita yang sudah dipublikasi
     public function scopePublished($query)
     {

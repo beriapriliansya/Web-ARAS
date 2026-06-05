@@ -17,17 +17,25 @@
                     <h1 class="display-6 fw-bold mb-3 text-dark">{{ $article->title }}</h1>
 
                     <!-- Meta Info -->
-                    <div class="d-flex align-items-center gap-3 text-muted small mb-4 pb-3 border-bottom">
+                    <div class="d-flex align-items-center gap-3 text-muted flex-wrap small mb-4 pb-3 border-bottom">
                         <div class="d-flex align-items-center">
-                            <i class="bi bi-calendar-event me-2 text-primary"></i>
+                            <i class="bi bi-calendar-event me-1.5 text-primary"></i>
                             {{ $article->published_at ? $article->published_at->format('d M Y') : 'N/A' }}
                         </div>
                         <div class="d-flex align-items-center">
-                            <i class="bi bi-eye me-2 text-info"></i>
+                            <i class="bi bi-eye me-1.5 text-info"></i>
                             {{ number_format($article->views) }} Kali Dilihat
                         </div>
                         <div class="d-flex align-items-center">
-                            <i class="bi bi-person me-2 text-secondary"></i>
+                            <i class="bi bi-heart-fill me-1.5 text-danger"></i>
+                            {{ $article->likes->count() }} Menyukai
+                        </div>
+                        <div class="d-flex align-items-center">
+                            <i class="bi bi-chat-left-text-fill me-1.5 text-success"></i>
+                            {{ $article->comments->count() }} Komentar
+                        </div>
+                        <div class="d-flex align-items-center">
+                            <i class="bi bi-person me-1.5 text-secondary"></i>
                             Penulis: {{ $article->author->name ?? 'Admin Dinas' }}
                         </div>
                     </div>
@@ -44,16 +52,113 @@
                         {!! nl2br($article->content) !!}
                     </div>
 
-                    <!-- Share Section -->
-                    <div class="mt-5 pt-4 border-top d-flex align-items-center justify-content-between flex-wrap gap-2">
-                        <span class="fw-bold text-dark">Bagikan Artikel Ini:</span>
-                        <div class="d-flex gap-2">
-                            <button class="btn btn-outline-primary btn-sm rounded-pill"><i class="bi bi-facebook me-1"></i> Facebook</button>
-                            <button class="btn btn-outline-info btn-sm rounded-pill"><i class="bi bi-twitter-x me-1"></i> Twitter</button>
-                            <button class="btn btn-outline-success btn-sm rounded-pill"><i class="bi bi-whatsapp me-1"></i> WhatsApp</button>
+                    <!-- Interaction & Share Section -->
+                    <div class="mt-5 pt-4 border-top d-flex align-items-center justify-content-between flex-wrap gap-3">
+                        <div class="d-flex align-items-center gap-2">
+                            @auth
+                                @php
+                                    $hasLiked = $article->likes->where('user_id', auth()->id())->isNotEmpty();
+                                @endphp
+                                <form action="{{ route('admin.news.like', $article->id) }}" method="POST" class="m-0">
+                                    @csrf
+                                    <button type="submit" class="btn btn-sm {{ $hasLiked ? 'btn-danger' : 'btn-outline-danger' }} rounded-pill px-3 fw-bold d-flex align-items-center gap-1.5">
+                                        <i class="bi {{ $hasLiked ? 'bi-heart-fill' : 'bi-heart' }}"></i>
+                                        {{ $hasLiked ? 'Batal Suka' : 'Suka' }}
+                                    </button>
+                                </form>
+                            @else
+                                <a href="{{ route('login') }}" class="btn btn-sm btn-outline-danger rounded-pill px-3 fw-bold d-flex align-items-center gap-1.5">
+                                    <i class="bi bi-heart"></i> Suka
+                                </a>
+                            @endauth
+                            <span class="text-secondary small fw-semibold">{{ $article->likes->count() }} orang menyukai berita ini</span>
+                        </div>
+                        
+                        <div class="d-flex align-items-center gap-2">
+                            <span class="fw-bold text-dark small me-1">Bagikan:</span>
+                            <button class="btn btn-outline-primary btn-sm rounded-pill"><i class="bi bi-facebook"></i></button>
+                            <button class="btn btn-outline-info btn-sm rounded-pill"><i class="bi bi-twitter-x"></i></button>
+                            <button class="btn btn-outline-success btn-sm rounded-pill"><i class="bi bi-whatsapp"></i></button>
                         </div>
                     </div>
                 </article>
+
+                <!-- KOLOM KOMENTAR -->
+                <div class="card border shadow border-0 rounded-4 overflow-hidden mt-4 shadow-sm">
+                    <div class="card-header bg-primary text-white py-3">
+                        <h6 class="mb-0 fw-bold"><i class="bi bi-chat-left-text-fill me-2"></i>Komentar ({{ $article->comments->count() }})</h6>
+                    </div>
+                    <div class="card-body p-4 bg-white">
+                        @if(session('success'))
+                            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                <i class="bi bi-check-circle-fill me-2"></i> {{ session('success') }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                            </div>
+                        @endif
+                        @if(session('error'))
+                            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                <i class="bi bi-exclamation-triangle-fill me-2"></i> {{ session('error') }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                            </div>
+                        @endif
+
+                        <!-- Form Input Komentar -->
+                        @auth
+                            <form action="{{ route('admin.news.comment', $article->id) }}" method="POST" class="mb-4 pb-4 border-bottom">
+                                @csrf
+                                <div class="mb-3">
+                                    <label for="comment_content" class="form-label fw-bold text-secondary small">Tulis Komentar Anda:</label>
+                                    <textarea name="content" id="comment_content" rows="3" class="form-control rounded-3" placeholder="Bagikan tanggapan Anda mengenai berita ini..." required></textarea>
+                                </div>
+                                <div class="d-flex justify-content-end">
+                                    <button type="submit" class="btn btn-primary px-4 fw-bold rounded-pill">
+                                        Kirim Komentar
+                                    </button>
+                                </div>
+                            </form>
+                        @else
+                            <div class="alert alert-warning rounded-3 mb-4 p-3 d-flex align-items-center justify-content-between flex-wrap gap-2">
+                                <span class="small"><i class="bi bi-info-circle-fill me-2"></i> Anda harus login terlebih dahulu untuk menyukai atau mengomentari berita ini.</span>
+                                <a href="{{ route('login') }}" class="btn btn-sm btn-primary fw-bold px-3 rounded-pill">Login</a>
+                            </div>
+                        @endif
+
+                        <!-- Daftar Komentar -->
+                        <div class="comments-list d-flex flex-column gap-3">
+                            @forelse($article->comments as $comment)
+                                <div class="p-3 bg-light rounded-3 border">
+                                    <div class="d-flex justify-content-between align-items-start flex-wrap gap-2 mb-2">
+                                        <div class="d-flex align-items-center gap-2">
+                                            <!-- Initial Badge Avatar -->
+                                            <div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center fw-bold" style="width: 32px; height: 32px; font-size: 0.85rem;">
+                                                {{ strtoupper(substr($comment->user->name, 0, 1)) }}
+                                            </div>
+                                            <div>
+                                                <h6 class="fw-bold mb-0 text-dark" style="font-size: 0.9rem;">{{ $comment->user->name }}</h6>
+                                                <small class="text-muted" style="font-size: 0.75rem;">{{ $comment->created_at->diffForHumans() }}</small>
+                                            </div>
+                                        </div>
+                                        @if(auth()->check() && auth()->id() === $comment->user_id)
+                                            <form action="{{ route('admin.news.comment.destroy', $comment->id) }}" method="POST" onsubmit="return confirm('Hapus komentar ini?')">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="btn btn-sm text-danger p-0 border-0" title="Hapus Komentar">
+                                                    <i class="bi bi-trash-fill"></i>
+                                                </button>
+                                            </form>
+                                        @endif
+                                    </div>
+                                    <p class="mb-0 text-secondary" style="font-size: 0.95rem; white-space: pre-line;">{{ $comment->content }}</p>
+                                </div>
+                            @empty
+                                <div class="text-center py-4 text-muted">
+                                    <i class="bi bi-chat-quote fs-2 mb-2 d-block"></i>
+                                    <p class="small mb-0">Belum ada komentar. Jadilah yang pertama memberikan tanggapan!</p>
+                                </div>
+                            @endforelse
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <!-- Kolom Kanan: Artikel Terkait & Sidebar -->
