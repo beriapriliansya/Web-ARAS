@@ -146,8 +146,12 @@
                                     <input type="text" class="form-control" name="telepon" value="{{ old('telepon') }}" placeholder="081234567890">
                                 </div>
                                 <div class="col-md-6">
-                                    <label class="form-label fw-bold">Website</label>
-                                    <input type="url" class="form-control" name="website" value="{{ old('website') }}" placeholder="https://example.com">
+                                    <label class="form-label fw-bold">Website (Opsional)</label>
+                                    <input type="text" class="form-control @error('website') is-invalid @enderror" 
+                                           name="website" value="{{ old('website') }}" placeholder="https://example.com atau www.example.com">
+                                    @error('website')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
                                 </div>
 
                                 <!-- Foto -->

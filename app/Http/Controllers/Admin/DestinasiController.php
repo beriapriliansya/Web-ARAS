@@ -106,12 +106,21 @@ class DestinasiController extends Controller
             'longitude' => 'required|numeric',
             'jam_buka' => 'nullable',
             'jam_tutup' => 'nullable',
-            'website' => 'nullable|url',
+            'website' => 'nullable|string|max:255',
             'telepon' => 'nullable|string',
             'foto' => 'nullable|image|mimes:jpeg,jpg,png|max:10240', // Max 10MB
         ];
 
         $validated = $request->validate($rules);
+
+        // Auto prepend protocol to website if it is filled but missing a scheme
+        if (!empty($validated['website'])) {
+            $website = trim($validated['website']);
+            if (!preg_match("~^(?:f|ht)tps?://~i", $website)) {
+                $website = "https://" . $website;
+            }
+            $validated['website'] = $website;
+        }
 
         // 2. Upload Foto Baru (Jika Ada)
         if ($request->hasFile('foto')) {
