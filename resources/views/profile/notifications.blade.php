@@ -1,17 +1,28 @@
 <x-app-layout>
+    <style>
+        .notif-item {
+            transition: all 0.2s ease;
+        }
+        .notif-item:hover {
+            background-color: #f8fafc !important;
+        }
+    </style>
+
     <!-- Page Header -->
-    <div class="bg-primary text-white py-5" style="background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);">
-        <div class="container text-center py-3">
-            <h1 class="display-4 fw-bold mb-2">
-                <i class="bi bi-bell-fill"></i> Notifikasi Anda
-            </h1>
-            <p class="lead mb-0 opacity-75">
-                Lihat riwayat aktivitas, pembaruan berita, dan keamanan akun Anda
-            </p>
+    <div class="container mt-4">
+        <div class="card shadow-sm border-0 rounded-4 overflow-hidden">
+            <div class="card-body py-3 d-flex justify-content-between align-items-center flex-wrap gap-3 border-start border-primary border-5">
+                <div>
+                    <h2 class="fw-bold mb-1 text-primary m-0">
+                        <i class="bi bi-bell-fill text-warning"></i> Notifikasi Anda
+                    </h2>
+                    <p class="text-muted mb-0 small">Lihat riwayat aktivitas, pembaruan berita, dan keamanan akun Anda</p>
+                </div>
+            </div>
         </div>
     </div>
 
-    <div class="container py-5">
+    <div class="container py-4">
         <div class="row justify-content-center">
             <div class="col-lg-8">
                 
@@ -44,7 +55,7 @@
                     <div class="card-body p-0 bg-white">
                         <div class="list-group list-group-flush">
                             @forelse($notifications as $notif)
-                                <div class="list-group-item p-4 transition-all" style="background-color: #ffffff; @if(!$notif->read_at) border-left: 4px solid #0d6efd !important; @endif">
+                                <div class="list-group-item p-4 transition-all notif-item" style="background-color: #ffffff; @if(!$notif->read_at) border-left: 4px solid #2a5298 !important; @endif">
                                     <div class="d-flex justify-content-between align-items-start gap-2 mb-2 flex-wrap">
                                         <div class="d-flex align-items-center gap-2">
                                             <!-- Notification Icon based on type -->

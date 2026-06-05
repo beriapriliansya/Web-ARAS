@@ -1,13 +1,15 @@
 <x-app-layout>
     <!-- Page Header -->
-    <div class="bg-primary text-white py-5" style="background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);">
-        <div class="container text-center py-3">
-            <h1 class="display-4 fw-bold mb-2">
-                <i class="bi bi-person-fill-gear"></i> Pengaturan Profil
-            </h1>
-            <p class="lead mb-0 opacity-75">
-                Kelola informasi akun dan pengaturan keamanan Anda
-            </p>
+    <div class="container mt-4">
+        <div class="card shadow-sm border-0 rounded-4 overflow-hidden">
+            <div class="card-body py-3 d-flex justify-content-between align-items-center flex-wrap gap-3 border-start border-primary border-5">
+                <div>
+                    <h2 class="fw-bold mb-1 text-primary m-0">
+                        <i class="bi bi-person-fill-gear text-warning"></i> Pengaturan Profil
+                    </h2>
+                    <p class="text-muted mb-0 small">Kelola informasi akun dan pengaturan keamanan Anda</p>
+                </div>
+            </div>
         </div>
     </div>
 

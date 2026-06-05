@@ -3,12 +3,21 @@
 @section('title', 'Berita Terbaru')
 
 @section('content')
-<div class="container my-5">
-    <div class="row">
-        <div class="col-12">
-            <h1 class="fw-bold mb-4 border-bottom pb-2">Berita & Artikel Terbaru</h1>
+<!-- Page Header -->
+<div class="container mt-4">
+    <div class="card shadow-sm border-0 rounded-4 overflow-hidden">
+        <div class="card-body py-3 d-flex justify-content-between align-items-center flex-wrap gap-3 border-start border-primary border-5">
+            <div>
+                <h2 class="fw-bold mb-1 text-primary m-0">
+                    <i class="bi bi-newspaper text-warning"></i> Berita & Artikel Terbaru
+                </h2>
+                <p class="text-muted mb-0 small">Ikuti perkembangan destinasi wisata dan berita pariwisata resmi Kabupaten Pesawaran</p>
+            </div>
         </div>
     </div>
+</div>
+
+<div class="container my-4">
 
     @if ($articles->count() > 0)
         <div class="row">

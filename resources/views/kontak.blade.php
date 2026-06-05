@@ -4,12 +4,16 @@
 
 @section('content')
 <!-- Header -->
-<div class="bg-primary text-white py-5">
-    <div class="container text-center">
-        <h1 class="display-4 fw-bold mb-3">
-            <i class="bi bi-envelope"></i> Kontak Kami
-        </h1>
-        <p class="lead">Hubungi kami untuk informasi lebih lanjut</p>
+<div class="container mt-4">
+    <div class="card shadow-sm border-0 rounded-4 overflow-hidden">
+        <div class="card-body py-3 d-flex justify-content-between align-items-center flex-wrap gap-3 border-start border-primary border-5">
+            <div>
+                <h2 class="fw-bold mb-1 text-primary m-0">
+                    <i class="bi bi-envelope-fill text-warning"></i> Kontak Kami
+                </h2>
+                <p class="text-muted mb-0 small">Hubungi kami untuk informasi lebih lanjut</p>
+            </div>
+        </div>
     </div>
 </div>
 
