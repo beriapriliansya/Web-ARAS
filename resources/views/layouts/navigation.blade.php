@@ -93,6 +93,11 @@
                         Manajemen Berita
                     </a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link px-3 {{ request()->routeIs('admin.fasilitas.*') ? 'active fw-bold text-primary' : '' }}" href="{{ route('admin.fasilitas.index') }}">
+                        Manajemen Fasilitas
+                    </a>
+                </li>
                 @endif
 
                 <!-- Menu Berita (Hanya User/Public, Admin tidak butuh ini di navbar) -->

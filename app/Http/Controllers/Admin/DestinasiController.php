@@ -109,9 +109,14 @@ class DestinasiController extends Controller
             'website' => 'nullable|string|max:255',
             'telepon' => 'nullable|string',
             'foto' => 'nullable|image|mimes:jpeg,jpg,png|max:10240', // Max 10MB
+            'fasilitas' => 'nullable|array',
+            'fasilitas.*' => 'string|max:100',
         ];
 
         $validated = $request->validate($rules);
+
+        // Assign facilities array directly
+        $validated['fasilitas'] = $request->input('fasilitas', []);
 
         // Auto prepend protocol to website if it is filled but missing a scheme
         if (!empty($validated['website'])) {

@@ -132,10 +132,14 @@
                                     <label class="form-label fw-bold mb-3">Fasilitas</label>
                                     <div class="row">
                                         @php
-                                            $fasilitasOptions = ['Parkir', 'Toilet', 'Mushola', 'Warung Makan', 'Gazebo', 'Penginapan', 'Area Bermain', 'Spot Foto', 'WiFi'];
+                                            $dbFasilitas = \App\Models\Fasilitas::orderBy('nama_fasilitas')->pluck('nama_fasilitas')->toArray();
                                             $selectedFasilitas = $destinasi->fasilitas ?? [];
+                                            $fasilitasOptions = array_values(array_unique(array_merge($dbFasilitas, $selectedFasilitas)));
+                                            if (empty($fasilitasOptions)) {
+                                                $fasilitasOptions = ['Parkir', 'Toilet', 'Mushola', 'Warung Makan', 'Gazebo', 'Penginapan', 'Area Bermain', 'Spot Foto', 'WiFi'];
+                                            }
                                         @endphp
-                                        @foreach($fasilitasOptions as $fas)
+                                        @forelse($fasilitasOptions as $fas)
                                             <div class="col-md-3 col-6 mb-2">
                                                 <div class="form-check">
                                                     <input class="form-check-input" type="checkbox" name="fasilitas[]"
@@ -144,7 +148,11 @@
                                                     <label class="form-check-label" for="fas_{{ $loop->index }}">{{ $fas }}</label>
                                                 </div>
                                             </div>
-                                        @endforeach
+                                        @empty
+                                            <div class="col-12 text-muted">
+                                                Belum ada pilihan fasilitas. Silakan kelola di menu <a href="{{ route('admin.fasilitas.index') }}" target="_blank">Kelola Fasilitas</a>.
+                                            </div>
+                                        @endforelse
                                     </div>
                                 </div>
                             </div>

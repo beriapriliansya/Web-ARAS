@@ -146,6 +146,9 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
     // Except 'create', 'edit' karena kita pakai Modal di halaman index
     Route::resource('destinasi', App\Http\Controllers\Admin\DestinasiController::class);
 
+    // 3.1 Manajemen Fasilitas (CRUD)
+    Route::resource('fasilitas', App\Http\Controllers\Admin\FasilitasController::class);
+
     // 4. ARAS Management
     Route::get('/aras', [ArasController::class, 'index'])->name('aras.index');
     Route::post('/aras/hitung', [ArasController::class, 'hitung'])->name('aras.hitung');
