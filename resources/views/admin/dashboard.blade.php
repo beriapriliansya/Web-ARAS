@@ -15,7 +15,7 @@
         @endif
 
         <div class="row g-4 mb-5">
-            <div class="col-md-3">
+            <div class="col-md-4">
                 <div class="card bg-primary text-white h-100 shadow-sm border-0">
                     <div class="card-body">
                         <div class="d-flex justify-content-between align-items-center">
@@ -28,7 +28,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-3">
+            <div class="col-md-4">
                 <div class="card bg-success text-white h-100 shadow-sm border-0">
                     <div class="card-body">
                         <div class="d-flex justify-content-between align-items-center">
@@ -41,7 +41,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-3">
+            <div class="col-md-4">
                 <div class="card bg-warning text-dark h-100 shadow-sm border-0">
                     <div class="card-body">
                         <div class="d-flex justify-content-between align-items-center">
@@ -50,19 +50,6 @@
                                 <h2 class="fw-bold mb-0">{{ $totalDestinasi }}</h2>
                             </div>
                             <i class="bi bi-map-fill fs-1 opacity-50"></i>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="card bg-danger text-white h-100 shadow-sm border-0">
-                    <div class="card-body">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <div>
-                                <h6 class="text-uppercase mb-1 opacity-75">Bookings</h6>
-                                <h2 class="fw-bold mb-0">{{ $totalBooking }}</h2>
-                            </div>
-                            <i class="bi bi-ticket-perforated-fill fs-1 opacity-50"></i>
                         </div>
                     </div>
                 </div>

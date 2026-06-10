@@ -27,13 +27,6 @@
                 </li>
 
                 @auth
-                    <!-- Menu untuk user yang sudah login -->
-                    <li class="nav-item">
-                        <a class="nav-link {{ Request::routeIs('booking.*') ? 'active' : '' }}" href="{{ route('booking.index') }}">
-                            <i class="bi bi-ticket-perforated"></i> Booking Saya
-                        </a>
-                    </li>
-
                     @if(auth()->user()->isAdmin())
                         <!-- Menu khusus admin -->
                         <li class="nav-item">

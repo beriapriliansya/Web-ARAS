@@ -66,31 +66,6 @@ class DestinasiWisata extends Model
     }
 
     /**
-     * Relasi ke tabel ulasan (one to many)
-     * Satu destinasi punya banyak ulasan
-     */
-    public function ulasan()
-    {
-        return $this->hasMany(Ulasan::class, 'destinasi_id');
-    }
-
-    /**
-     * Accessor: Get average rating
-     */
-    public function getAverageRatingAttribute()
-    {
-        return $this->ulasan()->avg('rating') ?? 0;
-    }
-
-    /**
-     * Accessor: Get total ulasan
-     */
-    public function getTotalUlasanAttribute()
-    {
-        return $this->ulasan()->count();
-    }
-
-    /**
      * Scope: Filter destinasi aktif
      */
     public function scopeAktif($query)

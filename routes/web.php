@@ -4,8 +4,6 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\DestinasiController; // Controller Public (Read Only)
 use App\Http\Controllers\ArasController;
-use App\Http\Controllers\BookingController;
-use App\Http\Controllers\UlasanController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\NewsController; // Controller Public News
@@ -88,17 +86,7 @@ Route::middleware(['auth'])->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-    // Booking Tiket (User)
-    Route::get('/booking', [BookingController::class, 'index'])->name('booking.index');
-    Route::get('/booking/create/{destinasi_id}', [BookingController::class, 'create'])->name('booking.create');
-    Route::post('/booking', [BookingController::class, 'store'])->name('booking.store');
-    Route::get('/booking/{id}', [BookingController::class, 'show'])->name('booking.show');
-    Route::post('/booking/{id}/payment', [BookingController::class, 'uploadPayment'])->name('booking.upload_payment');
-    Route::post('/booking/{id}/cancel', [BookingController::class, 'cancel'])->name('booking.cancel');
 
-    // Ulasan/Rating
-    Route::get('/ulasan/create/{booking_id}', [UlasanController::class, 'create'])->name('ulasan.create');
-    Route::post('/ulasan', [UlasanController::class, 'store'])->name('ulasan.store');
 
     // Likes & Comments pada Berita (News)
     Route::post('/news/{id}/like', [NewsController::class, 'toggleLike'])->name('news.like');
@@ -167,21 +155,5 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
     Route::get('/destinasi/{id}/nilai', [App\Http\Controllers\Admin\DestinasiController::class, 'editNilai'])->name('destinasi.nilai.edit');
     Route::post('/destinasi/{id}/nilai', [App\Http\Controllers\Admin\DestinasiController::class, 'updateNilai'])->name('destinasi.nilai.update');
 
-    // 5. Booking Management (Admin View)
-    Route::get('/bookings', function() {
-        $bookings = \App\Models\Booking::with(['user', 'destinasi'])->latest()->paginate(20);
-        return view('admin.bookings.index', compact('bookings'));
-    })->name('bookings.index');
-
-    Route::get('/bookings/{id}', function($id) {
-        $booking = \App\Models\Booking::with(['user', 'destinasi'])->findOrFail($id);
-        return view('admin.bookings.show', compact('booking'));
-    })->name('bookings.show');
-
-    Route::post('/bookings/{id}/complete', function($id) {
-        $booking = \App\Models\Booking::findOrFail($id);
-        $booking->update(['status' => 'completed']);
-        return redirect()->back()->with('success', 'Booking berhasil diselesaikan!');
-    })->name('bookings.complete');
-
 });
+

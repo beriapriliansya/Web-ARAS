@@ -23,7 +23,7 @@ class DestinasiController extends Controller
      */
     public function show($id)
     {
-        $destinasi = DestinasiWisata::with(['alternatif.kriteria', 'ulasan.user'])->findOrFail($id);
+        $destinasi = DestinasiWisata::with(['alternatif.kriteria'])->findOrFail($id);
         return view('admin.destinasi.show', compact('destinasi'));
     }
 

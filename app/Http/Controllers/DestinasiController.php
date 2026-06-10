@@ -127,7 +127,7 @@ class DestinasiController extends Controller
             ->update(['foto' => 'pantaimutun.jpg']);
 
         // Relasi dimuat agar halaman detail lengkap
-        $destinasi = DestinasiWisata::with(['ulasan.user', 'alternatif.kriteria'])->findOrFail($id);
+        $destinasi = DestinasiWisata::with(['alternatif.kriteria'])->findOrFail($id);
 
         $aksesibilitasAlternatif = $destinasi->alternatif->first(function($alt) {
             return $alt->kriteria && $alt->kriteria->kode === 'C1';

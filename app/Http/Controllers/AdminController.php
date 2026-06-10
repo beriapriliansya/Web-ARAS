@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\DestinasiWisata;
-use App\Models\Booking;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage; // Tambahan untuk hapus gambar
 
@@ -20,7 +19,6 @@ class AdminController extends Controller
         $totalUser = User::where('role', 'user')->count();
         $totalAdmin = User::where('role', 'admin')->count();
         $totalDestinasi = DestinasiWisata::count();
-        $totalBooking = Booking::count();
 
         // 2. Data User
         $users = User::with('destinasi')
@@ -35,7 +33,6 @@ class AdminController extends Controller
             'totalUser',
             'totalAdmin',
             'totalDestinasi',
-            'totalBooking',
             'users',
             'listDestinasi'
         ));

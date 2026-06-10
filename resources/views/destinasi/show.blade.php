@@ -149,11 +149,11 @@
                 </script>
             </div> <!-- Close col-lg-8 -->
 
-            <!-- KOLOM KANAN: Card Booking (Sticky) -->
+            <!-- KOLOM KANAN: Card Informasi (Sticky) -->
             <div class="col-lg-4">
                 <div class="card shadow border-0 sticky-top" style="top: 100px; z-index: 99;">
                     <div class="card-body p-4">
-                        <h5 class="fw-bold text-dark mb-4">Jadwalkan Kunjungan</h5>
+                        <h5 class="fw-bold text-dark mb-4">Informasi Kunjungan</h5>
 
                         <!-- Harga -->
                         <div class="d-flex justify-content-between align-items-center mb-3 pb-3 border-bottom">
