@@ -77,28 +77,20 @@
                                             <td class="text-start">
                                                 @php
                                                     $existingNilai = isset($alternatifValues[$k->id]) ? (float)$alternatifValues[$k->id] : null;
-                                                    $options = isset($subKriteria[$k->id]) ? $subKriteria[$k->id] : collect();
                                                 @endphp
-                                                
-                                                @if($options->isNotEmpty())
-                                                    <select name="nilai_{{ $k->id }}" class="form-select" required>
-                                                        <option value="" disabled {{ $existingNilai === null ? 'selected' : '' }}>-- Pilih Nilai Sub-Kriteria --</option>
-                                                        @foreach($options as $opt)
-                                                            @php
-                                                                // Pre-select if existing value matches option value
-                                                                $isSelected = ($existingNilai !== null && abs($existingNilai - (float)$opt->nilai) < 0.001);
-                                                            @endphp
-                                                            <option value="{{ $opt->id }}" {{ $isSelected ? 'selected' : '' }}>
-                                                                {{ $opt->keterangan }}
-                                                            </option>
-                                                        @endforeach
-                                                    </select>
-                                                @else
-                                                    <!-- Fallback input number if sub-criteria is not defined for this kriteria -->
-                                                    <input type="number" step="0.01" name="nilai_{{ $k->id }}_raw" class="form-control mb-2" 
-                                                           value="{{ $existingNilai }}" required placeholder="Masukkan nilai langsung (desimal/angka)">
-                                                    <span class="text-danger small"><i class="bi bi-exclamation-triangle"></i> Sub Kriteria belum diset! Silakan tambahkan opsi di halaman Sub Kriteria.</span>
-                                                @endif
+                                                <div class="input-group">
+                                                    @if($k->satuan == 'Rp')
+                                                        <span class="input-group-text">Rp</span>
+                                                    @endif
+                                                    
+                                                    <input type="number" step="any" name="nilai_{{ $k->id }}" class="form-control fw-semibold" 
+                                                           value="{{ $existingNilai }}" required 
+                                                           placeholder="Masukkan nilai {{ strtolower($k->nama_kriteria) }}">
+                                                    
+                                                    @if($k->satuan && $k->satuan != 'Rp')
+                                                        <span class="input-group-text">{{ $k->satuan }}</span>
+                                                    @endif
+                                                </div>
                                             </td>
                                         </tr>
                                     @endforeach

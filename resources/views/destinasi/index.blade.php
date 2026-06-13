@@ -50,23 +50,7 @@
                                 </select>
                             </div>
 
-                            <!-- Criteria Dropdowns (C1 - C5) -->
-                            @foreach($kriteriaFilter as $kf)
-                                <div class="mb-3">
-                                    <label class="form-label fw-semibold text-secondary small mb-1">{{ $kf->nama_kriteria }}:</label>
-                                    <select name="{{ strtolower($kf->kode) }}" class="form-select form-select-sm">
-                                        <option value="">-- Semua --</option>
-                                        @foreach($kf->subKriteria as $sub)
-                                            @php
-                                                $isSelected = request(strtolower($kf->kode)) !== null && abs((float)request(strtolower($kf->kode)) - (float)$sub->nilai) < 0.001;
-                                            @endphp
-                                            <option value="{{ $sub->nilai }}" {{ $isSelected ? 'selected' : '' }}>
-                                                {{ $sub->keterangan }}
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            @endforeach
+
 
                             <div class="d-flex align-items-center gap-2 mt-4 pt-3 border-top">
                                 <button type="submit" class="btn btn-primary btn-sm px-3 fw-bold flex-grow-1">

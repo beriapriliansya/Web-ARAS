@@ -165,11 +165,8 @@ class DestinasiController extends Controller
         $alternatifValues = \App\Models\Alternatif::where('destinasi_id', $id)
             ->pluck('nilai', 'kriteria_id')
             ->toArray();
-
-        // Ambil sub kriteria dikelompokkan berdasarkan kriteria_id
-        $subKriteria = \App\Models\SubKriteria::orderBy('nilai', 'desc')->get()->groupBy('kriteria_id');
             
-        return view('admin.destinasi.nilai', compact('destinasi', 'kriteria', 'alternatifValues', 'subKriteria'));
+        return view('admin.destinasi.nilai', compact('destinasi', 'kriteria', 'alternatifValues'));
     }
 
     /**
@@ -183,31 +180,17 @@ class DestinasiController extends Controller
         \Illuminate\Support\Facades\DB::beginTransaction();
         try {
             foreach ($kriteria as $k) {
-                $subKriteriaId = $request->input('nilai_' . $k->id);
-                $rawNilai = $request->input('nilai_' . $k->id . '_raw');
+                $nilaiVal = $request->input('nilai_' . $k->id);
 
-                if ($subKriteriaId) {
-                    $sub = \App\Models\SubKriteria::findOrFail($subKriteriaId);
-                    
+                if ($nilaiVal !== null) {
                     \App\Models\Alternatif::updateOrCreate(
                         [
                             'destinasi_id' => $destinasi->id,
                             'kriteria_id' => $k->id,
                         ],
                         [
-                            'nilai' => $sub->nilai,
-                            'catatan' => 'Diberikan opsi sub-kriteria: ' . $sub->keterangan,
-                        ]
-                    );
-                } elseif ($rawNilai !== null) {
-                    \App\Models\Alternatif::updateOrCreate(
-                        [
-                            'destinasi_id' => $destinasi->id,
-                            'kriteria_id' => $k->id,
-                        ],
-                        [
-                            'nilai' => $rawNilai,
-                            'catatan' => 'Diberikan nilai manual',
+                            'nilai' => $nilaiVal,
+                            'catatan' => 'Diberikan nilai kriteria langsung',
                         ]
                     );
                 }

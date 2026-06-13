@@ -7,7 +7,7 @@ use App\Models\DestinasiWisata;
 use App\Models\Kriteria;
 use App\Models\Alternatif;
 use App\Models\HasilAras;
-use App\Models\SubKriteria;
+
 use Illuminate\Support\Facades\DB;
 
 class ArasController extends Controller
@@ -139,151 +139,10 @@ class ArasController extends Controller
         }
     }
 
-    /**
-     * [ADMIN] Halaman Kelola Sub Kriteria (CRUD)
-     */
-    public function subkriteria(Request $request)
-    {
-        // 1. Auto-run migration if table does not exist
-        if (!\Illuminate\Support\Facades\Schema::hasTable('sub_kriteria')) {
-            try {
-                \Illuminate\Support\Facades\Artisan::call('migrate', ['--force' => true]);
-            } catch (\Exception $e) {
-                // If migration fails, run direct SQL query to create the table
-                \Illuminate\Support\Facades\DB::statement("
-                    CREATE TABLE IF NOT EXISTS `sub_kriteria` (
-                        `id` bigint unsigned NOT NULL AUTO_INCREMENT,
-                        `kriteria_id` bigint unsigned NOT NULL,
-                        `keterangan` varchar(255) NOT NULL,
-                        `nilai` decimal(5,2) NOT NULL,
-                        `created_at` timestamp NULL DEFAULT NULL,
-                        `updated_at` timestamp NULL DEFAULT NULL,
-                        PRIMARY KEY (`id`),
-                        FOREIGN KEY (`kriteria_id`) REFERENCES `kriteria` (`id`) ON DELETE CASCADE
-                    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-                ");
-            }
-        }
 
-        // 2. Auto-seed if table is empty
-        if (\Illuminate\Support\Facades\DB::table('sub_kriteria')->count() == 0) {
-            $c1 = Kriteria::where('kode', 'C1')->first();
-            $c2 = Kriteria::where('kode', 'C2')->first();
-            $c3 = Kriteria::where('kode', 'C3')->first();
-            $c4 = Kriteria::where('kode', 'C4')->first();
-            $c5 = Kriteria::where('kode', 'C5')->first();
-            $c6 = Kriteria::where('kode', 'C6')->first();
-
-            $seeds = [];
-            if ($c5) {
-                $seeds[] = ['kriteria_id' => $c5->id, 'keterangan' => '> Rp 35.000', 'nilai' => 1.0];
-                $seeds[] = ['kriteria_id' => $c5->id, 'keterangan' => 'Rp 26.000 - Rp 35.000', 'nilai' => 0.75];
-                $seeds[] = ['kriteria_id' => $c5->id, 'keterangan' => 'Rp 16.000 - Rp 25.000', 'nilai' => 0.5];
-                $seeds[] = ['kriteria_id' => $c5->id, 'keterangan' => 'Rp 5.000 - Rp 15.000', 'nilai' => 0.25];
-            }
-            if ($c1) {
-                $seeds[] = ['kriteria_id' => $c1->id, 'keterangan' => '> 80 km', 'nilai' => 1.0];
-                $seeds[] = ['kriteria_id' => $c1->id, 'keterangan' => '71 - 80 km', 'nilai' => 0.75];
-                $seeds[] = ['kriteria_id' => $c1->id, 'keterangan' => '61 - 70 km', 'nilai' => 0.5];
-                $seeds[] = ['kriteria_id' => $c1->id, 'keterangan' => '50 - 60 km', 'nilai' => 0.25];
-            }
-            if ($c2) {
-                $seeds[] = ['kriteria_id' => $c2->id, 'keterangan' => '> 8', 'nilai' => 1.0];
-                $seeds[] = ['kriteria_id' => $c2->id, 'keterangan' => '7', 'nilai' => 0.75];
-                $seeds[] = ['kriteria_id' => $c2->id, 'keterangan' => '6', 'nilai' => 0.5];
-                $seeds[] = ['kriteria_id' => $c2->id, 'keterangan' => '< 5', 'nilai' => 0.25];
-            }
-            if ($c3) {
-                $seeds[] = ['kriteria_id' => $c3->id, 'keterangan' => 'Sangat Bersih', 'nilai' => 1.0];
-                $seeds[] = ['kriteria_id' => $c3->id, 'keterangan' => 'Bersih', 'nilai' => 0.75];
-                $seeds[] = ['kriteria_id' => $c3->id, 'keterangan' => 'Cukup Bersih', 'nilai' => 0.5];
-                $seeds[] = ['kriteria_id' => $c3->id, 'keterangan' => 'Kurang Bersih', 'nilai' => 0.25];
-            }
-            if ($c4) {
-                $seeds[] = ['kriteria_id' => $c4->id, 'keterangan' => 'Sangat Aman', 'nilai' => 1.0];
-                $seeds[] = ['kriteria_id' => $c4->id, 'keterangan' => 'Aman', 'nilai' => 0.75];
-                $seeds[] = ['kriteria_id' => $c4->id, 'keterangan' => 'Cukup Aman', 'nilai' => 0.5];
-                $seeds[] = ['kriteria_id' => $c4->id, 'keterangan' => 'Kurang Aman', 'nilai' => 0.25];
-            }
-            if ($c6) {
-                $seeds[] = ['kriteria_id' => $c6->id, 'keterangan' => 'Sangat Ramai', 'nilai' => 1.0];
-                $seeds[] = ['kriteria_id' => $c6->id, 'keterangan' => 'Ramai', 'nilai' => 0.75];
-                $seeds[] = ['kriteria_id' => $c6->id, 'keterangan' => 'Cukup Ramai', 'nilai' => 0.5];
-                $seeds[] = ['kriteria_id' => $c6->id, 'keterangan' => 'Sepi', 'nilai' => 0.25];
-            }
-            foreach ($seeds as $s) {
-                \App\Models\SubKriteria::create($s);
-            }
-        }
-
-        $kriteria = Kriteria::all();
-        
-        // Filter by Kriteria Induk if selected in dropdown
-        $filterKriteriaId = $request->input('kriteria_filter');
-        $query = \App\Models\SubKriteria::with('kriteria');
-        if ($filterKriteriaId) {
-            $query->where('kriteria_id', $filterKriteriaId);
-        }
-        $subKriteria = $query->orderBy('kriteria_id')->get();
-
-        return view('admin.aras.subkriteria', compact('kriteria', 'subKriteria', 'filterKriteriaId'));
-    }
 
     /**
-     * Store new Sub Kriteria
-     */
-    public function storeSubkriteria(Request $request)
-    {
-        $request->validate([
-            'kriteria_id' => 'required|exists:kriteria,id',
-            'keterangan' => 'required|string|max:255',
-            'nilai' => 'required|numeric|min:0|max:100',
-        ]);
-
-        \App\Models\SubKriteria::create([
-            'kriteria_id' => $request->kriteria_id,
-            'keterangan' => $request->keterangan,
-            'nilai' => $request->nilai,
-        ]);
-
-        return back()->with('success', 'Sub Kriteria berhasil ditambahkan!');
-    }
-
-    /**
-     * Update existing Sub Kriteria
-     */
-    public function updateSubkriteria(Request $request, $id)
-    {
-        $sub = \App\Models\SubKriteria::findOrFail($id);
-
-        $request->validate([
-            'kriteria_id' => 'required|exists:kriteria,id',
-            'keterangan' => 'required|string|max:255',
-            'nilai' => 'required|numeric|min:0|max:100',
-        ]);
-
-        $sub->update([
-            'kriteria_id' => $request->kriteria_id,
-            'keterangan' => $request->keterangan,
-            'nilai' => $request->nilai,
-        ]);
-
-        return back()->with('success', 'Sub Kriteria berhasil diperbarui!');
-    }
-
-    /**
-     * Delete Sub Kriteria
-     */
-    public function destroySubkriteria($id)
-    {
-        $sub = \App\Models\SubKriteria::findOrFail($id);
-        $sub->delete();
-
-        return back()->with('success', 'Sub Kriteria berhasil dihapus.');
-    }
-
-    /**
-     * [ADMIN] Halaman Kelola Penilaian Alternatif (Dropdown Opsi)
+     * [ADMIN] Halaman Kelola Penilaian Alternatif (Input Nilai Langsung)
      */
     public function penilaian(Request $request)
     {
@@ -304,10 +163,7 @@ class ArasController extends Controller
                                     ->toArray();
         }
 
-        // Get all sub criteria for dropdowns
-        $subKriteria = SubKriteria::orderBy('nilai', 'desc')->get()->groupBy('kriteria_id');
-
-        return view('admin.aras.penilaian', compact('destinasi', 'kriteria', 'selectedDestinasi', 'alternatifValues', 'subKriteria', 'selectedDestinasiId'));
+        return view('admin.aras.penilaian', compact('destinasi', 'kriteria', 'selectedDestinasi', 'alternatifValues', 'selectedDestinasiId'));
     }
 
     /**
@@ -324,33 +180,17 @@ class ArasController extends Controller
         DB::beginTransaction();
         try {
             foreach ($kriteria as $k) {
-                $subKriteriaId = $request->input('nilai_' . $k->id);
-                $rawNilai = $request->input('nilai_' . $k->id . '_raw');
+                $nilaiVal = $request->input('nilai_' . $k->id);
 
-                if ($subKriteriaId) {
-                    $sub = SubKriteria::findOrFail($subKriteriaId);
-                    
-                    // Update or create in alternatif table
+                if ($nilaiVal !== null) {
                     Alternatif::updateOrCreate(
                         [
                             'destinasi_id' => $request->destinasi_id,
                             'kriteria_id' => $k->id,
                         ],
                         [
-                            'nilai' => $sub->nilai,
-                            'catatan' => 'Diberikan opsi sub-kriteria: ' . $sub->keterangan,
-                        ]
-                    );
-                } elseif ($rawNilai !== null) {
-                    // Fallback to raw value
-                    Alternatif::updateOrCreate(
-                        [
-                            'destinasi_id' => $request->destinasi_id,
-                            'kriteria_id' => $k->id,
-                        ],
-                        [
-                            'nilai' => $rawNilai,
-                            'catatan' => 'Diberikan nilai manual',
+                            'nilai' => $nilaiVal,
+                            'catatan' => 'Diberikan nilai kriteria langsung',
                         ]
                     );
                 }

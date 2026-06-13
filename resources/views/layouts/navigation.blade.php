@@ -50,11 +50,6 @@
                             </a>
                         </li>
                         <li>
-                            <a class="dropdown-item py-2 {{ request()->routeIs('admin.aras.subkriteria') ? 'active fw-bold' : '' }}" href="{{ route('admin.aras.subkriteria') }}">
-                                <i class="bi bi-list-stars me-2"></i> Sub Kriteria
-                            </a>
-                        </li>
-                        <li>
                             <a class="dropdown-item py-2 {{ request()->routeIs('admin.aras.kriteria.edit') ? 'active fw-bold' : '' }}" href="{{ route('admin.aras.kriteria.edit') }}">
                                 <i class="bi bi-sliders me-2"></i> Bobot
                             </a>

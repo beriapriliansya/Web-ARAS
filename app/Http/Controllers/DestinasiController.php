@@ -21,77 +21,6 @@ class DestinasiController extends Controller
                     ->leftJoin('hasil_aras', 'destinasi_wisata.id', '=', 'hasil_aras.destinasi_id')
                     ->select('destinasi_wisata.*', 'hasil_aras.ranking', 'hasil_aras.nilai_k');
 
-        // Filter by Kriteria (C1 - C5)
-        $kriteriaCodes = ['C1', 'C2', 'C3', 'C4', 'C5'];
-        foreach ($kriteriaCodes as $code) {
-            $inputName = strtolower($code);
-            if ($request->has($inputName) && $request->input($inputName) != '') {
-                $filterVal = (float)$request->input($inputName);
-                
-                $query->whereHas('alternatif', function($q) use ($code, $filterVal) {
-                    $q->whereHas('kriteria', function($qk) use ($code) {
-                        $qk->where('kode', $code);
-                    })->where(function($qsub) use ($code, $filterVal) {
-                        // Match exact sub-criteria value
-                        $qsub->where('nilai', $filterVal);
-                        
-                        // Or match corresponding raw values from the seeder
-                        if ($code == 'C5') { // Harga Tiket
-                            if (abs($filterVal - 0.25) < 0.001) {
-                                $qsub->orWhereBetween('nilai', [5000, 15000]);
-                            } elseif (abs($filterVal - 0.5) < 0.001) {
-                                $qsub->orWhereBetween('nilai', [16000, 25000]);
-                            } elseif (abs($filterVal - 0.75) < 0.001) {
-                                $qsub->orWhereBetween('nilai', [26000, 35000]);
-                            } elseif (abs($filterVal - 1.0) < 0.001) {
-                                $qsub->orWhere('nilai', '>', 35000);
-                            }
-                        } elseif ($code == 'C1') { // Aksesibilitas
-                            if (abs($filterVal - 0.25) < 0.001) {
-                                $qsub->orWhereBetween('nilai', [1.0, 2.5]);
-                            } elseif (abs($filterVal - 0.5) < 0.001) {
-                                $qsub->orWhereBetween('nilai', [2.6, 3.7]);
-                            } elseif (abs($filterVal - 0.75) < 0.001) {
-                                $qsub->orWhereBetween('nilai', [3.8, 4.5]);
-                            } elseif (abs($filterVal - 1.0) < 0.001) {
-                                $qsub->orWhere('nilai', '>=', 4.6);
-                            }
-                        } elseif ($code == 'C2') { // Fasilitas
-                            if (abs($filterVal - 0.25) < 0.001) {
-                                $qsub->orWhere('nilai', '<=', 4.0);
-                            } elseif (abs($filterVal - 0.5) < 0.001) {
-                                $qsub->orWhereBetween('nilai', [4.1, 4.4]);
-                            } elseif (abs($filterVal - 0.75) < 0.001) {
-                                $qsub->orWhereBetween('nilai', [4.5, 4.7]);
-                            } elseif (abs($filterVal - 1.0) < 0.001) {
-                                $qsub->orWhere('nilai', '>=', 4.8);
-                            }
-                        } elseif ($code == 'C3') { // Kebersihan
-                            if (abs($filterVal - 0.25) < 0.001) {
-                                $qsub->orWhere('nilai', '<', 3.0);
-                            } elseif (abs($filterVal - 0.5) < 0.001) {
-                                $qsub->orWhereBetween('nilai', [3.0, 3.9]);
-                            } elseif (abs($filterVal - 0.75) < 0.001) {
-                                $qsub->orWhereBetween('nilai', [4.0, 4.4]);
-                            } elseif (abs($filterVal - 1.0) < 0.001) {
-                                $qsub->orWhere('nilai', '>=', 4.5);
-                            }
-                        } elseif ($code == 'C4') { // Keamanan
-                            if (abs($filterVal - 0.25) < 0.001) {
-                                $qsub->orWhere('nilai', '<', 3.0);
-                            } elseif (abs($filterVal - 0.5) < 0.001) {
-                                $qsub->orWhereBetween('nilai', [3.0, 3.9]);
-                            } elseif (abs($filterVal - 0.75) < 0.001) {
-                                $qsub->orWhereBetween('nilai', [4.0, 4.4]);
-                            } elseif (abs($filterVal - 1.0) < 0.001) {
-                                $qsub->orWhere('nilai', '>=', 4.5);
-                            }
-                        }
-                    });
-                });
-            }
-        }
-
         // Filter by kategori
         if ($request->has('kategori') && $request->kategori != '') {
             $query->where('destinasi_wisata.kategori', $request->kategori);
@@ -111,12 +40,7 @@ class DestinasiController extends Controller
         // Ambil list kategori untuk filter sidebar
         $kategoriList = DestinasiWisata::select('kategori')->distinct()->pluck('kategori');
 
-        // Ambil data kriteria filter beserta sub-kriterianya
-        $kriteriaFilter = \App\Models\Kriteria::with('subKriteria')
-            ->whereIn('kode', $kriteriaCodes)
-            ->get();
-
-        return view('destinasi.index', compact('destinasi', 'kategoriList', 'kriteriaFilter'));
+        return view('destinasi.index', compact('destinasi', 'kategoriList'));
     }
 
     public function show($id)

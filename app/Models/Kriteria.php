@@ -43,13 +43,6 @@ class Kriteria extends Model
         return $this->hasMany(Alternatif::class, 'kriteria_id');
     }
 
-    /**
-     * Relasi ke tabel sub_kriteria (one to many)
-     */
-    public function subKriteria()
-    {
-        return $this->hasMany(SubKriteria::class, 'kriteria_id');
-    }
 
     /**
      * Scope: Filter kriteria aktif

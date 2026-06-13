@@ -33,7 +33,7 @@
                         </div>
                         <hr>
                         <p class="text-secondary small mb-4">
-                            Pilih opsi sub-kriteria untuk alternatif destinasi ini. Nilai ini akan digunakan dalam perhitungan normalisasi dan optimasi matriks keputusan metode ARAS.
+                            Masukkan nilai kriteria secara langsung untuk alternatif destinasi ini. Nilai ini akan digunakan dalam perhitungan normalisasi dan optimasi matriks keputusan metode ARAS.
                         </p>
 
                         <form action="{{ route('admin.destinasi.nilai.update', $destinasi->id) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menyimpan nilai alternatif kriteria ini?');">
@@ -42,7 +42,6 @@
                             @foreach($kriteria as $k)
                                 @php
                                     $currentVal = isset($alternatifValues[$k->id]) ? (float)$alternatifValues[$k->id] : null;
-                                    $options = isset($subKriteria[$k->id]) ? $subKriteria[$k->id] : collect();
                                 @endphp
                                 <div class="mb-4 p-3 bg-light rounded border-start border-4 border-primary">
                                     <div class="d-flex justify-content-between mb-2">
@@ -55,38 +54,22 @@
                                         </span>
                                     </div>
                                     
-                                    @if($options->isNotEmpty())
-                                        <select name="nilai_{{ $k->id }}" id="nilai_{{ $k->id }}" class="form-select fw-semibold" required>
-                                            <option value="" disabled {{ $currentVal === null ? 'selected' : '' }}>-- Pilih Nilai Sub-Kriteria --</option>
-                                            @foreach($options as $opt)
-                                                @php
-                                                    $isSelected = ($currentVal !== null && abs($currentVal - (float)$opt->nilai) < 0.001);
-                                                @endphp
-                                                <option value="{{ $opt->id }}" {{ $isSelected ? 'selected' : '' }}>
-                                                    {{ $opt->keterangan }} (Nilai: {{ number_format($opt->nilai, 2) }})
-                                                </option>
-                                            @endforeach
-                                        </select>
-                                    @else
-                                        <!-- Fallback to direct input if sub-kriteria options are empty -->
-                                        <div class="input-group">
-                                            @if($k->satuan == 'Rp')
-                                                <span class="input-group-text">Rp</span>
-                                            @endif
-                                            
-                                            <input type="number" step="0.01" class="form-control fw-bold" 
-                                                   name="nilai_{{ $k->id }}_raw" 
-                                                   id="nilai_{{ $k->id }}_raw"
-                                                   value="{{ old('nilai_'.$k->id.'_raw', $currentVal) }}" 
-                                                   placeholder="Masukkan nilai desimal/angka..."
-                                                   required>
-                                                   
-                                            @if($k->satuan && $k->satuan != 'Rp')
-                                                <span class="input-group-text">{{ $k->satuan }}</span>
-                                            @endif
-                                        </div>
-                                        <span class="text-danger small mt-1 d-block"><i class="bi bi-exclamation-triangle"></i> Sub Kriteria belum diset! Silakan tambahkan opsi di menu Sub Kriteria.</span>
-                                    @endif
+                                    <div class="input-group">
+                                        @if($k->satuan == 'Rp')
+                                            <span class="input-group-text">Rp</span>
+                                        @endif
+                                        
+                                        <input type="number" step="any" class="form-control fw-bold" 
+                                               name="nilai_{{ $k->id }}" 
+                                               id="nilai_{{ $k->id }}"
+                                               value="{{ old('nilai_'.$k->id, $currentVal) }}" 
+                                               placeholder="Masukkan nilai {{ strtolower($k->nama_kriteria) }}..."
+                                               required>
+                                               
+                                        @if($k->satuan && $k->satuan != 'Rp')
+                                            <span class="input-group-text">{{ $k->satuan }}</span>
+                                        @endif
+                                    </div>
                                     <div class="form-text small mt-1 text-muted">{{ $k->keterangan }}</div>
                                 </div>
                             @endforeach
