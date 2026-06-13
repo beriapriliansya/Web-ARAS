@@ -130,10 +130,10 @@
                     <li class="nav-item d-flex align-items-center gap-3">
 
                         <!-- Lonceng Notifikasi (Link ke Halaman Notifikasi) -->
-                        <a href="{{ route('notifications.index') }}" class="btn border rounded-circle d-flex justify-content-center align-items-center position-relative shadow-sm me-2" style="width: 40px; height: 40px; background-color: #ffffff;" title="Notifikasi">
-                            <i class="bi bi-bell text-dark fs-5"></i>
+                        <a href="{{ route('notifications.index') }}" class="notification-bell-btn d-flex justify-content-center align-items-center position-relative me-2" title="Notifikasi">
+                            <i class="bi bi-bell fs-5"></i>
                             @if($unreadNotificationCount > 0)
-                                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" id="unread-count-badge" style="font-size: 0.55rem; padding: 0.25em 0.5em; top: 5px !important; left: 32px !important;">
+                                <span class="notification-badge" id="unread-count-badge">
                                     {{ $unreadNotificationCount }}
                                 </span>
                             @endif
@@ -179,6 +179,76 @@
             .nav-item.dropdown:hover .dropdown-menu {
                 display: block !important;
                 margin-top: 0;
+            }
+        }
+
+        /* Modern Notification Bell Styles */
+        .notification-bell-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #ffffff;
+            border: 1px solid #e5e7eb;
+            color: #4b5563;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .notification-bell-btn:hover {
+            background: #f9fafb;
+            border-color: #d1d5db;
+            color: #4f46e5;
+            transform: translateY(-2px) scale(1.05);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -2px rgba(0, 0, 0, 0.04);
+        }
+
+        .notification-bell-btn:hover i {
+            display: inline-block;
+            animation: bell-ring 0.65s ease-in-out;
+        }
+
+        @keyframes bell-ring {
+            0%, 100% { transform: rotate(0); }
+            15% { transform: rotate(15deg); }
+            30% { transform: rotate(-15deg); }
+            45% { transform: rotate(10deg); }
+            60% { transform: rotate(-10deg); }
+            75% { transform: rotate(5deg); }
+            85% { transform: rotate(-5deg); }
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: 2px;
+            right: 2px;
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            color: white;
+            font-size: 0.62rem;
+            font-weight: 800;
+            min-width: 17px;
+            height: 17px;
+            padding: 0 4px;
+            border-radius: 9999px;
+            border: 2px solid #ffffff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 2px 4px rgba(239, 68, 68, 0.4);
+            transform: translate(25%, -25%);
+            animation: pulse-ring 2s infinite;
+        }
+
+        @keyframes pulse-ring {
+            0% {
+                box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7), 0 2px 4px rgba(239, 68, 68, 0.4);
+            }
+            70% {
+                box-shadow: 0 0 0 5px rgba(239, 68, 68, 0), 0 2px 4px rgba(239, 68, 68, 0.4);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(239, 68, 68, 0), 0 2px 4px rgba(239, 68, 68, 0.4);
             }
         }
     </style>

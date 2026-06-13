@@ -229,12 +229,12 @@
                                 </thead>
                                 <tbody>
                                     <tr class="table-success-subtle fw-semibold">
-                                        <td class="text-center"><span class="badge bg-success">5</span></td>
+                                        <td class="text-center"><span class="badge bg-success">1</span></td>
                                         <td>x < 3.000</td>
                                         <td>Sangat Murah</td>
                                     </tr>
                                     <tr>
-                                        <td class="text-center"><span class="badge bg-primary">4</span></td>
+                                        <td class="text-center"><span class="badge bg-primary">2</span></td>
                                         <td>3.000 s/d &le; 5.000</td>
                                         <td>Murah</td>
                                     </tr>
@@ -244,12 +244,12 @@
                                         <td>Cukup Murah</td>
                                     </tr>
                                     <tr>
-                                        <td class="text-center"><span class="badge bg-warning text-dark">2</span></td>
+                                        <td class="text-center"><span class="badge bg-warning text-dark">4</span></td>
                                         <td>> 10.000 s/d &le; 15.000</td>
                                         <td>Mahal</td>
                                     </tr>
                                     <tr class="table-danger-subtle">
-                                        <td class="text-center"><span class="badge bg-danger">1</span></td>
+                                        <td class="text-center"><span class="badge bg-danger">5</span></td>
                                         <td>x &ge; 15.000</td>
                                         <td>Sangat Mahal</td>
                                     </tr>

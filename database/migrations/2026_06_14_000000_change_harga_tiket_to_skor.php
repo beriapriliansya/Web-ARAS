@@ -17,7 +17,7 @@ return new class extends Migration
             ->where('kode', 'C5')
             ->update(['satuan' => 'Skor']);
 
-        // 2. Convert raw values in alternatif to score-based (divide by 5000, e.g. 15000 -> 3.0)
+        // 2. Convert raw values in alternatif to score-based (1 = Sangat Murah, 5 = Sangat Mahal)
         $kriteriaId = DB::table('kriteria')->where('kode', 'C5')->value('id');
         if ($kriteriaId) {
             $alternatifs = DB::table('alternatif')
@@ -27,7 +27,17 @@ return new class extends Migration
             foreach ($alternatifs as $alt) {
                 // If it is a raw ticket price (usually >= 100)
                 if ($alt->nilai >= 100) {
-                    $newScore = $alt->nilai / 5000;
+                    $newScore = 5.0; // Default to Sangat Mahal
+                    if ($alt->nilai < 3000) {
+                        $newScore = 1.0;
+                    } elseif ($alt->nilai <= 5000) {
+                        $newScore = 2.0;
+                    } elseif ($alt->nilai <= 10000) {
+                        $newScore = 3.0;
+                    } elseif ($alt->nilai < 15000) {
+                        $newScore = 4.0;
+                    }
+
                     DB::table('alternatif')
                         ->where('id', $alt->id)
                         ->update([
@@ -49,7 +59,7 @@ return new class extends Migration
             ->where('kode', 'C5')
             ->update(['satuan' => 'Rp']);
 
-        // 2. Revert score-based values in alternatif back to raw (multiply by 5000)
+        // 2. Revert score-based values in alternatif back to raw (multiply by 5000 or approximate)
         $kriteriaId = DB::table('kriteria')->where('kode', 'C5')->value('id');
         if ($kriteriaId) {
             $alternatifs = DB::table('alternatif')
@@ -58,7 +68,17 @@ return new class extends Migration
 
             foreach ($alternatifs as $alt) {
                 if ($alt->nilai <= 10) { // If it is a score (usually <= 10)
-                    $rawPrice = $alt->nilai * 5000;
+                    $rawPrice = 15000;
+                    if ($alt->nilai == 1.0) {
+                        $rawPrice = 2000;
+                    } elseif ($alt->nilai == 2.0) {
+                        $rawPrice = 5000;
+                    } elseif ($alt->nilai == 3.0) {
+                        $rawPrice = 10000;
+                    } elseif ($alt->nilai == 4.0) {
+                        $rawPrice = 12000;
+                    }
+
                     DB::table('alternatif')
                         ->where('id', $alt->id)
                         ->update([

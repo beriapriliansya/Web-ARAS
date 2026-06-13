@@ -109,7 +109,7 @@
                                                     $val = $h->destinasi->alternatif->firstWhere('kriteria_id', $k->id);
                                                 @endphp
                                                 <td class="text-center text-secondary">
-                                                    {{ $val ? number_format($val->nilai, 2) : '0.00' }}
+                                                    {{ $val ? (float)$val->nilai : 0 }}
                                                 </td>
                                             @endforeach
 

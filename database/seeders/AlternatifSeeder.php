@@ -22,7 +22,7 @@ class AlternatifSeeder extends Seeder
                 'C2' => 4.0,
                 'C3' => 3.8,
                 'C4' => 4.2,
-                'C5' => 3.0,
+                'C5' => 5.0,
                 'C6' => 4.5,
             ],
             'Pantai Sari Ringgung' => [
@@ -30,7 +30,7 @@ class AlternatifSeeder extends Seeder
                 'C2' => 4.5,
                 'C3' => 4.0,
                 'C4' => 4.3,
-                'C5' => 4.0,
+                'C5' => 5.0,
                 'C6' => 4.8,
             ],
             'Pulau Pahawang' => [
@@ -38,7 +38,7 @@ class AlternatifSeeder extends Seeder
                 'C2' => 4.5,
                 'C3' => 4.5,
                 'C4' => 4.5,
-                'C5' => 2.0,
+                'C5' => 3.0,
                 'C6' => 4.2,
             ],
             'Pantai Klara' => [
@@ -46,7 +46,7 @@ class AlternatifSeeder extends Seeder
                 'C2' => 3.8,
                 'C3' => 3.9,
                 'C4' => 4.6,
-                'C5' => 3.0,
+                'C5' => 5.0,
                 'C6' => 4.0,
             ],
             'Teluk Hantu' => [
@@ -54,7 +54,7 @@ class AlternatifSeeder extends Seeder
                 'C2' => 2.0,
                 'C3' => 4.8,
                 'C4' => 3.0,
-                'C5' => 1.0,
+                'C5' => 2.0,
                 'C6' => 2.0,
             ],
         ];
