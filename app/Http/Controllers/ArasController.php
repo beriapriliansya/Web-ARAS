@@ -204,6 +204,14 @@ class ArasController extends Controller
     }
 
     /**
+     * [ADMIN] Halaman Panduan Konversi Nilai Kriteria
+     */
+    public function panduanKonversi()
+    {
+        return view('admin.aras.panduan');
+    }
+
+    /**
      * [ADMIN] Cetak Laporan Detail Perhitungan ARAS
      */
     public function cetakLaporan()

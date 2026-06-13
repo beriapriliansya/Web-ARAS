@@ -146,6 +146,7 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
     Route::get('/aras/penilaian', [ArasController::class, 'penilaian'])->name('aras.penilaian');
     Route::post('/aras/penilaian', [ArasController::class, 'storePenilaian'])->name('aras.penilaian.store');
     Route::get('/aras/cetak', [ArasController::class, 'cetakLaporan'])->name('aras.cetak');
+    Route::get('/aras/panduan', [ArasController::class, 'panduanKonversi'])->name('aras.panduan');
 
     // Manajemen Nilai Alternatif per Destinasi
     Route::get('/destinasi/{id}/nilai', [App\Http\Controllers\Admin\DestinasiController::class, 'editNilai'])->name('destinasi.nilai.edit');

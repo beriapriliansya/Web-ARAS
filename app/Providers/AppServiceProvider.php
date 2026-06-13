@@ -21,12 +21,12 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        if (!\Illuminate\Support\Facades\Schema::hasTable('fasilitas')) {
-            try {
+        try {
+            if (!\Illuminate\Support\Facades\Schema::hasTable('fasilitas')) {
                 \Illuminate\Support\Facades\Artisan::call('migrate', ['--force' => true]);
-            } catch (\Exception $e) {
-                // Ignore exceptions
             }
+        } catch (\Exception $e) {
+            // Abaikan jika database offline saat booting aplikasi
         }
     }
 }

@@ -60,7 +60,7 @@
                                     <tr>
                                         <th class="text-center" width="8%">No</th>
                                         <th class="text-start" width="42%">Kriteria</th>
-                                        <th class="text-start" width="50%">Nilai (Sub-Kriteria)</th>
+                                        <th class="text-start" width="50%">Nilai Kriteria</th>
                                     </tr>
                                 </thead>
                                 <tbody>

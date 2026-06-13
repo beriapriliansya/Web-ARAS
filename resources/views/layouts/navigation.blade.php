@@ -60,6 +60,11 @@
                             </a>
                         </li>
                         <li>
+                            <a class="dropdown-item py-2 {{ request()->routeIs('admin.aras.panduan') ? 'active fw-bold' : '' }}" href="{{ route('admin.aras.panduan') }}">
+                                <i class="bi bi-book me-2"></i> Panduan Konversi
+                            </a>
+                        </li>
+                        <li>
                             <hr class="dropdown-divider">
                         </li>
                         <li>

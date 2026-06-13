@@ -56,7 +56,7 @@ class KriteriaSeeder extends Seeder
                 'bobot' => 0.20,
                 'tipe' => 'cost',
                 'keterangan' => 'Biaya masuk / tiket masuk tempat wisata',
-                'satuan' => 'Rp',
+                'satuan' => 'Skor',
                 'status' => 'aktif',
             ],
             [
