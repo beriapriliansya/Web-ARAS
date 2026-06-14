@@ -27,7 +27,7 @@
                 @if(Route::has('destinasi.index'))
                 <li class="nav-item">
                     <a class="nav-link px-3 {{ request()->routeIs('destinasi.*') || request()->routeIs('admin.destinasi.*') ? 'active fw-bold text-primary' : '' }}"
-                       href="{{ (auth()->check() && (auth()->user()->role === 'superadmin' || auth()->user()->role === 'admin')) ? route('admin.destinasi.index') : route('destinasi.index') }}">
+                       href="{{ (auth()->check() && auth()->user()->role === 'superadmin') ? route('admin.destinasi.index') : route('destinasi.index') }}">
                         Destinasi
                     </a>
                 </li>
@@ -87,7 +87,7 @@
 
                 <!-- MENU KHUSUS SUPERADMIN: Manage Berita -->
                 <!-- Ini yang tadi ketinggalan -->
-                @if(auth()->check() && (auth()->user()->role === 'superadmin' || auth()->user()->role === 'admin'))
+                @if(auth()->check() && auth()->user()->role === 'superadmin')
                 <li class="nav-item">
                     <a class="nav-link px-3 {{ request()->routeIs('admin.news.*') ? 'active fw-bold text-primary' : '' }}" href="{{ route('admin.news.index') }}">
                         Manajemen Berita
@@ -140,7 +140,7 @@
                         </a>
 
                         <!-- Nama User (Link Cerdas: Admin ke Dashboard, User ke Profil) -->
-                        <a href="{{ (auth()->user()->role === 'admin' || auth()->user()->role === 'superadmin') ? route('admin.dashboard') : route('profile.edit') }}"
+                        <a href="{{ (auth()->user()->role === 'superadmin') ? route('admin.dashboard') : route('profile.edit') }}"
                            class="text-decoration-none fw-bold text-dark d-flex align-items-center bg-light px-3 py-1 rounded-pill border hover-shadow transition">
                             <div class="bg-primary text-white rounded-circle d-flex justify-content-center align-items-center me-2" style="width: 30px; height: 30px; font-size: 0.8rem;">
                                 {{ substr(Auth::user()->name, 0, 1) }}

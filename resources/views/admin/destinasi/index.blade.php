@@ -21,36 +21,45 @@
     <div class="container my-4">
         <div class="card shadow-sm border-0">
             <div class="card-body">
-                <form action="{{ route('admin.destinasi.index') }}" method="GET" class="row g-3">
+                <form action="{{ route('admin.destinasi.index') }}" method="GET" class="row g-3 align-items-end">
                     <!-- Search -->
-                    <div class="col-md-5">
+                    <div class="col-md-4">
+                        <label class="form-label fw-semibold text-secondary small mb-1">Cari Nama Pantai:</label>
                         <div class="input-group">
                             <span class="input-group-text bg-light border-end-0">
                                 <i class="bi bi-search text-muted"></i>
                             </span>
                             <input type="text" class="form-control border-start-0 ps-0" name="search"
-                                   placeholder="Cari nama destinasi..."
+                                   placeholder="Masukkan nama pantai..."
                                    value="{{ request('search') }}">
                         </div>
                     </div>
 
-                    <!-- Filter Kategori -->
-                    <div class="col-md-4">
-                        <select class="form-select" name="kategori">
-                            <option value="">Semua Kategori</option>
-                            <!-- Pastikan variable $kategoriList dikirim dari controller, atau manual dulu -->
-                            @foreach(['Pantai', 'Pulau', 'Air Terjun', 'Gunung', 'Budaya', 'Kuliner', 'Religi', 'Edukasi'] as $kat)
-                                <option value="{{ $kat }}" {{ request('kategori') == $kat ? 'selected' : '' }}>
-                                    {{ $kat }}
-                                </option>
-                            @endforeach
+                    <!-- Filter Status -->
+                    <div class="col-md-3">
+                        <label class="form-label fw-semibold text-secondary small mb-1">Status Publikasi:</label>
+                        <select class="form-select" name="status">
+                            <option value="">Semua Status</option>
+                            <option value="aktif" {{ request('status') === 'aktif' ? 'selected' : '' }}>Aktif (Tampil)</option>
+                            <option value="nonaktif" {{ request('status') === 'nonaktif' ? 'selected' : '' }}>Non-Aktif (Sembunyi)</option>
+                        </select>
+                    </div>
+
+                    <!-- Urutkan (Sorting) -->
+                    <div class="col-md-3">
+                        <label class="form-label fw-semibold text-secondary small mb-1">Urutkan Berdasarkan:</label>
+                        <select class="form-select" name="sort">
+                            <option value="latest" {{ request('sort') === 'latest' ? 'selected' : '' }}>Terbaru</option>
+                            <option value="price_asc" {{ request('sort') === 'price_asc' ? 'selected' : '' }}>Harga Terendah</option>
+                            <option value="price_desc" {{ request('sort') === 'price_desc' ? 'selected' : '' }}>Harga Tertinggi</option>
+                            <option value="name_asc" {{ request('sort') === 'name_asc' ? 'selected' : '' }}>Nama A - Z</option>
                         </select>
                     </div>
 
                     <!-- Button -->
-                    <div class="col-md-3">
-                        <button type="submit" class="btn btn-primary w-100">
-                            <i class="bi bi-funnel"></i> Filter Data
+                    <div class="col-md-2">
+                        <button type="submit" class="btn btn-primary w-100 fw-semibold">
+                            <i class="bi bi-funnel"></i> Terapkan
                         </button>
                     </div>
                 </form>

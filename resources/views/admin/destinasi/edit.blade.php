@@ -37,10 +37,7 @@
                                 <div class="col-md-4">
                                     <label class="form-label fw-bold">Kategori *</label>
                                     <select class="form-select" name="kategori" required>
-                                        <option value="">Pilih Kategori</option>
-                                        @foreach(['Alam', 'Pantai', 'Gunung', 'Air Terjun', 'Budaya', 'Kuliner', 'Religi', 'Edukasi'] as $kat)
-                                            <option value="{{ $kat }}" {{ old('kategori', $destinasi->kategori) == $kat ? 'selected' : '' }}>{{ $kat }}</option>
-                                        @endforeach
+                                        <option value="Pantai" selected>Pantai</option>
                                     </select>
                                 </div>
                                 <div class="col-12">
@@ -123,7 +120,7 @@
                                     <label class="form-label fw-bold">Status Publikasi</label>
                                     <select name="status" class="form-select bg-light">
                                         <option value="aktif" {{ $destinasi->status == 'aktif' ? 'selected' : '' }}>✅ Aktif</option>
-                                        <option value="non-aktif" {{ $destinasi->status == 'non-aktif' ? 'selected' : '' }}>❌ Non-Aktif</option>
+                                        <option value="nonaktif" {{ $destinasi->status == 'nonaktif' ? 'selected' : '' }}>❌ Non-Aktif</option>
                                     </select>
                                 </div>
 

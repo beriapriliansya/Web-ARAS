@@ -51,7 +51,7 @@ class DestinasiWisataSeeder extends Seeder
                 'alamat' => 'Kecamatan Punduh Pidada, Kabupaten Pesawaran',
                 'latitude' => -5.67499000,
                 'longitude' => 105.21731000,
-                'kategori' => 'Pulau',
+                'kategori' => 'Pantai',
                 'foto' => 'pulau_pahawang.jpg',
                 'harga_tiket' => 10000,
                 'jam_buka' => '07:00:00',

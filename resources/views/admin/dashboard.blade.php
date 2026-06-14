@@ -15,20 +15,7 @@
         @endif
 
         <div class="row g-4 mb-5">
-            <div class="col-md-4">
-                <div class="card bg-primary text-white h-100 shadow-sm border-0">
-                    <div class="card-body">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <div>
-                                <h6 class="text-uppercase mb-1 opacity-75">Total Admin</h6>
-                                <h2 class="fw-bold mb-0">{{ $totalAdmin }}</h2>
-                            </div>
-                            <i class="bi bi-person-badge fs-1 opacity-50"></i>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4">
+            <div class="col-md-6">
                 <div class="card bg-success text-white h-100 shadow-sm border-0">
                     <div class="card-body">
                         <div class="d-flex justify-content-between align-items-center">
@@ -41,7 +28,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-6">
                 <div class="card bg-warning text-dark h-100 shadow-sm border-0">
                     <div class="card-body">
                         <div class="d-flex justify-content-between align-items-center">
@@ -75,7 +62,6 @@
                                 <th>Nama User</th>
                                 <th>Email</th>
                                 <th>Role</th>
-                                <th>Destinasi Kelolaan</th>
                                 <th class="text-end">Aksi</th>
                             </tr>
                         </thead>
@@ -94,23 +80,8 @@
                                     <td>
                                         @if($user->role === 'superadmin')
                                             <span class="badge bg-dark">Super Admin</span>
-                                        @elseif($user->role === 'admin')
-                                            <span class="badge bg-primary">Admin Destinasi</span>
                                         @else
-                                            <span class="badge bg-secondary">User</span>
-                                        @endif
-                                    </td>
-                                    <td>
-                                        @if($user->role === 'admin' && $user->destinasi)
-                                            <span class="badge bg-success">
-                                                <i class="bi bi-geo-alt-fill"></i> {{ $user->destinasi->nama }}
-                                            </span>
-                                        @elseif($user->role === 'admin' && !$user->destinasi)
-                                            <span class="badge bg-warning text-dark">
-                                                <i class="bi bi-exclamation-circle"></i> Belum di-assign
-                                            </span>
-                                        @else
-                                            <span class="text-muted small">-</span>
+                                            <span class="badge bg-secondary">User (Wisatawan)</span>
                                         @endif
                                     </td>
                                     <td class="text-end">
@@ -121,8 +92,7 @@
                                                 data-id="{{ $user->id }}"
                                                 data-name="{{ $user->name }}"
                                                 data-email="{{ $user->email }}"
-                                                data-role="{{ $user->role }}"
-                                                data-destinasi_id="{{ $user->destinasi_id }}">
+                                                data-role="{{ $user->role }}">
                                                 <i class="bi bi-pencil"></i>
                                             </button>
                                             <form action="{{ route('admin.users.destroy', $user->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Hapus user ini?');">
@@ -168,11 +138,7 @@
                             <div class="col-md-6 mb-3">
                                 <label class="form-label">Kategori</label>
                                 <select name="kategori" class="form-select" required>
-                                    <option value="Pantai">Pantai</option>
-                                    <option value="Pulau">Pulau</option>
-                                    <option value="Air Terjun">Air Terjun</option>
-                                    <option value="Bukit">Bukit</option>
-                                    <option value="Taman">Taman</option>
+                                    <option value="Pantai" selected>Pantai</option>
                                 </select>
                             </div>
                         </div>
@@ -192,7 +158,7 @@
                             <label class="form-label">Status</label>
                             <select name="status" class="form-select" required>
                                 <option value="aktif">Aktif (Tampil di Web)</option>
-                                <option value="non-aktif">Non-Aktif (Sembunyikan)</option>
+                                <option value="nonaktif">Non-Aktif (Sembunyikan)</option>
                             </select>
                         </div>
                     </div>
@@ -224,11 +190,7 @@
                             <div class="col-md-6 mb-3">
                                 <label class="form-label">Kategori</label>
                                 <select name="kategori" id="edit_kategori" class="form-select" required>
-                                    <option value="Pantai">Pantai</option>
-                                    <option value="Pulau">Pulau</option>
-                                    <option value="Air Terjun">Air Terjun</option>
-                                    <option value="Bukit">Bukit</option>
-                                    <option value="Taman">Taman</option>
+                                    <option value="Pantai" selected>Pantai</option>
                                 </select>
                             </div>
                         </div>
@@ -248,7 +210,7 @@
                             <label class="form-label">Status</label>
                             <select name="status" id="edit_status" class="form-select" required>
                                 <option value="aktif">Aktif (Tampil di Web)</option>
-                                <option value="non-aktif">Non-Aktif (Sembunyikan)</option>
+                                <option value="nonaktif">Non-Aktif (Sembunyikan)</option>
                             </select>
                         </div>
                     </div>
@@ -289,23 +251,9 @@
                         <div class="mb-3">
                             <label class="form-label">Role (Hak Akses)</label>
                             <select name="role" id="roleSelect" class="form-select" required>
-                                <option value="user">User Biasa (Pengunjung)</option>
-                                <option value="admin">Admin Destinasi (Pengelola)</option>
+                                <option value="user">User Biasa (Pengunjung / Wisatawan)</option>
                                 <option value="superadmin">Super Admin</option>
                             </select>
-                        </div>
-
-                        <div class="mb-3 d-none" id="destinasiContainer">
-                            <label class="form-label fw-bold text-primary">Kelola Destinasi Mana?</label>
-                            <select name="destinasi_id" class="form-select border-primary">
-                                <option value="" selected disabled>-- Pilih Destinasi Wisata --</option>
-                                @foreach($listDestinasi as $dest)
-                                    <option value="{{ $dest->id }}">{{ $dest->nama }}</option>
-                                @endforeach
-                            </select>
-                            <div class="form-text text-primary">
-                                <i class="bi bi-info-circle"></i> Destinasi harus dibuat dulu di tabel atas sebelum muncul di sini.
-                            </div>
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -346,19 +294,8 @@
                         <div class="mb-3">
                             <label class="form-label">Role (Hak Akses)</label>
                             <select name="role" id="edit_user_role" class="form-select" required>
-                                <option value="user">User Biasa (Pengunjung)</option>
-                                <option value="admin">Admin Destinasi (Pengelola)</option>
+                                <option value="user">User Biasa (Pengunjung / Wisatawan)</option>
                                 <option value="superadmin">Super Admin</option>
-                            </select>
-                        </div>
-
-                        <div class="mb-3 d-none" id="editDestinasiContainer">
-                            <label class="form-label fw-bold text-primary">Kelola Destinasi Mana?</label>
-                            <select name="destinasi_id" id="edit_user_destinasi_id" class="form-select border-primary">
-                                <option value="" selected>-- Pilih Destinasi Wisata --</option>
-                                @foreach($listDestinasi as $dest)
-                                    <option value="{{ $dest->id }}">{{ $dest->nama }}</option>
-                                @endforeach
                             </select>
                         </div>
                     </div>
@@ -374,22 +311,6 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // --- LOGIKA MODAL TAMBAH USER (Original Code) ---
-            const roleSelect = document.getElementById('roleSelect');
-            const destinasiContainer = document.getElementById('destinasiContainer');
-
-            function toggleDestinasi() {
-                if (roleSelect.value === 'admin') {
-                    destinasiContainer.classList.remove('d-none');
-                    destinasiContainer.querySelector('select').setAttribute('required', 'required');
-                } else {
-                    destinasiContainer.classList.add('d-none');
-                    destinasiContainer.querySelector('select').removeAttribute('required');
-                }
-            }
-            roleSelect.addEventListener('change', toggleDestinasi);
-            toggleDestinasi(); // Panggil saat load untuk memastikan status awal
-
             // --- LOGIKA EDIT DESTINASI ---
             document.querySelectorAll('.btn-edit-destinasi').forEach(button => {
                 button.addEventListener('click', function() {
@@ -423,13 +344,10 @@
                     const name = this.getAttribute('data-name');
                     const email = this.getAttribute('data-email');
                     const role = this.getAttribute('data-role');
-                    const destinasiId = this.getAttribute('data-destinasi_id');
 
                     // Elemen di modal edit user
                     const form = document.getElementById('formEditUser');
                     const editRoleSelect = document.getElementById('edit_user_role');
-                    const editDestinasiContainer = document.getElementById('editDestinasiContainer');
-                    const editDestinasiSelect = document.getElementById('edit_user_destinasi_id');
 
                     // 1. Set Action URL Form
                     // Pastikan route ini sesuai di routes/web.php
@@ -439,19 +357,6 @@
                     document.getElementById('edit_user_name').value = name;
                     document.getElementById('edit_user_email').value = email;
                     editRoleSelect.value = role;
-
-                    // 3. Toggle visibility destinasi berdasarkan role
-                    function toggleEditDestinasiVisibility() {
-                        if (editRoleSelect.value === 'admin') {
-                            editDestinasiContainer.classList.remove('d-none');
-                            editDestinasiSelect.value = destinasiId; // Set nilai destinasi saat container terlihat
-                        } else {
-                            editDestinasiContainer.classList.add('d-none');
-                        }
-                    }
-
-                    toggleEditDestinasiVisibility();
-                    editRoleSelect.onchange = toggleEditDestinasiVisibility;
                 });
             });
 

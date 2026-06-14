@@ -30,8 +30,8 @@ class AuthenticatedSessionController extends Controller
 
         $role = $request->user()->role;
 
-        // 1. Jika Admin / Superadmin -> Dashboard Admin
-        if ($role === 'superadmin' || $role === 'admin') {
+        // 1. Jika Superadmin -> Dashboard Admin
+        if ($role === 'superadmin') {
             return redirect()->route('admin.dashboard');
         }
 

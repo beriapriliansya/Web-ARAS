@@ -17,12 +17,11 @@ class AdminController extends Controller
     {
         // 1. Statistik
         $totalUser = User::where('role', 'user')->count();
-        $totalAdmin = User::where('role', 'admin')->count();
         $totalDestinasi = DestinasiWisata::count();
 
         // 2. Data User
         $users = User::with('destinasi')
-                    ->whereIn('role', ['admin', 'superadmin', 'user'])
+                    ->whereIn('role', ['superadmin', 'user'])
                     ->latest()
                     ->paginate(5, ['*'], 'users_page'); // Kasih nama page biar gak bentrok
 
@@ -31,7 +30,6 @@ class AdminController extends Controller
 
         return view('admin.dashboard', compact(
             'totalUser',
-            'totalAdmin',
             'totalDestinasi',
             'users',
             'listDestinasi'
@@ -47,8 +45,7 @@ class AdminController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email',
             'password' => 'required|min:8',
-            'role' => 'required|in:superadmin,admin,user',
-            'destinasi_id' => 'nullable|required_if:role,admin|exists:destinasi_wisata,id',
+            'role' => 'required|in:superadmin,user',
         ]);
 
         User::create([
@@ -56,7 +53,7 @@ class AdminController extends Controller
             'email' => $request->email,
             'password' => Hash::make($request->password),
             'role' => $request->role,
-            'destinasi_id' => ($request->role === 'admin') ? $request->destinasi_id : null,
+            'destinasi_id' => null,
         ]);
 
         return redirect()->back()->with('success', 'User berhasil ditambahkan!');
@@ -86,15 +83,14 @@ class AdminController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email,' . $user->id,
             'password' => 'nullable|min:8',
-            'role' => 'required|in:superadmin,admin,user',
-            'destinasi_id' => 'nullable|required_if:role,admin|exists:destinasi_wisata,id',
+            'role' => 'required|in:superadmin,user',
         ]);
 
         $data = [
             'name' => $request->name,
             'email' => $request->email,
             'role' => $request->role,
-            'destinasi_id' => ($request->role === 'admin') ? $request->destinasi_id : null,
+            'destinasi_id' => null,
         ];
 
         if ($request->filled('password')) {
@@ -121,7 +117,7 @@ class AdminController extends Controller
             'alamat' => 'required|string',
             'deskripsi' => 'required|string',
             'harga_tiket' => 'required|numeric',
-            'status' => 'required|in:aktif,non-aktif',
+            'status' => 'required|in:aktif,nonaktif',
             // Gambar opsional dulu biar ga ribet
         ]);
 

@@ -12,9 +12,33 @@ class DestinasiController extends Controller
     /**
      * Menampilkan daftar destinasi di halaman admin
      */
-    public function index()
+    public function index(Request $request)
     {
-        $destinasi = DestinasiWisata::latest()->paginate(10);
+        $query = DestinasiWisata::query();
+
+        // 1. Pencarian nama
+        if ($request->filled('search')) {
+            $query->where('nama', 'like', '%' . $request->search . '%');
+        }
+
+        // 2. Filter Status
+        if ($request->filled('status')) {
+            $query->where('status', $request->status);
+        }
+
+        // 3. Pengurutan (Sorting)
+        $sort = $request->input('sort', 'latest');
+        if ($sort === 'price_asc') {
+            $query->orderBy('harga_tiket', 'asc');
+        } elseif ($sort === 'price_desc') {
+            $query->orderBy('harga_tiket', 'desc');
+        } elseif ($sort === 'name_asc') {
+            $query->orderBy('nama', 'asc');
+        } else {
+            $query->latest();
+        }
+
+        $destinasi = $query->paginate(9); // 9 per page fits the 3x3 grid beautifully
         return view('admin.destinasi.index', compact('destinasi'));
     }
 
@@ -79,9 +103,9 @@ class DestinasiController extends Controller
 
         $this->handleSave($request, $destinasi);
 
-        // Kirim notifikasi pembaruan destinasi ke admin/superadmin saja
+        // Kirim notifikasi pembaruan destinasi ke superadmin saja
         \App\Models\UserNotification::ensureTableExists();
-        $users = \App\Models\User::whereIn('role', ['admin', 'superadmin'])->get();
+        $users = \App\Models\User::where('role', 'superadmin')->get();
         foreach ($users as $u) {
             \App\Models\UserNotification::create([
                 'user_id' => $u->id,
@@ -122,7 +146,7 @@ class DestinasiController extends Controller
         $rules = [
             'nama' => 'required|string|max:200',
             'kategori' => 'required|string',
-            'status' => 'required|in:aktif,non-aktif',
+            'status' => 'required|in:aktif,nonaktif',
             'harga_tiket' => 'required|numeric|min:0',
             'alamat' => 'required|string',
             'deskripsi' => 'required|string',
@@ -222,9 +246,9 @@ class DestinasiController extends Controller
             }
             \Illuminate\Support\Facades\DB::commit();
 
-            // Kirim notifikasi pembaruan nilai alternatif ke admin/superadmin saja
+            // Kirim notifikasi pembaruan nilai alternatif ke superadmin saja
             \App\Models\UserNotification::ensureTableExists();
-            $users = \App\Models\User::whereIn('role', ['admin', 'superadmin'])->get();
+            $users = \App\Models\User::where('role', 'superadmin')->get();
             foreach ($users as $u) {
                 \App\Models\UserNotification::create([
                     'user_id' => $u->id,

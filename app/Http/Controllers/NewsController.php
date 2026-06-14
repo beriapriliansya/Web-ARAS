@@ -129,9 +129,9 @@ class NewsController extends Controller
     {
         $comment = \App\Models\NewsComment::findOrFail($id);
 
-        // Hanya pemilik komentar atau superadmin/admin yang bisa menghapusnya
+        // Hanya pemilik komentar atau superadmin yang bisa menghapusnya
         $user = auth()->user();
-        if ($comment->user_id !== $user->id && !in_array($user->role, ['superadmin', 'admin'])) {
+        if ($comment->user_id !== $user->id && $user->role !== 'superadmin') {
             return back()->with('error', 'Anda tidak memiliki akses untuk menghapus komentar ini.');
         }
 

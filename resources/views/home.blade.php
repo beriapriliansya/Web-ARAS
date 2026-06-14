@@ -182,7 +182,7 @@
                     <i class="bi bi-rocket-takeoff-fill"></i> Mulai Rekomendasi
                 </a>
                 @auth
-                    @if(auth()->user()->role === 'admin')
+                    @if(auth()->user()->role === 'superadmin')
                     <a href="{{ route('admin.aras.index') }}" class="btn btn-outline-primary btn-lg px-4">
                         <i class="bi bi-calculator"></i> Kelola ARAS
                     </a>

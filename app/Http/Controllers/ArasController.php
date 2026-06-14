@@ -210,11 +210,11 @@ class ArasController extends Controller
             }
             DB::commit();
 
-            // Kirim notifikasi pembaruan nilai alternatif ke admin/superadmin saja
+            // Kirim notifikasi pembaruan nilai alternatif ke superadmin saja
             $destinasiObj = DestinasiWisata::find($request->destinasi_id);
             if ($destinasiObj) {
                 \App\Models\UserNotification::ensureTableExists();
-                $users = \App\Models\User::whereIn('role', ['admin', 'superadmin'])->get();
+                $users = \App\Models\User::where('role', 'superadmin')->get();
                 foreach ($users as $u) {
                     \App\Models\UserNotification::create([
                         'user_id' => $u->id,

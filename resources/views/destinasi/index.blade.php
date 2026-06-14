@@ -37,18 +37,7 @@
                                 </div>
                             </div>
 
-                            <!-- Kategori -->
-                            <div class="mb-3">
-                                <label class="form-label fw-semibold text-secondary small mb-1">Kategori:</label>
-                                <select class="form-select form-select-sm" name="kategori">
-                                    <option value="">Semua Kategori</option>
-                                    @foreach($kategoriList as $kat)
-                                        <option value="{{ $kat }}" {{ request('kategori') == $kat ? 'selected' : '' }}>
-                                            {{ $kat }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                            </div>
+
 
                             <!-- Filter Skor Alternatif -->
                             <hr class="my-3 text-secondary-50">

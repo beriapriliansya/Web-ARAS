@@ -43,10 +43,7 @@
                                 <div class="col-md-4">
                                     <label class="form-label fw-bold">Kategori *</label>
                                     <select class="form-select @error('kategori') is-invalid @enderror" name="kategori" required>
-                                        <option value="">Pilih Kategori</option>
-                                        @foreach(['Alam', 'Pantai', 'Gunung', 'Air Terjun', 'Budaya', 'Kuliner', 'Religi', 'Edukasi'] as $kat)
-                                            <option value="{{ $kat }}" {{ old('kategori') == $kat ? 'selected' : '' }}>{{ $kat }}</option>
-                                        @endforeach
+                                        <option value="Pantai" selected>Pantai</option>
                                     </select>
                                     @error('kategori')
                                         <div class="invalid-feedback">{{ $message }}</div>
@@ -167,7 +164,7 @@
                                     <label class="form-label fw-bold">Status Publikasi</label>
                                     <select name="status" class="form-select bg-light">
                                         <option value="aktif" selected>✅ Aktif (Tampil di Web)</option>
-                                        <option value="non-aktif">❌ Non-Aktif (Sembunyikan)</option>
+                                        <option value="nonaktif">❌ Non-Aktif (Sembunyikan)</option>
                                     </select>
                                 </div>
 

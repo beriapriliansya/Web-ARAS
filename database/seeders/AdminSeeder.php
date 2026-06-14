@@ -24,33 +24,7 @@ class AdminSeeder extends Seeder
                 'email_verified_at' => now(),
             ]
         );
-
-        // 2. ADMIN DESTINASI (CONTOH 1)
-        // Ini contoh akun admin yang nanti memegang destinasi "Pantai Pahawang"
-        User::updateOrCreate(
-            ['email' => 'admin.pahawang@pariwisata.com'],
-            [
-                'name'     => 'Admin Pahawang',
-                'password' => Hash::make('password123'),
-                'role'     => 'admin', // Role tetap 'admin'
-                // Nanti kolom 'destinasi_id' diisi manual lewat Dashboard Superadmin
-                'email_verified_at' => now(),
-            ]
-        );
-
-        // 3. ADMIN DESTINASI (CONTOH 2)
-        // Ini contoh akun admin untuk "Pulau Tegal Mas"
-        User::updateOrCreate(
-            ['email' => 'admin.tegalmas@pariwisata.com'],
-            [
-                'name'     => 'Admin Tegal Mas',
-                'password' => Hash::make('password123'),
-                'role'     => 'admin',
-                'email_verified_at' => now(),
-            ]
-        );
-
-        // 4. USER BIASA (PENGUNJUNG)
+        // 2. USER BIASA (PENGUNJUNG)
         User::updateOrCreate(
             ['email' => 'user@gmail.com'],
             [
