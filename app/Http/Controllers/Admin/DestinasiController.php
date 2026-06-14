@@ -42,7 +42,19 @@ class DestinasiController extends Controller
      */
     public function store(Request $request)
     {
-        $this->handleSave($request);
+        $destinasi = $this->handleSave($request);
+
+        // Kirim notifikasi destinasi baru ke semua user
+        \App\Models\UserNotification::ensureTableExists();
+        $users = \App\Models\User::all();
+        foreach ($users as $u) {
+            \App\Models\UserNotification::create([
+                'user_id' => $u->id,
+                'type'    => 'destinasi',
+                'title'   => 'Destinasi Wisata Baru',
+                'message' => 'Destinasi air baru "' . $destinasi->nama . '" telah ditambahkan ke sistem. Yuk, lihat keindahannya!',
+            ]);
+        }
 
         return redirect()->route('admin.destinasi.index')
             ->with('success', 'Destinasi Wisata berhasil ditambahkan!');
@@ -66,6 +78,18 @@ class DestinasiController extends Controller
         $destinasi = DestinasiWisata::findOrFail($id);
 
         $this->handleSave($request, $destinasi);
+
+        // Kirim notifikasi pembaruan destinasi ke admin/superadmin saja
+        \App\Models\UserNotification::ensureTableExists();
+        $users = \App\Models\User::whereIn('role', ['admin', 'superadmin'])->get();
+        foreach ($users as $u) {
+            \App\Models\UserNotification::create([
+                'user_id' => $u->id,
+                'type'    => 'destinasi',
+                'title'   => 'Pembaruan Informasi Destinasi',
+                'message' => 'Informasi untuk destinasi wisata "' . $destinasi->nama . '" baru saja diperbarui oleh admin.',
+            ]);
+        }
 
         return redirect()->route('admin.destinasi.index')
             ->with('success', 'Data Destinasi berhasil diperbarui!');
@@ -147,9 +171,10 @@ class DestinasiController extends Controller
         if ($destinasi) {
             // Mode Update
             $destinasi->update($validated);
+            return $destinasi;
         } else {
             // Mode Create
-            DestinasiWisata::create($validated);
+            return DestinasiWisata::create($validated);
         }
     }
 
@@ -196,6 +221,19 @@ class DestinasiController extends Controller
                 }
             }
             \Illuminate\Support\Facades\DB::commit();
+
+            // Kirim notifikasi pembaruan nilai alternatif ke admin/superadmin saja
+            \App\Models\UserNotification::ensureTableExists();
+            $users = \App\Models\User::whereIn('role', ['admin', 'superadmin'])->get();
+            foreach ($users as $u) {
+                \App\Models\UserNotification::create([
+                    'user_id' => $u->id,
+                    'type'    => 'destinasi',
+                    'title'   => 'Pembaruan Nilai Alternatif',
+                    'message' => 'Nilai kriteria / alternatif untuk destinasi "' . $destinasi->nama . '" baru saja diperbarui oleh admin.',
+                ]);
+            }
+
             return redirect()->route('admin.destinasi.show', $destinasi->id)
                 ->with('success', 'Nilai kriteria berhasil diperbarui!');
         } catch (\Exception $e) {

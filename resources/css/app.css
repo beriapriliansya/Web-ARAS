@@ -338,6 +338,10 @@ body {
     transform: translateY(0);
 }
 
+.btn.rounded-circle {
+    padding: 0 !important;
+}
+
 .btn-primary {
     background: var(--primary-gradient);
 }

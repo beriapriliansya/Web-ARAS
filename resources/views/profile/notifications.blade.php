@@ -61,6 +61,10 @@
                                             <!-- Notification Icon based on type -->
                                             @if($notif->type === 'news')
                                                 <span class="badge rounded-circle p-2 bg-success text-white d-flex align-items-center justify-content-center" style="width: 32px; height: 32px;"><i class="bi bi-newspaper fs-6"></i></span>
+                                            @elseif($notif->type === 'destinasi')
+                                                <span class="badge rounded-circle p-2 bg-primary text-white d-flex align-items-center justify-content-center" style="width: 32px; height: 32px;"><i class="bi bi-compass fs-6"></i></span>
+                                            @elseif($notif->type === 'perhitungan')
+                                                <span class="badge rounded-circle p-2 text-white d-flex align-items-center justify-content-center" style="width: 32px; height: 32px; background-color: #6366f1 !important;"><i class="bi bi-calculator fs-6"></i></span>
                                             @elseif($notif->type === 'security_email' || $notif->type === 'security_password')
                                                 <span class="badge rounded-circle p-2 bg-warning text-dark d-flex align-items-center justify-content-center" style="width: 32px; height: 32px;"><i class="bi bi-shield-lock-fill fs-6"></i></span>
                                             @else

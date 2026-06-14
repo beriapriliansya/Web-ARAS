@@ -50,7 +50,51 @@
                                 </select>
                             </div>
 
-
+                            <!-- Filter Skor Alternatif -->
+                            <hr class="my-3 text-secondary-50">
+                            <h6 class="fw-bold text-secondary small mb-2"><i class="bi bi-sliders me-1"></i>Filter Skor Alternatif:</h6>
+                            @foreach($kriteria as $k)
+                                <div class="mb-2">
+                                    <label class="form-label fw-semibold text-secondary small mb-0" style="font-size: 0.75rem;">{{ $k->nama_kriteria }}:</label>
+                                    <select class="form-select form-select-sm" name="kriteria_{{ $k->id }}" style="font-size: 0.8rem; padding: 0.25rem 0.5rem;">
+                                        @if($k->tipe == 'benefit')
+                                            <option value="">Semua {{ $k->nama_kriteria }}</option>
+                                            <option value="1" {{ request('kriteria_' . $k->id) == '1' ? 'selected' : '' }}>
+                                                Sangat Kurang (Skor 1)
+                                            </option>
+                                            <option value="2" {{ request('kriteria_' . $k->id) == '2' ? 'selected' : '' }}>
+                                                Kurang (Skor 2)
+                                            </option>
+                                            <option value="3" {{ request('kriteria_' . $k->id) == '3' ? 'selected' : '' }}>
+                                                Cukup (Skor 3)
+                                            </option>
+                                            <option value="4" {{ request('kriteria_' . $k->id) == '4' ? 'selected' : '' }}>
+                                                Baik (Skor 4)
+                                            </option>
+                                            <option value="5" {{ request('kriteria_' . $k->id) == '5' ? 'selected' : '' }}>
+                                                Sangat Baik (Skor 5)
+                                            </option>
+                                        @else
+                                            <option value="">Semua {{ $k->nama_kriteria }}</option>
+                                            <option value="1" {{ request('kriteria_' . $k->id) == '1' ? 'selected' : '' }}>
+                                                Sangat Murah (Skor 1)
+                                            </option>
+                                            <option value="2" {{ request('kriteria_' . $k->id) == '2' ? 'selected' : '' }}>
+                                                Murah (Skor 2)
+                                            </option>
+                                            <option value="3" {{ request('kriteria_' . $k->id) == '3' ? 'selected' : '' }}>
+                                                Cukup Murah (Skor 3)
+                                            </option>
+                                            <option value="4" {{ request('kriteria_' . $k->id) == '4' ? 'selected' : '' }}>
+                                                Mahal (Skor 4)
+                                            </option>
+                                            <option value="5" {{ request('kriteria_' . $k->id) == '5' ? 'selected' : '' }}>
+                                                Sangat Mahal (Skor 5)
+                                            </option>
+                                        @endif
+                                    </select>
+                                </div>
+                            @endforeach
 
                             <div class="d-flex align-items-center gap-2 mt-4 pt-3 border-top">
                                 <button type="submit" class="btn btn-primary btn-sm px-3 fw-bold flex-grow-1">

@@ -55,6 +55,19 @@ class ArasController extends Controller
                 ]);
             }
             DB::commit();
+
+            // Kirim notifikasi hasil perhitungan ARAS ke semua user
+            \App\Models\UserNotification::ensureTableExists();
+            $users = \App\Models\User::all();
+            foreach ($users as $u) {
+                \App\Models\UserNotification::create([
+                    'user_id' => $u->id,
+                    'type'    => 'perhitungan',
+                    'title'   => 'Hasil Perankingan Diperbarui',
+                    'message' => 'Kalkulasi Metode ARAS baru saja dijalankan oleh admin. Hasil rekomendasi peringkat wisata air terupdate telah diterbitkan!',
+                ]);
+            }
+
             return back()->with('success', 'Perhitungan ARAS selesai! Ranking di database telah diperbarui.');
 
         } catch (\Exception $e) {
@@ -196,6 +209,22 @@ class ArasController extends Controller
                 }
             }
             DB::commit();
+
+            // Kirim notifikasi pembaruan nilai alternatif ke admin/superadmin saja
+            $destinasiObj = DestinasiWisata::find($request->destinasi_id);
+            if ($destinasiObj) {
+                \App\Models\UserNotification::ensureTableExists();
+                $users = \App\Models\User::whereIn('role', ['admin', 'superadmin'])->get();
+                foreach ($users as $u) {
+                    \App\Models\UserNotification::create([
+                        'user_id' => $u->id,
+                        'type'    => 'destinasi',
+                        'title'   => 'Pembaruan Nilai Alternatif',
+                        'message' => 'Nilai kriteria / alternatif untuk destinasi "' . $destinasiObj->nama . '" baru saja diperbarui oleh admin.',
+                    ]);
+                }
+            }
+
             return back()->with('success', 'Penilaian berhasil disimpan!');
         } catch (\Exception $e) {
             DB::rollBack();

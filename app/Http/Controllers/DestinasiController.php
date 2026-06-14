@@ -31,6 +31,26 @@ class DestinasiController extends Controller
             $query->where('destinasi_wisata.nama', 'like', '%' . $request->search . '%');
         }
 
+        // Filter by skor kriteria alternatif
+        $kriteria = \App\Models\Kriteria::all();
+        foreach ($kriteria as $k) {
+            $paramName = 'kriteria_' . $k->id;
+            if ($request->has($paramName) && $request->input($paramName) != '') {
+                $val = (float)$request->input($paramName);
+                $query->whereExists(function ($q) use ($k, $val) {
+                    $q->select(\Illuminate\Support\Facades\DB::raw(1))
+                      ->from('alternatif')
+                      ->whereColumn('alternatif.destinasi_id', 'destinasi_wisata.id')
+                      ->where('alternatif.kriteria_id', $k->id);
+                    if ($k->tipe == 'benefit') {
+                        $q->where('alternatif.nilai', '>=', $val);
+                    } else {
+                        $q->where('alternatif.nilai', '<=', $val);
+                    }
+                });
+            }
+        }
+
         // Order by ARAS ranking (if exists), then by name
         $query->orderByRaw('CASE WHEN hasil_aras.ranking IS NULL THEN 9999 ELSE hasil_aras.ranking END ASC')
               ->orderBy('destinasi_wisata.nama');
@@ -40,7 +60,7 @@ class DestinasiController extends Controller
         // Ambil list kategori untuk filter sidebar
         $kategoriList = DestinasiWisata::select('kategori')->distinct()->pluck('kategori');
 
-        return view('destinasi.index', compact('destinasi', 'kategoriList'));
+        return view('destinasi.index', compact('destinasi', 'kategoriList', 'kriteria'));
     }
 
     public function show($id)
