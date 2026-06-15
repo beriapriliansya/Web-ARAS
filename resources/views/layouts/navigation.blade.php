@@ -38,7 +38,7 @@
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle px-3 {{ request()->routeIs('admin.aras.*') ? 'active fw-bold text-primary' : '' }}" 
                        href="#" id="navbarDropdownAras" role="button" 
-                       data-bs-toggle="dropdown" aria-expanded="false">
+                       aria-expanded="false">
                         Perhitungan ARAS
                     </a>
                     <ul class="dropdown-menu shadow border-0" aria-labelledby="navbarDropdownAras">
@@ -250,4 +250,32 @@
             }
         }
     </style>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const dropdownToggle = document.getElementById('navbarDropdownAras');
+            if (dropdownToggle) {
+                dropdownToggle.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    const dropdownMenu = this.nextElementSibling;
+                    if (dropdownMenu) {
+                        dropdownMenu.classList.toggle('show');
+                        const isOpen = dropdownMenu.classList.contains('show');
+                        this.setAttribute('aria-expanded', isOpen);
+                    }
+                });
+
+                // Close dropdown when clicking outside
+                document.addEventListener('click', function(e) {
+                    const dropdownMenu = dropdownToggle.nextElementSibling;
+                    if (dropdownMenu && dropdownMenu.classList.contains('show')) {
+                        if (!dropdownToggle.contains(e.target) && !dropdownMenu.contains(e.target)) {
+                            dropdownMenu.classList.remove('show');
+                            dropdownToggle.setAttribute('aria-expanded', 'false');
+                        }
+                    }
+                });
+            }
+        });
+    </script>
 </nav>
