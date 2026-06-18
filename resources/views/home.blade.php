@@ -42,15 +42,15 @@
                 <div class="col-md-3">
                     <div class="p-4 rounded bg-light h-100">
                         <i class="bi bi-people text-warning" style="font-size: 3rem;"></i>
-                        <h3 class="fw-bold mt-3 mb-0">60++</h3>
+                        <h3 class="fw-bold mt-3 mb-0">{{ $totalUser }}</h3>
                         <p class="text-muted">Pengguna terdaftar</p>
                     </div>
                 </div>
                 <div class="col-md-3">
                     <div class="p-4 rounded bg-light h-100">
                         <i class="bi bi-award-fill text-danger" style="font-size: 3rem;"></i>
-                        <h3 class="fw-bold mt-3 mb-0">99%</h3>
-                        <p class="text-muted">Akurasi Rekomendasi</p>
+                        <h3 class="fw-bold mt-3 mb-0">{{ $totalHasilAras }}</h3>
+                        <p class="text-muted">Rekomendasi Dihasilkan</p>
                     </div>
                 </div>
             </div>
