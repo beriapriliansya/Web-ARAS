@@ -91,6 +91,9 @@
                                 </thead>
                                 <tbody>
                                     @forelse($hasil as $h)
+                                        @if(!$h->destinasi)
+                                            @continue
+                                        @endif
                                         <tr class="{{ $h->ranking <= 3 ? 'table-warning' : '' }}">
                                             <td class="text-center fw-bold">
                                                 @if($h->ranking == 1) 🥇
