@@ -7,8 +7,12 @@
     "file": "assets/bootstrap-icons-mSm7cUeB.woff2",
     "src": "node_modules/bootstrap-icons/font/fonts/bootstrap-icons.woff2"
   },
+  "public/images/beach_hero.png": {
+    "file": "assets/beach_hero-_mvfXZd3.png",
+    "src": "public/images/beach_hero.png"
+  },
   "resources/css/app.css": {
-    "file": "assets/app-DXypfXW3.css",
+    "file": "assets/app-CvcDkA2E.css",
     "src": "resources/css/app.css",
     "isEntry": true
   },
