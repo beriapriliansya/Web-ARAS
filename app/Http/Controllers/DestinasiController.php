@@ -41,12 +41,8 @@ class DestinasiController extends Controller
                     $q->select(\Illuminate\Support\Facades\DB::raw(1))
                       ->from('alternatif')
                       ->whereColumn('alternatif.destinasi_id', 'destinasi_wisata.id')
-                      ->where('alternatif.kriteria_id', $k->id);
-                    if ($k->tipe == 'benefit') {
-                        $q->where('alternatif.nilai', '>=', $val);
-                    } else {
-                        $q->where('alternatif.nilai', '<=', $val);
-                    }
+                      ->where('alternatif.kriteria_id', $k->id)
+                      ->where('alternatif.nilai', '=', $val);
                 });
             }
         }
