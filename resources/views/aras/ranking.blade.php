@@ -47,6 +47,9 @@
             border: 2px solid #cd7f32 !important;
             box-shadow: 0 0.5rem 1.5rem rgba(205, 127, 50, 0.15);
         }
+        .bg-bronze {
+            background-color: #cd7f32 !important;
+        }
     </style>
 
     <!-- Page Header -->
@@ -84,7 +87,7 @@
                         $badgeText = '🥈 Peringkat 2';
                     } elseif ($h->ranking == 3) {
                         $borderClass = 'bronze-border';
-                        $badgeClass = 'bg-danger-emphasis text-white';
+                        $badgeClass = 'bg-bronze text-white';
                         $badgeText = '🥉 Peringkat 3';
                     }
                 @endphp
