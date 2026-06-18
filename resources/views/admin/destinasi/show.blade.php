@@ -87,6 +87,17 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="col-md-6">
+                                <div class="d-flex align-items-center">
+                                    <div class="bg-light p-3 rounded-circle me-3">
+                                        <i class="bi bi-signpost-split fs-3 text-warning"></i>
+                                    </div>
+                                    <div>
+                                        <small class="text-muted d-block">Jarak Pusat Kota</small>
+                                        <span class="fw-bold">{{ $destinasi->jarak !== null ? $destinasi->jarak . ' km' : '-' }}</span>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>

@@ -78,15 +78,23 @@
                         </div>
                         <div class="card-body">
                             <div class="row g-3">
-                                <div class="col-md-4">
+                                <div class="col-md-6">
                                     <label class="form-label fw-bold">Harga Tiket (Rp) *</label>
                                     <input type="number" class="form-control" name="harga_tiket" value="{{ old('harga_tiket', $destinasi->harga_tiket) }}" min="0" required>
                                 </div>
-                                <div class="col-md-4">
+                                <div class="col-md-6">
+                                    <label class="form-label fw-bold">Jarak Dari Pusat Kota (km) *</label>
+                                    <input type="number" class="form-control @error('jarak') is-invalid @enderror"
+                                           name="jarak" value="{{ old('jarak', $destinasi->jarak) }}" min="0" required placeholder="Contoh: 15">
+                                    @error('jarak')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                                <div class="col-md-6">
                                     <label class="form-label fw-bold">Jam Buka</label>
                                     <input type="time" class="form-control" name="jam_buka" value="{{ old('jam_buka', $destinasi->jam_buka ? \Carbon\Carbon::parse($destinasi->jam_buka)->format('H:i') : '') }}">
                                 </div>
-                                <div class="col-md-4">
+                                <div class="col-md-6">
                                     <label class="form-label fw-bold">Jam Tutup</label>
                                     <input type="time" class="form-control" name="jam_tutup" value="{{ old('jam_tutup', $destinasi->jam_tutup ? \Carbon\Carbon::parse($destinasi->jam_tutup)->format('H:i') : '') }}">
                                 </div>

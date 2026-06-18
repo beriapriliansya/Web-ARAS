@@ -75,7 +75,9 @@ class DestinasiController extends Controller
 
         $nilaiC1 = $aksesibilitasAlternatif ? (float)$aksesibilitasAlternatif->nilai : null;
         $jarakText = 'Tidak diketahui';
-        if ($nilaiC1 !== null) {
+        if ($destinasi->jarak !== null) {
+            $jarakText = $destinasi->jarak . ' km';
+        } elseif ($nilaiC1 !== null) {
             if ($nilaiC1 >= 50.0) {
                 $jarakText = $nilaiC1 . ' km';
             } elseif ($nilaiC1 === 0.25 || ($nilaiC1 >= 1.0 && $nilaiC1 <= 2.5)) {

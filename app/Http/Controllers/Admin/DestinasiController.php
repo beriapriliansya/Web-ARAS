@@ -148,6 +148,7 @@ class DestinasiController extends Controller
             'kategori' => 'required|string',
             'status' => 'required|in:aktif,nonaktif',
             'harga_tiket' => 'required|numeric|min:0',
+            'jarak' => 'nullable|integer|min:0',
             'alamat' => 'required|string',
             'deskripsi' => 'required|string',
             'latitude' => 'required|numeric',
