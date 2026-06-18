@@ -149,27 +149,14 @@
                                                     <select name="nilai_{{ $k->id }}" class="form-select fw-semibold" required>
                                                         <option value="" disabled {{ $existingNilai === null ? 'selected' : '' }}>-- Pilih Deskripsi Nilai --</option>
                                                         @foreach($options as $skor => $desc)
-                                                            <option value="{{ $skor }}" {{ ($existingNilai !== null && abs((float)$existingNilai - $skor) < 0.001) ? 'selected' : '' }}>
+                                                            @php
+                                                                $isSelected = ($existingNilai !== null && (int)round($existingNilai) === $skor);
+                                                            @endphp
+                                                            <option value="{{ $skor }}" {{ $isSelected ? 'selected' : '' }}>
                                                                 Skor {{ $skor }} : {{ $desc }}
                                                             </option>
                                                         @endforeach
-                                                        @if($existingNilai !== null)
-                                                            @php
-                                                                $matched = false;
-                                                                foreach(array_keys($options) as $skor) {
-                                                                    if(abs((float)$existingNilai - $skor) < 0.001) {
-                                                                        $matched = true;
-                                                                        break;
-                                                                    }
-                                                                }
-                                                            @endphp
-                                                            @if(!$matched)
-                                                                <option value="{{ $existingNilai }}" selected>
-                                                                    Skor {{ $existingNilai }} : Nilai Kustom Sebelumnya
-                                                                </option>
-                                                            @endif
-                                                        @endif
-                                                    </select>
+                                                     </select>
                                                 @endif
                                             </td>
                                         </tr>
