@@ -27,6 +27,7 @@ class DestinasiWisata extends Model
         'kategori',
         'foto',
         'harga_tiket',
+        'jarak',
         'jam_buka',
         'jam_tutup',
         'telepon',
@@ -41,6 +42,7 @@ class DestinasiWisata extends Model
     protected $casts = [
         'fasilitas' => 'array', // JSON ke array
         'harga_tiket' => 'decimal:2',
+        'jarak' => 'integer',
         'latitude' => 'decimal:8',
         'longitude' => 'decimal:8',
         'jam_buka' => 'datetime:H:i',

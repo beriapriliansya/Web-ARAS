@@ -118,7 +118,7 @@
                         <div class="card-body">
                             <div class="row g-3">
                                 <!-- Harga Tiket -->
-                                <div class="col-md-4">
+                                <div class="col-md-6">
                                     <label class="form-label fw-bold">Harga Tiket (Rp) *</label>
                                     <input type="number" class="form-control @error('harga_tiket') is-invalid @enderror"
                                            name="harga_tiket" value="{{ old('harga_tiket', 0) }}" min="0" required>
@@ -127,12 +127,22 @@
                                     @enderror
                                 </div>
 
+                                <!-- Jarak Dari Pusat Kota -->
+                                <div class="col-md-6">
+                                    <label class="form-label fw-bold">Jarak Dari Pusat Kota (km) *</label>
+                                    <input type="number" class="form-control @error('jarak') is-invalid @enderror"
+                                           name="jarak" value="{{ old('jarak') }}" min="0" required placeholder="Contoh: 15">
+                                    @error('jarak')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+
                                 <!-- Jam Operasional -->
-                                <div class="col-md-4">
+                                <div class="col-md-6">
                                     <label class="form-label fw-bold">Jam Buka</label>
                                     <input type="time" class="form-control" name="jam_buka" value="{{ old('jam_buka', '07:00') }}">
                                 </div>
-                                <div class="col-md-4">
+                                <div class="col-md-6">
                                     <label class="form-label fw-bold">Jam Tutup</label>
                                     <input type="time" class="form-control" name="jam_tutup" value="{{ old('jam_tutup', '17:00') }}">
                                 </div>
