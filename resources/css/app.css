@@ -106,7 +106,9 @@ body {
    HERO SECTION
    ======================================== */
 .hero-section {
-    background: var(--primary-gradient);
+    background: linear-gradient(135deg, rgba(30, 60, 114, 0.6) 0%, rgba(42, 82, 152, 0.6) 100%), url('../../public/images/beach_hero.png');
+    background-size: cover;
+    background-position: center;
     color: white;
     padding: 100px 0;
     position: relative;

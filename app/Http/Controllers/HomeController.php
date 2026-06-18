@@ -14,6 +14,8 @@ class HomeController extends Controller
         // 1. Data Statistik Sederhana
         $totalDestinasi = DestinasiWisata::count();
         $totalKriteria = Kriteria::count();
+        $totalUser = \App\Models\User::count();
+        $totalHasilAras = HasilAras::count();
 
         // 2. Data Top 3 Destinasi berdasarkan Hasil ARAS (Ranking 1-3)
         // Pastikan tabel 'hasil_aras' sudah ada datanya. Kalau kosong, bagian ini tidak akan tampil error.
@@ -38,6 +40,8 @@ class HomeController extends Controller
         return view('home', compact(
             'totalDestinasi',
             'totalKriteria',
+            'totalUser',
+            'totalHasilAras',
             'topDestinasi',
             'destinasiTerbaru'
         ));
