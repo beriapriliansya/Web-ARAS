@@ -114,10 +114,10 @@
 
                         <!-- Action Button to Google Maps Navigation -->
                         <div class="text-center mt-4">
-                            <a href="https://www.google.com/maps/dir/?api=1&destination={{ $destinasi->latitude }},{{ $destinasi->longitude }}"
+                            <a href="https://www.google.com/maps/search/?api=1&query={{ $destinasi->latitude }},{{ $destinasi->longitude }}"
                                target="_blank"
                                class="btn btn-primary px-4 py-2 rounded-pill fw-bold shadow-sm">
-                                <i class="bi bi-compass-fill me-1.5"></i> Buka Rute di Google Maps
+                                <i class="bi bi-map-fill me-1.5"></i> Buka di Google Maps
                             </a>
                         </div>
                     </div>
