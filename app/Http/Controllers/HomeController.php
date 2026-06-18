@@ -21,7 +21,8 @@ class HomeController extends Controller
         // Pastikan tabel 'hasil_aras' sudah ada datanya. Kalau kosong, bagian ini tidak akan tampil error.
         $topDestinasi = [];
         try {
-            $topDestinasi = HasilAras::with('destinasi')
+            $topDestinasi = HasilAras::whereHas('destinasi')
+                ->with('destinasi')
                 ->orderBy('ranking', 'asc') // Urutkan dari ranking 1
                 ->limit(3)
                 ->get();

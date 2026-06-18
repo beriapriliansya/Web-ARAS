@@ -20,8 +20,11 @@ class ArasController extends Controller
         $kriteria = Kriteria::all();
         $destinasi = DestinasiWisata::aktif()->count();
 
-        // Ambil hasil perhitungan terakhir jika ada
-        $hasil = HasilAras::with('destinasi.alternatif')->orderBy('ranking')->get();
+        // Ambil hasil perhitungan terakhir jika ada (hanya jika destinasi tidak di-softdelete/dihapus)
+        $hasil = HasilAras::whereHas('destinasi')
+                    ->with('destinasi.alternatif')
+                    ->orderBy('ranking')
+                    ->get();
 
         return view('admin.aras.index', compact('kriteria', 'destinasi', 'hasil'));
     }
@@ -263,7 +266,8 @@ class ArasController extends Controller
      */
     public function ranking()
     {
-        $hasil = HasilAras::with('destinasi')
+        $hasil = HasilAras::whereHas('destinasi')
+                    ->with('destinasi')
                     ->orderBy('ranking', 'asc')
                     ->get();
 
@@ -276,8 +280,11 @@ class ArasController extends Controller
     public function rekomendasiForm()
     {
         $kriteria = Kriteria::all();
-        // Ambil ranking default sebagai referensi awal
-        $hasilDefault = HasilAras::with('destinasi')->orderBy('ranking')->get();
+        // Ambil ranking default sebagai referensi awal (hanya yang destinasinya aktif/ada)
+        $hasilDefault = HasilAras::whereHas('destinasi')
+                            ->with('destinasi')
+                            ->orderBy('ranking')
+                            ->get();
 
         return view('aras.rekomendasi', compact('kriteria', 'hasilDefault'));
     }
