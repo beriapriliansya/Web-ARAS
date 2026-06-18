@@ -77,20 +77,100 @@
                                             <td class="text-start">
                                                 @php
                                                     $existingNilai = isset($alternatifValues[$k->id]) ? (float)$alternatifValues[$k->id] : null;
+                                                    
+                                                    // Map kriteria to guidelines
+                                                    $options = [];
+                                                    if ($k->kode == 'C1') {
+                                                        $options = [
+                                                            5 => 'Sangat Baik (Jalan aspal mulus & dekat jalan raya utama)',
+                                                            4 => 'Baik (Jalan aspal baik & mudah dilalui mobil)',
+                                                            3 => 'Cukup (Jalan semen/berbatu, dapat dilalui)',
+                                                            2 => 'Kurang (Jalan tanah/berlubang, sulit dilalui)',
+                                                            1 => 'Sangat Kurang (Jalan rusak parah / terjal)',
+                                                        ];
+                                                    } elseif ($k->kode == 'C2') {
+                                                        $options = [
+                                                            5 => 'Sangat Lengkap (Semua fasilitas utama & penunjang tersedia)',
+                                                            4 => 'Lengkap (Toilet, mushola, area parkir, kantin tersedia)',
+                                                            3 => 'Cukup Lengkap (Toilet, parkir, warung makan tersedia)',
+                                                            2 => 'Kurang Lengkap (Hanya toilet & area parkir darurat)',
+                                                            1 => 'Tidak Lengkap (Hampir tidak ada fasilitas)',
+                                                        ];
+                                                    } elseif ($k->kode == 'C3') {
+                                                        $options = [
+                                                            5 => 'Sangat Bersih (Bebas sampah plastik, air jernih, asri)',
+                                                            4 => 'Bersih (Petugas aktif, tempat sampah memadai)',
+                                                            3 => 'Cukup (Ada sedikit sampah alami/daun, air cukup jernih)',
+                                                            2 => 'Kurang Bersih (Sampah plastik terlihat menumpuk)',
+                                                            1 => 'Sangat Kotor (Sampah berserakan & air tercemar)',
+                                                        ];
+                                                    } elseif ($k->kode == 'C4') {
+                                                        $options = [
+                                                            5 => 'Sangat Aman (Penjaga pantai bersertifikat & pos medis aktif)',
+                                                            4 => 'Aman (Pengelola lokal siaga & parkir terpantau)',
+                                                            3 => 'Cukup Aman (Kerawanan rendah, pengawasan swadaya)',
+                                                            2 => 'Kurang Aman (Minim rambu bahaya & pengawasan)',
+                                                            1 => 'Sangat Rawan (Sering terjadi kehilangan/tanpa pengawas)',
+                                                        ];
+                                                    } elseif ($k->kode == 'C5') {
+                                                        $options = [
+                                                            1 => 'Sangat Murah (Tiket < Rp 3.000)',
+                                                            2 => 'Murah (Rp 3.000 s/d <= Rp 5.000)',
+                                                            3 => 'Cukup Murah (> Rp 5.000 s/d <= Rp 10.000)',
+                                                            4 => 'Mahal (> Rp 10.000 s/d <= Rp 15.000)',
+                                                            5 => 'Sangat Mahal (>= Rp 15.000)',
+                                                        ];
+                                                    } elseif ($k->kode == 'C6') {
+                                                        $options = [
+                                                            5 => 'Sangat Ramai (Destinasi sangat populer & padat)',
+                                                            4 => 'Ramai (Destinasi populer & ramai pada akhir pekan)',
+                                                            3 => 'Cukup Ramai (Pengunjung stabil, cukup populer)',
+                                                            2 => 'Sepi (Pengunjung musiman / jarang dikunjungi)',
+                                                            1 => 'Sangat Sepi (Hampir tidak ada pengunjung)',
+                                                        ];
+                                                    }
                                                 @endphp
-                                                <div class="input-group">
-                                                    @if($k->satuan == 'Rp')
-                                                        <span class="input-group-text">Rp</span>
-                                                    @endif
-                                                    
-                                                    <input type="number" step="any" name="nilai_{{ $k->id }}" class="form-control fw-semibold" 
-                                                           value="{{ $existingNilai }}" required 
-                                                           placeholder="Masukkan nilai {{ strtolower($k->nama_kriteria) }}">
-                                                    
-                                                    @if($k->satuan && $k->satuan != 'Rp')
-                                                        <span class="input-group-text">{{ $k->satuan }}</span>
-                                                    @endif
-                                                </div>
+
+                                                @if(empty($options))
+                                                    <div class="input-group">
+                                                        @if($k->satuan == 'Rp')
+                                                            <span class="input-group-text">Rp</span>
+                                                        @endif
+                                                        
+                                                        <input type="number" step="any" name="nilai_{{ $k->id }}" class="form-control fw-semibold" 
+                                                               value="{{ $existingNilai }}" required 
+                                                               placeholder="Masukkan nilai {{ strtolower($k->nama_kriteria) }}">
+                                                        
+                                                        @if($k->satuan && $k->satuan != 'Rp')
+                                                            <span class="input-group-text">{{ $k->satuan }}</span>
+                                                        @endif
+                                                    </div>
+                                                @else
+                                                    <select name="nilai_{{ $k->id }}" class="form-select fw-semibold" required>
+                                                        <option value="" disabled {{ $existingNilai === null ? 'selected' : '' }}>-- Pilih Deskripsi Nilai --</option>
+                                                        @foreach($options as $skor => $desc)
+                                                            <option value="{{ $skor }}" {{ ($existingNilai !== null && abs((float)$existingNilai - $skor) < 0.001) ? 'selected' : '' }}>
+                                                                Skor {{ $skor }} : {{ $desc }}
+                                                            </option>
+                                                        @endforeach
+                                                        @if($existingNilai !== null)
+                                                            @php
+                                                                $matched = false;
+                                                                foreach(array_keys($options) as $skor) {
+                                                                    if(abs((float)$existingNilai - $skor) < 0.001) {
+                                                                        $matched = true;
+                                                                        break;
+                                                                    }
+                                                                }
+                                                            @endphp
+                                                            @if(!$matched)
+                                                                <option value="{{ $existingNilai }}" selected>
+                                                                    Skor {{ $existingNilai }} : Nilai Kustom Sebelumnya
+                                                                </option>
+                                                            @endif
+                                                        @endif
+                                                    </select>
+                                                @endif
                                             </td>
                                         </tr>
                                     @endforeach
