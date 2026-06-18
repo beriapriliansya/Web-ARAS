@@ -66,6 +66,9 @@
     <div class="container py-5">
         <div class="row g-4 justify-content-center">
             @forelse($hasil as $h)
+                @if(!$h->destinasi)
+                    @continue
+                @endif
                 @php
                     $borderClass = '';
                     $badgeClass = 'bg-primary text-white';

@@ -125,9 +125,14 @@
                                     <tbody>
                                         @foreach($listHasil as $index => $item)
                                             @php
+                                                $dest = isset($item->destinasi) ? $item->destinasi : null;
+                                            @endphp
+                                            @if(!$dest)
+                                                @continue
+                                            @endif
+                                            @php
                                                 $ranking = isset($item->ranking) ? $item->ranking : ($index + 1);
                                                 $nilaiK = isset($item->nilai_k) ? $item->nilai_k : $item->nilai_k;
-                                                $dest = isset($item->destinasi) ? $item->destinasi : $item->destinasi;
                                             @endphp
                                             <tr class="{{ $ranking <= 3 ? 'table-warning opacity-100' : '' }}">
                                                 <td class="text-center fw-bold fs-5">
