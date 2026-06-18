@@ -47,6 +47,9 @@
             border: 2px solid #cd7f32 !important;
             box-shadow: 0 0.5rem 1.5rem rgba(205, 127, 50, 0.15);
         }
+        .bg-bronze {
+            background-color: #cd7f32 !important;
+        }
     </style>
 
     <!-- Page Header -->
@@ -72,20 +75,20 @@
                 @php
                     $borderClass = '';
                     $badgeClass = 'bg-primary text-white';
-                    $badgeText = 'Ranking #' . $h->ranking;
+                    $badgeText = 'Peringkat ' . $h->ranking;
                     
                     if ($h->ranking == 1) {
                         $borderClass = 'gold-border';
                         $badgeClass = 'bg-warning text-dark';
-                        $badgeText = '🏆 Juara 1 (Terbaik)';
+                        $badgeText = '🏆 Peringkat 1 (Terbaik)';
                     } elseif ($h->ranking == 2) {
                         $borderClass = 'silver-border';
                         $badgeClass = 'bg-secondary text-white';
-                        $badgeText = '🥈 Juara 2';
+                        $badgeText = '🥈 Peringkat 2';
                     } elseif ($h->ranking == 3) {
                         $borderClass = 'bronze-border';
-                        $badgeClass = 'bg-danger-emphasis text-white';
-                        $badgeText = '🥉 Juara 3';
+                        $badgeClass = 'bg-bronze text-white';
+                        $badgeText = '🥉 Peringkat 3';
                     }
                 @endphp
                 <div class="col-md-6 col-lg-4">
