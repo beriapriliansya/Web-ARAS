@@ -16,6 +16,15 @@ class KriteriaSeeder extends Seeder
         $kriteriaData = [
             [
                 'kode' => 'C1',
+                'nama_kriteria' => 'Harga Tiket',
+                'bobot' => 0.20,
+                'tipe' => 'cost',
+                'keterangan' => 'Biaya / Harga Tiket Masuk',
+                'satuan' => 'Skor',
+                'status' => 'aktif',
+            ],
+            [
+                'kode' => 'C2',
                 'nama_kriteria' => 'Aksesibilitas',
                 'bobot' => 0.15,
                 'tipe' => 'benefit',
@@ -24,7 +33,7 @@ class KriteriaSeeder extends Seeder
                 'status' => 'aktif',
             ],
             [
-                'kode' => 'C2',
+                'kode' => 'C3',
                 'nama_kriteria' => 'Fasilitas',
                 'bobot' => 0.20,
                 'tipe' => 'benefit',
@@ -33,7 +42,7 @@ class KriteriaSeeder extends Seeder
                 'status' => 'aktif',
             ],
             [
-                'kode' => 'C3',
+                'kode' => 'C4',
                 'nama_kriteria' => 'Kebersihan',
                 'bobot' => 0.15,
                 'tipe' => 'benefit',
@@ -42,20 +51,11 @@ class KriteriaSeeder extends Seeder
                 'status' => 'aktif',
             ],
             [
-                'kode' => 'C4',
+                'kode' => 'C5',
                 'nama_kriteria' => 'Keamanan',
                 'bobot' => 0.15,
                 'tipe' => 'benefit',
                 'keterangan' => 'Tingkat keamanan di area lokasi wisata',
-                'satuan' => 'Skor',
-                'status' => 'aktif',
-            ],
-            [
-                'kode' => 'C5',
-                'nama_kriteria' => 'Harga Tiket',
-                'bobot' => 0.20,
-                'tipe' => 'cost',
-                'keterangan' => 'Biaya masuk / tiket masuk tempat wisata',
                 'satuan' => 'Skor',
                 'status' => 'aktif',
             ],
