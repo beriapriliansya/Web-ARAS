@@ -18,7 +18,7 @@ class AlternatifSeeder extends Seeder
         // Format: [destinasi_nama => [kriteria_kode => nilai]]
         $nilaiData = [
             'Pantai Mutun' => [
-                'C1' => 5,
+                'C1' => 1,
                 'C2' => 5,
                 'C3' => 4,
                 'C4' => 4,
@@ -26,7 +26,7 @@ class AlternatifSeeder extends Seeder
                 'C6' => 5,
             ],
             'Pantai Sari Ringgung' => [
-                'C1' => 5,
+                'C1' => 2,
                 'C2' => 4,
                 'C3' => 5,
                 'C4' => 4,
@@ -34,7 +34,7 @@ class AlternatifSeeder extends Seeder
                 'C6' => 5,
             ],
             'Pulau Pahawang' => [
-                'C1' => 3,
+                'C1' => 1,
                 'C2' => 4,
                 'C3' => 5,
                 'C4' => 5,
@@ -42,7 +42,7 @@ class AlternatifSeeder extends Seeder
                 'C6' => 4,
             ],
             'Pantai Klara' => [
-                'C1' => 5,
+                'C1' => 1,
                 'C2' => 5,
                 'C3' => 4,
                 'C4' => 4,
@@ -50,7 +50,7 @@ class AlternatifSeeder extends Seeder
                 'C6' => 4,
             ],
             'Teluk Hantu' => [
-                'C1' => 2,
+                'C1' => 1,
                 'C2' => 2,
                 'C3' => 2,
                 'C4' => 5,

@@ -80,15 +80,15 @@
                                                     
                                                     // Map kriteria to guidelines
                                                     $options = [];
-                                                     if ($k->kode == 'C1') {
-                                                         $options = [
-                                                             5 => 'Sangat Murah (<= Rp 15.000)',
-                                                             4 => 'Murah (Rp 16.000 - Rp 30.000)',
-                                                             3 => 'Cukup Murah (Rp 31.000 - Rp 45.000)',
-                                                             2 => 'Mahal (Rp 46.000 - Rp 60.000)',
-                                                             1 => 'Sangat Mahal (> Rp 60.000)',
-                                                         ];
-                                                     } elseif ($k->kode == 'C2') {
+                                                      if ($k->kode == 'C1') {
+                                                          $options = [
+                                                              1 => 'Sangat Murah (<= Rp 15.000)',
+                                                              2 => 'Murah (Rp 16.000 - Rp 30.000)',
+                                                              3 => 'Cukup Murah (Rp 31.000 - Rp 45.000)',
+                                                              4 => 'Mahal (Rp 46.000 - Rp 60.000)',
+                                                              5 => 'Sangat Mahal (> Rp 60.000)',
+                                                          ];
+                                                      } elseif ($k->kode == 'C2') {
                                                          $options = [
                                                              5 => 'Sangat Baik (Aspal/beton mulus, dekat jalan utama, bisa dilalui motor, mobil, dan bus)',
                                                              4 => 'Baik (Aspal/semen rata, agak jauh dari jalan utama, mudah dilalui mobil)',

@@ -29,7 +29,7 @@
                         <span class="badge bg-danger-subtle text-danger fw-bold px-2.5 py-1" style="font-size: 0.7rem;">Cost</span>
                     </div>
                     <div class="card-body p-4">
-                        <p class="text-muted small mb-3">Besaran biaya/harga tiket masuk tempat wisata air. <strong>Kriteria Cost (Nilai konversi terbalik)</strong>.</p>
+                        <p class="text-muted small mb-3">Besaran biaya/harga tiket masuk tempat wisata air. <strong>Kriteria Cost (Semakin murah harga tiket, semakin kecil skornya)</strong>.</p>
                         <div class="table-responsive">
                             <table class="table table-sm table-hover align-middle mb-0" style="font-size: 0.85rem;">
                                 <thead class="table-light text-secondary">
@@ -41,12 +41,12 @@
                                 </thead>
                                 <tbody>
                                     <tr class="table-success-subtle fw-semibold">
-                                        <td class="text-center"><span class="badge bg-success">5</span></td>
+                                        <td class="text-center"><span class="badge bg-success">1</span></td>
                                         <td>&le; 15.000</td>
                                         <td>Sangat Murah</td>
                                     </tr>
                                     <tr>
-                                        <td class="text-center"><span class="badge bg-primary">4</span></td>
+                                        <td class="text-center"><span class="badge bg-primary">2</span></td>
                                         <td>16.000 - 30.000</td>
                                         <td>Murah</td>
                                     </tr>
@@ -56,12 +56,12 @@
                                         <td>Cukup Murah</td>
                                     </tr>
                                     <tr>
-                                        <td class="text-center"><span class="badge bg-warning text-dark">2</span></td>
+                                        <td class="text-center"><span class="badge bg-warning text-dark">4</span></td>
                                         <td>46.000 - 60.000</td>
                                         <td>Mahal</td>
                                     </tr>
                                     <tr class="table-danger-subtle">
-                                        <td class="text-center"><span class="badge bg-danger">1</span></td>
+                                        <td class="text-center"><span class="badge bg-danger">5</span></td>
                                         <td>&gt; 60.000</td>
                                         <td>Sangat Mahal</td>
                                     </tr>
