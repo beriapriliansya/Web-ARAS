@@ -114,7 +114,7 @@
             <!-- Baris Destinasi -->
             @foreach($destinasi as $d)
                 <tr>
-                    <td class="text-start font-monospace">{{ $d->nama }}</td>
+                    <td class="text-start font-monospace">A{{ $destinasi->pluck('id')->indexOf($d->id) + 1 }} - {{ $d->nama }}</td>
                     @foreach($kriteria as $k)
                         <td>{{ $result['matriks'][$d->id][$k->id] }}</td>
                     @endforeach
@@ -145,7 +145,7 @@
             <!-- Baris Destinasi -->
             @foreach($destinasi as $d)
                 <tr>
-                    <td class="text-start font-monospace">{{ $d->nama }}</td>
+                    <td class="text-start font-monospace">A{{ $destinasi->pluck('id')->indexOf($d->id) + 1 }} - {{ $d->nama }}</td>
                     @foreach($kriteria as $k)
                         <td>{{ number_format($result['matriksR'][$d->id][$k->id], 4) }}</td>
                     @endforeach
@@ -184,7 +184,7 @@
             <!-- Baris Destinasi -->
             @foreach($destinasi as $d)
                 <tr>
-                    <td class="text-start font-monospace">{{ $d->nama }}</td>
+                    <td class="text-start font-monospace">A{{ $destinasi->pluck('id')->indexOf($d->id) + 1 }} - {{ $d->nama }}</td>
                     @foreach($kriteria as $k)
                         <td>{{ number_format($result['matriksV'][$d->id][$k->id], 4) }}</td>
                     @endforeach
@@ -210,7 +210,7 @@
                 @php $d = $destinasi->firstWhere('id', $id); @endphp
                 <tr>
                     <td class="text-center fw-bold">#{{ $rank++ }}</td>
-                    <td class="fw-bold">{{ $d->nama }}</td>
+                    <td class="fw-bold">A{{ $destinasi->pluck('id')->indexOf($d->id) + 1 }} - {{ $d->nama }}</td>
                     <td class="text-center">{{ number_format($result['nilaiS'][$d->id], 4) }}</td>
                     <td class="text-center fw-bold text-primary">{{ number_format($nilaiK, 4) }}</td>
                 </tr>
