@@ -34,31 +34,9 @@ class ArasController extends Controller
      */
     public function hitung()
     {
-        $destinasi = DestinasiWisata::aktif()->get();
-        $kriteria = Kriteria::all();
+        $success = HasilAras::recalculate();
 
-        if ($destinasi->isEmpty() || $kriteria->isEmpty()) {
-            return back()->with('error', 'Data Destinasi atau Kriteria masih kosong!');
-        }
-
-        // Jalankan perhitungan ARAS
-        $result = $this->runArasCalculation($destinasi, $kriteria);
-
-        DB::beginTransaction();
-        try {
-            HasilAras::query()->delete(); // Hapus hasil lama
-
-            $rank = 1;
-            foreach ($result['hasilSorted'] as $id => $nilaiK) {
-                HasilAras::create([
-                    'destinasi_id' => $id,
-                    'nilai_s'      => $result['nilaiS'][$id],
-                    'nilai_k'      => $nilaiK,
-                    'ranking'      => $rank++
-                ]);
-            }
-            DB::commit();
-
+        if ($success) {
             // Kirim notifikasi hasil perhitungan ARAS ke semua user
             \App\Models\UserNotification::ensureTableExists();
             $users = \App\Models\User::all();
@@ -72,10 +50,8 @@ class ArasController extends Controller
             }
 
             return back()->with('success', 'Perhitungan ARAS selesai! Ranking di database telah diperbarui.');
-
-        } catch (\Exception $e) {
-            DB::rollBack();
-            return back()->with('error', 'Terjadi kesalahan hitung: ' . $e->getMessage());
+        } else {
+            return back()->with('error', 'Gagal melakukan perhitungan ARAS. Pastikan data kriteria dan destinasi terisi.');
         }
     }
 
@@ -148,6 +124,10 @@ class ArasController extends Controller
                 ]);
             }
             DB::commit();
+
+            // Auto recalculate ARAS ranking
+            HasilAras::recalculate();
+
             return redirect()->route('admin.aras.index')->with('success', 'Bobot dan tipe kriteria berhasil diperbarui!');
         } catch (\Exception $e) {
             DB::rollBack();
@@ -212,6 +192,9 @@ class ArasController extends Controller
                 }
             }
             DB::commit();
+
+            // Auto recalculate ARAS ranking
+            HasilAras::recalculate();
 
             // Kirim notifikasi pembaruan nilai alternatif ke superadmin saja
             $destinasiObj = DestinasiWisata::find($request->destinasi_id);
