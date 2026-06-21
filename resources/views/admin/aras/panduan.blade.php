@@ -260,17 +260,17 @@
                 </div>
             </div>
 
-            <!-- C6: Jumlah Pengunjung -->
+            <!-- C6: Daya Tarik -->
             <div class="col-md-6 col-lg-4">
-                <div class="card h-100 border-0 shadow-sm rounded-4 overflow-hidden card-hover-animation" style="border-top: 4px solid #4b5563 !important;">
+                <div class="card h-100 border-0 shadow-sm rounded-4 overflow-hidden card-hover-animation" style="border-top: 4px solid #ffc107 !important;">
                     <div class="card-header bg-white border-0 pt-4 pb-0 d-flex align-items-center justify-content-between">
                         <h5 class="mb-0 fw-bold text-dark d-flex align-items-center">
-                            <i class="bi bi-people-fill text-secondary me-2 fs-5"></i>C6 - Jumlah Pengunjung
+                            <i class="bi bi-star-fill text-warning me-2 fs-5"></i>C6 - Daya Tarik
                         </h5>
                         <span class="badge bg-success-subtle text-success fw-bold px-2.5 py-1" style="font-size: 0.7rem;">Benefit</span>
                     </div>
                     <div class="card-body p-4">
-                        <p class="text-muted small mb-3">Tingkat kepadatan atau jumlah pengunjung wisata air (indeks popularitas & daya tarik wisata).</p>
+                        <p class="text-muted small mb-3">Tingkat keindahan, keunikan, dan daya tarik utama dari destinasi wisata air.</p>
                         <div class="table-responsive">
                             <table class="table table-sm table-hover align-middle mb-0" style="font-size: 0.85rem;">
                                 <thead class="table-light text-secondary">
@@ -282,23 +282,23 @@
                                 <tbody>
                                     <tr class="table-success-subtle fw-semibold">
                                         <td class="text-center"><span class="badge bg-success">5</span></td>
-                                        <td>Sangat Ramai (Destinasi sangat populer & padat)</td>
+                                        <td>Sangat Menarik (Pemandangan alam sangat indah & ikonik)</td>
                                     </tr>
                                     <tr>
                                         <td class="text-center"><span class="badge bg-primary">4</span></td>
-                                        <td>Ramai (Destinasi populer & ramai pada akhir pekan)</td>
+                                        <td>Menarik (Pemandangan alam indah & memiliki spot foto bagus)</td>
                                     </tr>
                                     <tr>
                                         <td class="text-center"><span class="badge bg-info">3</span></td>
-                                        <td>Cukup Ramai (Pengunjung stabil, cukup populer)</td>
+                                        <td>Cukup Menarik (Pemandangan alam standar & cukup terawat)</td>
                                     </tr>
                                     <tr>
                                         <td class="text-center"><span class="badge bg-warning text-dark">2</span></td>
-                                        <td>Sepi (Pengunjung musiman / jarang dikunjungi)</td>
+                                        <td>Kurang Menarik (Pemandangan alam biasa saja)</td>
                                     </tr>
                                     <tr class="table-danger-subtle">
                                         <td class="text-center"><span class="badge bg-danger">1</span></td>
-                                        <td>Sangat Sepi (Hampir tidak ada pengunjung)</td>
+                                        <td>Tidak Menarik (Pemandangan alam kurang terawat / tidak ada daya tarik)</td>
                                     </tr>
                                 </tbody>
                             </table>

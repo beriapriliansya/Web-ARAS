@@ -38,7 +38,7 @@ Sistem menggunakan 6 kriteria utama:
 * C3: Kebersihan (Benefit)
 * C4: Keamanan (Benefit)
 * C5: Harga Tiket (Cost)
-* C6: Jumlah Pengunjung (Benefit)
+* C6: Daya Tarik (Benefit)
 
 5. Alternatif Tempat Wisata (Fokus: Wisata Air)
 * A1: Pantai Mutun

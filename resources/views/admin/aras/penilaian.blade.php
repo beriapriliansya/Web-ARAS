@@ -122,11 +122,11 @@
                                                         ];
                                                     } elseif ($k->kode == 'C6') {
                                                         $options = [
-                                                            5 => 'Sangat Ramai (Destinasi sangat populer & padat)',
-                                                            4 => 'Ramai (Destinasi populer & ramai pada akhir pekan)',
-                                                            3 => 'Cukup Ramai (Pengunjung stabil, cukup populer)',
-                                                            2 => 'Sepi (Pengunjung musiman / jarang dikunjungi)',
-                                                            1 => 'Sangat Sepi (Hampir tidak ada pengunjung)',
+                                                            5 => 'Sangat Menarik (Pemandangan alam sangat indah & ikonik)',
+                                                            4 => 'Menarik (Pemandangan alam indah & memiliki spot foto bagus)',
+                                                            3 => 'Cukup Menarik (Pemandangan alam standar & cukup terawat)',
+                                                            2 => 'Kurang Menarik (Pemandangan alam biasa saja)',
+                                                            1 => 'Tidak Menarik (Pemandangan alam kurang terawat / tidak ada daya tarik)',
                                                         ];
                                                     }
                                                 @endphp

@@ -61,10 +61,10 @@ class KriteriaSeeder extends Seeder
             ],
             [
                 'kode' => 'C6',
-                'nama_kriteria' => 'Jumlah Pengunjung',
+                'nama_kriteria' => 'Daya Tarik',
                 'bobot' => 0.15,
                 'tipe' => 'benefit',
-                'keterangan' => 'Rata-rata kepadatan atau jumlah pengunjung wisata',
+                'keterangan' => 'Keindahan, keunikan, dan daya tarik wisata',
                 'satuan' => 'Skor',
                 'status' => 'aktif',
             ],

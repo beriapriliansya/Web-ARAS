@@ -47,7 +47,7 @@
                                             @elseif($k->kode == 'C3') <i class="bi bi-trash3 text-success me-2"></i>
                                             @elseif($k->kode == 'C4') <i class="bi bi-shield-lock text-danger me-2"></i>
                                             @elseif($k->kode == 'C5') <i class="bi bi-cash-stack text-warning me-2"></i>
-                                            @elseif($k->kode == 'C6') <i class="bi bi-people text-secondary me-2"></i>
+                                            @elseif($k->kode == 'C6') <i class="bi bi-star text-warning me-2"></i>
                                             @endif
                                             {{ $k->nama_kriteria }} 
                                             <span class="badge {{ $k->tipe == 'benefit' ? 'bg-success' : 'bg-danger' }} ms-2" style="font-size: 0.65rem;">

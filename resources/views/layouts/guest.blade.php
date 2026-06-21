@@ -163,7 +163,7 @@
                         <span class="badge bg-blue-light px-3 py-2 rounded-pill fw-bold mb-3">Metode ARAS</span>
                         <h2 class="fw-extrabold text-white mb-3" style="line-height: 1.3;">Temukan Destinasi Wisata Air Terbaik Secara Objektif</h2>
                         <p class="text-white-80 mb-0" style="line-height: 1.6; font-size: 1.05rem;">
-                            Dengan mengintegrasikan preferensi kriteria Anda (Aksesibilitas, Fasilitas, Kebersihan, Keamanan, Harga, dan Pengunjung), sistem menghitung rekomendasi terbaik menggunakan metode <strong>Additive Ratio Assessment (ARAS)</strong>.
+                            Dengan mengintegrasikan preferensi kriteria Anda (Aksesibilitas, Fasilitas, Kebersihan, Keamanan, Harga, dan Daya Tarik), sistem menghitung rekomendasi terbaik menggunakan metode <strong>Additive Ratio Assessment (ARAS)</strong>.
                         </p>
                     </div>
 
