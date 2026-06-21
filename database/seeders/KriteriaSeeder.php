@@ -26,7 +26,7 @@ class KriteriaSeeder extends Seeder
             [
                 'kode' => 'C2',
                 'nama_kriteria' => 'Aksesibilitas',
-                'bobot' => 0.15,
+                'bobot' => 0.20,
                 'tipe' => 'benefit',
                 'keterangan' => 'Kemudahan akses jalan menuju lokasi wisata',
                 'satuan' => 'Skor',
@@ -35,7 +35,7 @@ class KriteriaSeeder extends Seeder
             [
                 'kode' => 'C3',
                 'nama_kriteria' => 'Fasilitas',
-                'bobot' => 0.20,
+                'bobot' => 0.15,
                 'tipe' => 'benefit',
                 'keterangan' => 'Kelengkapan sarana dan fasilitas penunjang di lokasi',
                 'satuan' => 'Skor',
@@ -44,7 +44,7 @@ class KriteriaSeeder extends Seeder
             [
                 'kode' => 'C4',
                 'nama_kriteria' => 'Kebersihan',
-                'bobot' => 0.15,
+                'bobot' => 0.10,
                 'tipe' => 'benefit',
                 'keterangan' => 'Tingkat kebersihan area wisata',
                 'satuan' => 'Skor',
@@ -53,7 +53,7 @@ class KriteriaSeeder extends Seeder
             [
                 'kode' => 'C5',
                 'nama_kriteria' => 'Keamanan',
-                'bobot' => 0.15,
+                'bobot' => 0.10,
                 'tipe' => 'benefit',
                 'keterangan' => 'Tingkat keamanan di area lokasi wisata',
                 'satuan' => 'Skor',
@@ -62,7 +62,7 @@ class KriteriaSeeder extends Seeder
             [
                 'kode' => 'C6',
                 'nama_kriteria' => 'Daya Tarik',
-                'bobot' => 0.15,
+                'bobot' => 0.25,
                 'tipe' => 'benefit',
                 'keterangan' => 'Keindahan, keunikan, dan daya tarik wisata',
                 'satuan' => 'Skor',
