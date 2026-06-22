@@ -33,6 +33,21 @@ Route::redirect('/home', '/');
 Route::get('/tentang', [HomeController::class, 'tentang'])->name('tentang');
 Route::get('/kontak', [HomeController::class, 'kontak'])->name('kontak');
 
+Route::get('/clear-cache', function() {
+    $outputs = [];
+    $outputs[] = \Illuminate\Support\Facades\Artisan::call('config:clear');
+    $outputs[] = \Illuminate\Support\Facades\Artisan::call('cache:clear');
+    $outputs[] = \Illuminate\Support\Facades\Artisan::call('view:clear');
+    $outputs[] = \Illuminate\Support\Facades\Artisan::call('route:clear');
+    
+    return response()->json([
+        'success' => true,
+        'artisan_outputs' => $outputs,
+        'google_maps_key_exists' => !empty(config('services.google_maps.api_key')),
+        'google_maps_key_prefix' => substr(config('services.google_maps.api_key'), 0, 8),
+    ]);
+});
+
 // Berita (News) - Tampilan Publik
 Route::get('/news', [NewsController::class, 'index'])->name('news.index');
 
