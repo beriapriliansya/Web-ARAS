@@ -9,6 +9,14 @@ class Kriteria extends Model
 {
     use HasFactory;
 
+    protected static function booted()
+    {
+        static::addGlobalScope('order', function ($builder) {
+            $builder->orderBy('kode', 'asc');
+        });
+    }
+
+
     /**
      * Nama tabel di database
      */
