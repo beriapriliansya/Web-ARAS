@@ -156,6 +156,9 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
     Route::get('/aras', [ArasController::class, 'index'])->name('aras.index');
     Route::post('/aras/hitung', [ArasController::class, 'hitung'])->name('aras.hitung');
     Route::get('/aras/kriteria-list', [ArasController::class, 'kriteriaList'])->name('aras.kriteria.list');
+    Route::post('/aras/kriteria/store', [ArasController::class, 'storeKriteria'])->name('aras.kriteria.store');
+    Route::put('/aras/kriteria/{id}', [ArasController::class, 'updateKriteriaDetail'])->name('aras.kriteria.update');
+    Route::delete('/aras/kriteria/{id}', [ArasController::class, 'destroyKriteria'])->name('aras.kriteria.destroy');
     Route::get('/aras/kriteria', [ArasController::class, 'editKriteria'])->name('aras.kriteria.edit');
     Route::post('/aras/kriteria', [ArasController::class, 'updateKriteria'])->name('aras.updateKriteria');
     Route::get('/aras/penilaian', [ArasController::class, 'penilaian'])->name('aras.penilaian');

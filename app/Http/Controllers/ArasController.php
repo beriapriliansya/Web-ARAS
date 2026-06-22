@@ -135,10 +135,149 @@ class ArasController extends Controller
         }
     }
 
+    /**
+     * [ADMIN] Tambah Kriteria Baru
+     */
+    public function storeKriteria(Request $request)
+    {
+        $validated = $request->validate([
+            'kode' => 'required|string|max:10|unique:kriteria,kode',
+            'nama_kriteria' => 'required|string|max:100',
+            'tipe' => 'required|in:benefit,cost',
+            'bobot' => 'required|numeric|min:0|max:100',
+            'keterangan' => 'nullable|string|max:255',
+            'satuan' => 'required|string|max:20',
+            'status' => 'required|in:aktif,nonaktif',
+        ], [
+            'kode.unique' => 'Kode kriteria sudah digunakan.',
+            'kode.required' => 'Kode kriteria wajib diisi.',
+            'nama_kriteria.required' => 'Nama kriteria wajib diisi.',
+            'bobot.required' => 'Bobot kriteria wajib diisi.',
+            'satuan.required' => 'Satuan kriteria wajib diisi.',
+        ]);
 
+        // Jika bobot dimasukkan sebagai persen (misal 20 untuk 20%), konversi ke desimal (0.2)
+        if ($validated['bobot'] > 1.0) {
+            $validated['bobot'] = $validated['bobot'] / 100;
+        }
+
+        DB::beginTransaction();
+        try {
+            $kriteria = Kriteria::create($validated);
+
+            // Inisialisasi alternatif nilai 0 untuk semua destinasi
+            $destinasi = DestinasiWisata::all();
+            foreach ($destinasi as $d) {
+                Alternatif::firstOrCreate([
+                    'destinasi_id' => $d->id,
+                    'kriteria_id' => $kriteria->id,
+                ], [
+                    'nilai' => 0.0,
+                    'catatan' => 'Inisialisasi kriteria baru'
+                ]);
+            }
+            DB::commit();
+
+            // Hitung total bobot
+            $totalBobot = Kriteria::sum('bobot');
+            $warning = '';
+            // Toleransi float sum
+            if (abs($totalBobot - 1.0) > 0.001) {
+                $warning = ' Peringatan: Total bobot kriteria saat ini ' . ($totalBobot * 100) . '%. Silakan sesuaikan kembali bobot kriteria agar berjumlah pas 100% atau 1.0.';
+            }
+
+            // Auto recalculate ARAS
+            HasilAras::recalculate();
+
+            return redirect()->route('admin.aras.kriteria.list')
+                ->with('success', 'Kriteria berhasil ditambahkan!' . $warning);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return back()->with('error', 'Gagal menambahkan kriteria: ' . $e->getMessage())->withInput();
+        }
+    }
+
+    /**
+     * [ADMIN] Update Detail Kriteria
+     */
+    public function updateKriteriaDetail(Request $request, $id)
+    {
+        $kriteria = Kriteria::findOrFail($id);
+
+        $validated = $request->validate([
+            'kode' => 'required|string|max:10|unique:kriteria,kode,' . $id,
+            'nama_kriteria' => 'required|string|max:100',
+            'tipe' => 'required|in:benefit,cost',
+            'bobot' => 'required|numeric|min:0|max:100',
+            'keterangan' => 'nullable|string|max:255',
+            'satuan' => 'required|string|max:20',
+            'status' => 'required|in:aktif,nonaktif',
+        ], [
+            'kode.unique' => 'Kode kriteria sudah digunakan.',
+            'kode.required' => 'Kode kriteria wajib diisi.',
+            'nama_kriteria.required' => 'Nama kriteria wajib diisi.',
+            'bobot.required' => 'Bobot kriteria wajib diisi.',
+            'satuan.required' => 'Satuan kriteria wajib diisi.',
+        ]);
+
+        if ($validated['bobot'] > 1.0) {
+            $validated['bobot'] = $validated['bobot'] / 100;
+        }
+
+        try {
+            $kriteria->update($validated);
+
+            // Hitung total bobot
+            $totalBobot = Kriteria::sum('bobot');
+            $warning = '';
+            if (abs($totalBobot - 1.0) > 0.001) {
+                $warning = ' Peringatan: Total bobot kriteria saat ini ' . ($totalBobot * 100) . '%. Silakan sesuaikan kembali bobot kriteria agar berjumlah pas 100% atau 1.0.';
+            }
+
+            // Auto recalculate ARAS
+            HasilAras::recalculate();
+
+            return redirect()->route('admin.aras.kriteria.list')
+                ->with('success', 'Kriteria berhasil diperbarui!' . $warning);
+        } catch (\Exception $e) {
+            return back()->with('error', 'Gagal memperbarui kriteria: ' . $e->getMessage())->withInput();
+        }
+    }
+
+    /**
+     * [ADMIN] Hapus Kriteria
+     */
+    public function destroyKriteria($id)
+    {
+        $kriteria = Kriteria::findOrFail($id);
+
+        if (Kriteria::count() <= 1) {
+            return back()->with('error', 'Gagal menghapus! Sistem membutuhkan minimal 1 kriteria untuk perhitungan ARAS.');
+        }
+
+        try {
+            $kriteria->delete();
+
+            // Hitung total bobot
+            $totalBobot = Kriteria::sum('bobot');
+            $warning = '';
+            if (abs($totalBobot - 1.0) > 0.001) {
+                $warning = ' Peringatan: Total bobot kriteria saat ini ' . ($totalBobot * 100) . '%. Silakan sesuaikan kembali bobot kriteria agar berjumlah pas 100% atau 1.0.';
+            }
+
+            // Auto recalculate ARAS
+            HasilAras::recalculate();
+
+            return redirect()->route('admin.aras.kriteria.list')
+                ->with('success', 'Kriteria berhasil dihapus!' . $warning);
+        } catch (\Exception $e) {
+            return back()->with('error', 'Gagal menghapus kriteria: ' . $e->getMessage());
+        }
+    }
 
     /**
      * [ADMIN] Halaman Kelola Penilaian Alternatif (Input Nilai Langsung)
+
      */
     public function penilaian(Request $request)
     {
