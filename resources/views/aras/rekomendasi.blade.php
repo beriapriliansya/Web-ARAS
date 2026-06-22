@@ -154,7 +154,7 @@
                                                             @endif
                                                         </div>
                                                         <div>
-                                                            <h6 class="fw-bold mb-0 text-dark">{{ $dest->nama }}</h6>
+                                                            <h6 class="fw-bold mb-0 text-dark">A<sub>{{ \App\Models\DestinasiWisata::aktif()->pluck('id')->search($dest->id) + 1 }}</sub> - {{ $dest->nama }}</h6>
                                                             <small class="text-muted"><i class="bi bi-geo-alt"></i> {{ Str::limit($dest->alamat, 45) }}</small>
                                                         </div>
                                                     </div>
