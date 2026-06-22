@@ -30,11 +30,21 @@
                         </div>
                         <div class="card-body">
                             <div class="row g-3">
-                                <div class="col-md-8">
+                                <!-- Kode Alternatif -->
+                                <div class="col-md-3">
+                                    <label class="form-label fw-bold">Kode Alternatif *</label>
+                                    <input type="text" class="form-control @error('kode') is-invalid @enderror"
+                                           name="kode" value="{{ old('kode', $destinasi->kode) }}" required>
+                                    @error('kode')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+
+                                <div class="col-md-6">
                                     <label class="form-label fw-bold">Nama Destinasi *</label>
                                     <input type="text" class="form-control" name="nama" value="{{ old('nama', $destinasi->nama) }}" required>
                                 </div>
-                                <div class="col-md-4">
+                                <div class="col-md-3">
                                     <label class="form-label fw-bold">Kategori *</label>
                                     <select class="form-select" name="kategori" required>
                                         <option value="Pantai" selected>Pantai</option>

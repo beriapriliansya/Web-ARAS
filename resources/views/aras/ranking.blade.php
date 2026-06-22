@@ -117,7 +117,7 @@
                                         <i class="bi bi-tag-fill me-1"></i>Rp {{ number_format($h->destinasi->harga_tiket, 0, ',', '.') }}
                                     </span>
                                 </div>
-                                <h4 class="fw-bold text-dark mb-3">A<sub>{{ \App\Models\DestinasiWisata::aktif()->pluck('id')->search($h->destinasi_id) + 1 }}</sub> - {{ $h->destinasi->nama }}</h4>
+                                <h4 class="fw-bold text-dark mb-3">{!! preg_replace('/(\d+)/', '<sub>$1</sub>', e($h->destinasi->kode ?? '')) !!} - {{ $h->destinasi->nama }}</h4>
                                 
                                 <p class="text-muted small mb-4">
                                     <i class="bi bi-geo-alt-fill text-danger me-1"></i>{{ Str::limit($h->destinasi->alamat, 90) }}

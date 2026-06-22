@@ -14,6 +14,7 @@ class DestinasiWisataSeeder extends Seeder
     {
         $destinasiData = [
             [
+                'kode' => 'A1',
                 'nama' => 'Pantai Klara 2',
                 'deskripsi' => 'Pantai Klara 2 menawarkan keindahan pantai pasir putih dengan ombak yang sangat tenang, pepohonan rindang di bibir pantai, gazebo di atas air, serta jembatan selfie yang ikonik.',
                 'alamat' => 'Jalan Raya Way Ratay, Desa Batu Menyan, Kecamatan Teluk Pandan, Kabupaten Pesawaran',
@@ -31,6 +32,7 @@ class DestinasiWisataSeeder extends Seeder
                 'status' => 'aktif',
             ],
             [
+                'kode' => 'A2',
                 'nama' => 'Pantai Bensam',
                 'deskripsi' => 'Pantai Bensam (Benteng Samudra) adalah pantai yang dikelola dengan baik, memiliki pasir bersih, dan menyajikan wahana rekreasi air untuk para pengunjung.',
                 'alamat' => 'Desa Batumenyan, Kecamatan Teluk Pandan, Kabupaten Pesawaran',
@@ -48,8 +50,9 @@ class DestinasiWisataSeeder extends Seeder
                 'status' => 'aktif',
             ],
             [
+                'kode' => 'A3',
                 'nama' => 'Pantai Ketapang Bahari',
-                'deskripsi' => 'Pantai Ketapang Bahari menyajikan keindahan pantai alami dengan pohon ketapang yang rindang dan air laut jernih, sangat cocok untuk berenang.',
+                'deskripsi' => 'Pantai Ketapang Bahari menyajikan keindahan pantai alami dengan pohon ketapang yang rindang and air laut jernih, sangat cocok untuk berenang.',
                 'alamat' => 'Desa Ketapang, Kecamatan Padang Cermin, Kabupaten Pesawaran',
                 'latitude' => -5.62345000,
                 'longitude' => 105.29876000,
@@ -65,6 +68,7 @@ class DestinasiWisataSeeder extends Seeder
                 'status' => 'aktif',
             ],
             [
+                'kode' => 'A4',
                 'nama' => 'Kyoko beach',
                 'deskripsi' => 'Kyoko Beach menawarkan keindahan pemandangan pantai pasir putih dengan panorama sunset yang menakjubkan.',
                 'alamat' => 'Kecamatan Kalianda, Kabupaten Lampung Selatan',
@@ -82,6 +86,7 @@ class DestinasiWisataSeeder extends Seeder
                 'status' => 'aktif',
             ],
             [
+                'kode' => 'A5',
                 'nama' => 'Pantai Mutun',
                 'deskripsi' => 'Pantai Mutun adalah salah satu destinasi wisata pantai yang terkenal di Pesawaran. Memiliki pasir putih yang bersih dan ombak yang tenang, sangat cocok untuk rekreasi keluarga.',
                 'alamat' => 'Desa Gebang, Kecamatan Padang Cermin, Kabupaten Pesawaran',

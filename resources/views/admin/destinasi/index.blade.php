@@ -106,7 +106,12 @@
                             </div>
 
                             <div class="card-body">
-                                <h5 class="card-title fw-bold mb-2 text-dark">{{ $item->nama }}</h5>
+                                <h5 class="card-title fw-bold mb-2 text-dark">
+                                    @if($item->kode)
+                                        <span class="badge bg-secondary me-1">{!! preg_replace('/(\d+)/', '<sub>$1</sub>', e($item->kode)) !!}</span>
+                                    @endif
+                                    {{ $item->nama }}
+                                </h5>
 
                                 <p class="card-text text-muted small">
                                     {{ Str::limit($item->deskripsi, 90) }}
