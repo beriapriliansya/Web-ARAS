@@ -29,8 +29,18 @@
                         </div>
                         <div class="card-body">
                             <div class="row g-3">
+                                <!-- Kode Alternatif -->
+                                <div class="col-md-3">
+                                    <label class="form-label fw-bold">Kode Alternatif *</label>
+                                    <input type="text" class="form-control @error('kode') is-invalid @enderror"
+                                           name="kode" value="{{ old('kode') }}" required placeholder="Contoh: A1">
+                                    @error('kode')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+
                                 <!-- Nama -->
-                                <div class="col-md-8">
+                                <div class="col-md-6">
                                     <label class="form-label fw-bold">Nama Destinasi *</label>
                                     <input type="text" class="form-control @error('nama') is-invalid @enderror"
                                            name="nama" value="{{ old('nama') }}" required placeholder="Contoh: Pantai Pahawang">
@@ -40,7 +50,7 @@
                                 </div>
 
                                 <!-- Kategori -->
-                                <div class="col-md-4">
+                                <div class="col-md-3">
                                     <label class="form-label fw-bold">Kategori *</label>
                                     <select class="form-select @error('kategori') is-invalid @enderror" name="kategori" required>
                                         <option value="Pantai" selected>Pantai</option>

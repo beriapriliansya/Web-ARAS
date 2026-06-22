@@ -19,6 +19,7 @@ class DestinasiWisata extends Model
      * Kolom yang bisa diisi mass assignment
      */
     protected $fillable = [
+        'kode',
         'nama',
         'deskripsi',
         'alamat',

@@ -22,7 +22,12 @@
                         <div class="d-flex justify-content-between align-items-start mb-3">
                             <div>
                                 <span class="badge bg-primary mb-2">{{ $destinasi->kategori }}</span>
-                                <h1 class="display-5 fw-bold mb-0 text-dark">{{ $destinasi->nama }}</h1>
+                                <h1 class="display-5 fw-bold mb-0 text-dark">
+                                    @if($destinasi->kode)
+                                        <span class="badge bg-secondary me-2">{!! preg_replace('/(\d+)/', '<sub>$1</sub>', e($destinasi->kode)) !!}</span>
+                                    @endif
+                                    {{ $destinasi->nama }}
+                                </h1>
                                 <p class="text-muted mt-1"><i class="bi bi-geo-alt"></i> {{ $destinasi->alamat }}</p>
                             </div>
                             <div class="text-end">

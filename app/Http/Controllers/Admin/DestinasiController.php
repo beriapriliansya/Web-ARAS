@@ -153,6 +153,7 @@ class DestinasiController extends Controller
     {
         // 1. Aturan Validasi
         $rules = [
+            'kode' => 'required|string|max:10',
             'nama' => 'required|string|max:200',
             'kategori' => 'required|string',
             'status' => 'required|in:aktif,nonaktif',
