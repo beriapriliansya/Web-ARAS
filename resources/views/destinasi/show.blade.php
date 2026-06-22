@@ -123,30 +123,64 @@
                     </div>
                 </div>
 
-                <!-- Leaflet CSS & JS CDN -->
-                <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
-                <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
-                
-                <script>
-                    document.addEventListener("DOMContentLoaded", function() {
-                        var lat = {{ (float)$destinasi->latitude }};
-                        var lng = {{ (float)$destinasi->longitude }};
-                        
-                        // Inisialisasi peta Leaflet
-                        var map = L.map('map', {
-                            scrollWheelZoom: false // Mencegah zoom tidak sengaja saat scroll
-                        }).setView([lat, lng], 13);
-                        
-                        // Gunakan tile OpenStreetMap
-                        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                        }).addTo(map);
-                        
-                        // Tambahkan penanda (Marker) di lokasi destinasi
-                        var marker = L.marker([lat, lng]).addTo(map);
-                        marker.bindPopup("<div class='text-center'><strong>{{ $destinasi->nama }}</strong><br><small class='text-muted'>{{ $destinasi->alamat }}</small></div>").openPopup();
-                    });
-                </script>
+                @if(config('services.google_maps.api_key'))
+                    <!-- Google Maps API -->
+                    <script>
+                        function initMap() {
+                            var lat = {{ (float)$destinasi->latitude }};
+                            var lng = {{ (float)$destinasi->longitude }};
+                            var location = { lat: lat, lng: lng };
+                            
+                            var map = new google.maps.Map(document.getElementById('map'), {
+                                zoom: 14,
+                                center: location,
+                                scrollwheel: false
+                            });
+                            
+                            var marker = new google.maps.Marker({
+                                position: location,
+                                map: map,
+                                title: "{{ $destinasi->nama }}"
+                            });
+                            
+                            var infowindow = new google.maps.InfoWindow({
+                                content: "<div class='text-center'><strong>{{ $destinasi->nama }}</strong><br><small class='text-muted'>{{ $destinasi->alamat }}</small></div>"
+                            });
+                            
+                            marker.addListener('click', function() {
+                                infowindow.open(map, marker);
+                            });
+                            
+                            infowindow.open(map, marker);
+                        }
+                    </script>
+                    <script src="https://maps.googleapis.com/maps/api/js?key={{ config('services.google_maps.api_key') }}&callback=initMap" async defer></script>
+                @else
+                    <!-- Leaflet CSS & JS CDN (Fallback) -->
+                    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+                    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+                    
+                    <script>
+                        document.addEventListener("DOMContentLoaded", function() {
+                            var lat = {{ (float)$destinasi->latitude }};
+                            var lng = {{ (float)$destinasi->longitude }};
+                            
+                            // Inisialisasi peta Leaflet
+                            var map = L.map('map', {
+                                scrollWheelZoom: false // Mencegah zoom tidak sengaja saat scroll
+                            }).setView([lat, lng], 13);
+                            
+                            // Gunakan tile OpenStreetMap
+                            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                            }).addTo(map);
+                            
+                            // Tambahkan penanda (Marker) di lokasi destinasi
+                            var marker = L.marker([lat, lng]).addTo(map);
+                            marker.bindPopup("<div class='text-center'><strong>{{ $destinasi->nama }}</strong><br><small class='text-muted'>{{ $destinasi->alamat }}</small></div>").openPopup();
+                        });
+                    </script>
+                @endif
             </div> <!-- Close col-lg-8 -->
 
             <!-- KOLOM KANAN: Card Informasi (Sticky) -->

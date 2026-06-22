@@ -103,7 +103,7 @@
                                                 @endif
                                             </td>
                                             <td>
-                                                <span class="fw-bold text-dark">{{ $h->destinasi->nama }}</span>
+                                                <span class="fw-bold text-dark">A<sub>{{ \App\Models\DestinasiWisata::aktif()->pluck('id')->search($h->destinasi_id) + 1 }}</sub> - {{ $h->destinasi->nama }}</span>
                                             </td>
                                             
                                             <!-- Kriteria Columns -->

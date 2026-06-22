@@ -80,55 +80,55 @@
                                                     
                                                     // Map kriteria to guidelines
                                                     $options = [];
-                                                    if ($k->kode == 'C1') {
-                                                        $options = [
-                                                            5 => 'Sangat Baik (Jalan aspal mulus & dekat jalan raya utama)',
-                                                            4 => 'Baik (Jalan aspal baik & mudah dilalui mobil)',
-                                                            3 => 'Cukup (Jalan semen/berbatu, dapat dilalui)',
-                                                            2 => 'Kurang (Jalan tanah/berlubang, sulit dilalui)',
-                                                            1 => 'Sangat Kurang (Jalan rusak parah / terjal)',
-                                                        ];
-                                                    } elseif ($k->kode == 'C2') {
-                                                        $options = [
-                                                            5 => 'Sangat Lengkap (Semua fasilitas utama & penunjang tersedia)',
-                                                            4 => 'Lengkap (Toilet, mushola, area parkir, kantin tersedia)',
-                                                            3 => 'Cukup Lengkap (Toilet, parkir, warung makan tersedia)',
-                                                            2 => 'Kurang Lengkap (Hanya toilet & area parkir darurat)',
-                                                            1 => 'Tidak Lengkap (Hampir tidak ada fasilitas)',
-                                                        ];
-                                                    } elseif ($k->kode == 'C3') {
-                                                        $options = [
-                                                            5 => 'Sangat Bersih (Bebas sampah plastik, air jernih, asri)',
-                                                            4 => 'Bersih (Petugas aktif, tempat sampah memadai)',
-                                                            3 => 'Cukup (Ada sedikit sampah alami/daun, air cukup jernih)',
-                                                            2 => 'Kurang Bersih (Sampah plastik terlihat menumpuk)',
-                                                            1 => 'Sangat Kotor (Sampah berserakan & air tercemar)',
-                                                        ];
-                                                    } elseif ($k->kode == 'C4') {
-                                                        $options = [
-                                                            5 => 'Sangat Aman (Penjaga pantai bersertifikat & pos medis aktif)',
-                                                            4 => 'Aman (Pengelola lokal siaga & parkir terpantau)',
-                                                            3 => 'Cukup Aman (Kerawanan rendah, pengawasan swadaya)',
-                                                            2 => 'Kurang Aman (Minim rambu bahaya & pengawasan)',
-                                                            1 => 'Sangat Rawan (Sering terjadi kehilangan/tanpa pengawas)',
-                                                        ];
-                                                    } elseif ($k->kode == 'C5') {
-                                                        $options = [
-                                                            1 => 'Sangat Murah (Tiket < Rp 3.000)',
-                                                            2 => 'Murah (Rp 3.000 s/d <= Rp 5.000)',
-                                                            3 => 'Cukup Murah (> Rp 5.000 s/d <= Rp 10.000)',
-                                                            4 => 'Mahal (> Rp 10.000 s/d <= Rp 15.000)',
-                                                            5 => 'Sangat Mahal (>= Rp 15.000)',
-                                                        ];
-                                                    } elseif ($k->kode == 'C6') {
-                                                        $options = [
-                                                            5 => 'Sangat Ramai (Destinasi sangat populer & padat)',
-                                                            4 => 'Ramai (Destinasi populer & ramai pada akhir pekan)',
-                                                            3 => 'Cukup Ramai (Pengunjung stabil, cukup populer)',
-                                                            2 => 'Sepi (Pengunjung musiman / jarang dikunjungi)',
-                                                            1 => 'Sangat Sepi (Hampir tidak ada pengunjung)',
-                                                        ];
-                                                    }
+                                                      if ($k->kode == 'C1') {
+                                                          $options = [
+                                                              1 => 'Sangat Murah (<= Rp 15.000)',
+                                                              2 => 'Murah (Rp 16.000 - Rp 30.000)',
+                                                              3 => 'Cukup Murah (Rp 31.000 - Rp 45.000)',
+                                                              4 => 'Mahal (Rp 46.000 - Rp 60.000)',
+                                                              5 => 'Sangat Mahal (> Rp 60.000)',
+                                                          ];
+                                                      } elseif ($k->kode == 'C2') {
+                                                         $options = [
+                                                             5 => 'Sangat Baik (Aspal/beton mulus, dekat jalan utama, bisa dilalui motor, mobil, dan bus)',
+                                                             4 => 'Baik (Aspal/semen rata, agak jauh dari jalan utama, mudah dilalui mobil)',
+                                                             3 => 'Cukup Baik (Semen sebagian/berbatu, jalan pas-pasan, harus hati-hati jika pakai mobil)',
+                                                             2 => 'Kurang Baik (Jalan tanah/berlubang parah dan sempit, hanya optimal untuk sepeda motor)',
+                                                             1 => 'Sangat Kurang (Jalan rusak parah atau batuan terjal, berbahaya, hanya bisa jalan kaki)',
+                                                         ];
+                                                     } elseif ($k->kode == 'C3') {
+                                                         $options = [
+                                                             5 => 'Sangat Lengkap (Memiliki 10 - 12 fasilitas)',
+                                                             4 => 'Lengkap (Memiliki 7 - 9 fasilitas)',
+                                                             3 => 'Cukup Lengkap (Memiliki 4 - 6 fasilitas)',
+                                                             2 => 'Kurang Lengkap (Memiliki 1 - 3 fasilitas)',
+                                                             1 => 'Tidak Ada Fasilitas (0 fasilitas)',
+                                                         ];
+                                                     } elseif ($k->kode == 'C4') {
+                                                         $options = [
+                                                             5 => 'Sangat Bersih',
+                                                             4 => 'Bersih',
+                                                             3 => 'Cukup Bersih',
+                                                             2 => 'Kurang Bersih',
+                                                             1 => 'Sangat Kotor',
+                                                         ];
+                                                     } elseif ($k->kode == 'C5') {
+                                                         $options = [
+                                                             5 => 'Sangat Aman (Ada lifeguard, pos keamanan, CCTV/penjaga aktif)',
+                                                             4 => 'Aman (Ada pos keamanan resmi dan petugas parkir)',
+                                                             3 => 'Cukup Aman (Keamanan swadaya standar)',
+                                                             2 => 'Kurang Aman (Rawan kehilangan/minim penerangan)',
+                                                             1 => 'Sangat Rawan/Tidak Aman',
+                                                         ];
+                                                     } elseif ($k->kode == 'C6') {
+                                                         $options = [
+                                                             5 => 'Sangat Menarik / Sangat Indah (Memiliki banyak keunikan alam/spot utama yang viral)',
+                                                             4 => 'Menarik / Indah (Pemandangan bagus dan terkelola dengan baik)',
+                                                             3 => 'Cukup Menarik (Standar pemandangan alam biasa)',
+                                                             2 => 'Kurang Menarik (Gersang atau kurang terawat)',
+                                                             1 => 'Tidak Menarik',
+                                                         ];
+                                                     }
                                                 @endphp
 
                                                 @if(empty($options))

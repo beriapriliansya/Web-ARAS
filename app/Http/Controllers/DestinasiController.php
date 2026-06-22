@@ -70,26 +70,26 @@ class DestinasiController extends Controller
         $destinasi = DestinasiWisata::with(['alternatif.kriteria'])->findOrFail($id);
 
         $aksesibilitasAlternatif = $destinasi->alternatif->first(function($alt) {
-            return $alt->kriteria && $alt->kriteria->kode === 'C1';
+            return $alt->kriteria && $alt->kriteria->kode === 'C2';
         });
 
-        $nilaiC1 = $aksesibilitasAlternatif ? (float)$aksesibilitasAlternatif->nilai : null;
+        $nilaiC2 = $aksesibilitasAlternatif ? (float)$aksesibilitasAlternatif->nilai : null;
         $jarakText = 'Tidak diketahui';
         if ($destinasi->jarak !== null) {
             $jarakText = $destinasi->jarak . ' km';
-        } elseif ($nilaiC1 !== null) {
-            if ($nilaiC1 >= 50.0) {
-                $jarakText = $nilaiC1 . ' km';
-            } elseif ($nilaiC1 === 0.25 || ($nilaiC1 >= 1.0 && $nilaiC1 <= 2.5)) {
+        } elseif ($nilaiC2 !== null) {
+            if ($nilaiC2 >= 50.0) {
+                $jarakText = $nilaiC2 . ' km';
+            } elseif ($nilaiC2 === 0.25 || ($nilaiC2 >= 1.0 && $nilaiC2 <= 2.5)) {
                 $jarakText = '50 - 60 km';
-            } elseif ($nilaiC1 === 0.50 || ($nilaiC1 >= 2.6 && $nilaiC1 <= 3.7)) {
+            } elseif ($nilaiC2 === 0.50 || ($nilaiC2 >= 2.6 && $nilaiC2 <= 3.7)) {
                 $jarakText = '61 - 70 km';
-            } elseif ($nilaiC1 === 0.75 || ($nilaiC1 >= 3.8 && $nilaiC1 <= 4.5)) {
+            } elseif ($nilaiC2 === 0.75 || ($nilaiC2 >= 3.8 && $nilaiC2 <= 4.5)) {
                 $jarakText = '71 - 80 km';
-            } elseif ($nilaiC1 === 1.00 || $nilaiC1 >= 4.6) {
+            } elseif ($nilaiC2 === 1.00 || $nilaiC2 >= 4.6) {
                 $jarakText = '> 80 km';
             } else {
-                $jarakText = $nilaiC1 . ' km';
+                $jarakText = $nilaiC2 . ' km';
             }
         }
 

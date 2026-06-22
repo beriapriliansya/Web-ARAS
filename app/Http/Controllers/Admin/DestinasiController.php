@@ -80,6 +80,9 @@ class DestinasiController extends Controller
             ]);
         }
 
+        // Auto recalculate ARAS ranking
+        \App\Models\HasilAras::recalculate();
+
         return redirect()->route('admin.destinasi.index')
             ->with('success', 'Destinasi Wisata berhasil ditambahkan!');
     }
@@ -115,6 +118,9 @@ class DestinasiController extends Controller
             ]);
         }
 
+        // Auto recalculate ARAS ranking
+        \App\Models\HasilAras::recalculate();
+
         return redirect()->route('admin.destinasi.index')
             ->with('success', 'Data Destinasi berhasil diperbarui!');
     }
@@ -132,6 +138,9 @@ class DestinasiController extends Controller
         }
 
         $destinasi->delete();
+
+        // Auto recalculate ARAS ranking
+        \App\Models\HasilAras::recalculate();
 
         return redirect()->route('admin.destinasi.index')
             ->with('success', 'Destinasi berhasil dihapus.');
@@ -246,6 +255,9 @@ class DestinasiController extends Controller
                 }
             }
             \Illuminate\Support\Facades\DB::commit();
+
+            // Auto recalculate ARAS ranking
+            \App\Models\HasilAras::recalculate();
 
             // Kirim notifikasi pembaruan nilai alternatif ke superadmin saja
             \App\Models\UserNotification::ensureTableExists();

@@ -17,45 +17,45 @@ class AlternatifSeeder extends Seeder
         // Data nilai untuk setiap destinasi per kriteria
         // Format: [destinasi_nama => [kriteria_kode => nilai]]
         $nilaiData = [
-            'Pantai Mutun' => [
-                'C1' => 5,
-                'C2' => 4,
-                'C3' => 4,
-                'C4' => 4,
-                'C5' => 5,
-                'C6' => 5,
-            ],
-            'Pantai Sari Ringgung' => [
-                'C1' => 4,
-                'C2' => 5,
-                'C3' => 4,
-                'C4' => 4,
-                'C5' => 5,
-                'C6' => 5,
-            ],
-            'Pulau Pahawang' => [
-                'C1' => 4,
-                'C2' => 5,
-                'C3' => 5,
-                'C4' => 5,
-                'C5' => 3,
-                'C6' => 4,
-            ],
-            'Pantai Klara' => [
-                'C1' => 5,
-                'C2' => 4,
-                'C3' => 4,
-                'C4' => 5,
-                'C5' => 5,
-                'C6' => 4,
-            ],
-            'Teluk Hantu' => [
+            'Pantai Ketapang Bahari' => [
                 'C1' => 2,
-                'C2' => 2,
+                'C2' => 4,
+                'C3' => 4,
+                'C4' => 5,
+                'C5' => 5,
+                'C6' => 5,
+            ],
+            'Pantai Klara 2' => [
+                'C1' => 2,
+                'C2' => 4,
                 'C3' => 5,
-                'C4' => 3,
-                'C5' => 2,
-                'C6' => 2,
+                'C4' => 4,
+                'C5' => 5,
+                'C6' => 4,
+            ],
+            'Kyoko beach' => [
+                'C1' => 5,
+                'C2' => 5,
+                'C3' => 5,
+                'C4' => 5,
+                'C5' => 5,
+                'C6' => 5,
+            ],
+            'Pantai Bensam' => [
+                'C1' => 2,
+                'C2' => 4,
+                'C3' => 5,
+                'C4' => 4,
+                'C5' => 4,
+                'C6' => 4,
+            ],
+            'Pantai Mutun' => [
+                'C1' => 3,
+                'C2' => 4,
+                'C3' => 5,
+                'C4' => 4,
+                'C5' => 4,
+                'C6' => 4,
             ],
         ];
 

@@ -32,7 +32,7 @@
                         yang dikembangkan untuk membantu wisatawan dalam menemukan dan memilih destinasi wisata terbaik
                         di Kabupaten Pesawaran, Lampung. Sistem ini menggunakan metode <strong>ARAS (Additive Ratio Assessment)</strong>,
                         sebuah metode pengambilan keputusan multi-kriteria, untuk memberikan rekomendasi destinasi wisata
-                        berdasarkan berbagai kriteria seperti harga tiket, jarak, fasilitas, rating pengunjung, dan aksesibilitas.
+                        berdasarkan berbagai kriteria seperti aksesibilitas, fasilitas, kebersihan, keamanan, harga tiket, dan daya tarik.
                     </p>
                     <p style="text-align: justify;">
                         Dengan integrasi <strong>Google Maps API</strong>, pengguna dapat melihat lokasi destinasi secara visual
