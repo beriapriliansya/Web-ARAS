@@ -54,6 +54,13 @@ Route::get('/news', [NewsController::class, 'index'])->name('news.index');
 // Destinasi - HANYA LIHAT (Read Only untuk public)
 Route::get('/destinasi', [DestinasiController::class, 'index'])->name('destinasi.index');
 
+// Publicly Accessible Details & Calculations (Bisa diakses Guest / Tanpa Login)
+Route::get('/destinasi/{id}', [DestinasiController::class, 'show'])->name('destinasi.show');
+Route::get('/news/{slug}', [NewsController::class, 'show'])->name('news.show');
+Route::get('/aras/ranking', [ArasController::class, 'ranking'])->name('aras.ranking');
+Route::get('/rekomendasi', [ArasController::class, 'rekomendasiForm'])->name('aras.rekomendasi.form');
+Route::post('/rekomendasi', [ArasController::class, 'rekomendasiHitung'])->name('aras.rekomendasi.hitung');
+
 // API untuk maps
 Route::get('/api/destinasi/{id}/koordinat', function($id) {
     $destinasi = \App\Models\DestinasiWisata::findOrFail($id);
@@ -84,17 +91,6 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
 // USER AUTHENTICATED ROUTES (Harus login)
 // ==========================================
 Route::middleware(['auth'])->group(function () {
-
-    // Detail Wisata (Membutuhkan Login)
-    Route::get('/destinasi/{id}', [DestinasiController::class, 'show'])->name('destinasi.show');
-
-    // Detail Berita (Membutuhkan Login)
-    Route::get('/news/{slug}', [NewsController::class, 'show'])->name('news.show');
-
-    // Hasil Rekomendasi & Ranking ARAS (Membutuhkan Login)
-    Route::get('/aras/ranking', [ArasController::class, 'ranking'])->name('aras.ranking');
-    Route::get('/rekomendasi', [ArasController::class, 'rekomendasiForm'])->name('aras.rekomendasi.form');
-    Route::post('/rekomendasi', [ArasController::class, 'rekomendasiHitung'])->name('aras.rekomendasi.hitung');
 
     // Profile
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
