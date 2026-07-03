@@ -186,19 +186,55 @@
             let table = document.querySelector('#rankingTable');
             if (!table) return;
 
-            let rows = table.querySelectorAll('tr');
-            for (let i = 0; i < rows.length; i++) {
-                let row = [], cols = rows[i].querySelectorAll('td, th');
-                
-                for (let j = 0; j < cols.length; j++) {
-                    // Clean text (remove emojis, line breaks and multiple spaces)
-                    let data = cols[j].innerText.replace(/🥇|🥈|🥉/g, '').replace(/(\r\n|\n|\r)/gm, '').replace(/(\s\s+)/gm, ' ').trim();
-                    // Escape double quotes
-                    data = data.replace(/"/g, '""');
-                    row.push('"' + data + '"');
+            // 1. Explicitly build the header row based on the actual columns
+            let headerRow = ['Rank', 'Nama Destinasi'];
+            
+            // Get kriteria column headers from the second row of thead
+            let kriteriaHeaders = table.querySelectorAll('thead tr:nth-child(2) th');
+            kriteriaHeaders.forEach(th => {
+                headerRow.push(th.innerText.trim());
+            });
+            
+            headerRow.push('Nilai S (Optimalitas)');
+            headerRow.push('Nilai K (Utilitas)');
+            
+            // Format headers with quotes
+            let formattedHeader = headerRow.map(h => '"' + h.replace(/"/g, '""') + '"');
+            csv.push(formattedHeader.join(','));
+
+            // 2. Build the data rows
+            let bodyRows = table.querySelectorAll('tbody tr');
+            bodyRows.forEach((tr, index) => {
+                let cells = tr.querySelectorAll('td');
+                if (cells.length < 5) return; // Skip empty/placeholder rows
+
+                let row = [];
+
+                // Rank (clean number)
+                let rank = (index + 1).toString();
+                row.push('"' + rank + '"');
+
+                // Destination Name (remove emojis, line breaks, extra spaces)
+                let nameCellText = cells[1].innerText.replace(/(\r\n|\n|\r)/gm, '').replace(/(\s\s+)/gm, ' ').trim();
+                nameCellText = nameCellText.replace(/"/g, '""');
+                row.push('"' + nameCellText + '"');
+
+                // Kriteria scores (cells from index 2 to cells.length - 3)
+                for (let j = 2; j < cells.length - 2; j++) {
+                    let score = cells[j].innerText.trim();
+                    row.push('"' + score + '"');
                 }
+
+                // Nilai S
+                let nilaiS = cells[cells.length - 2].innerText.trim();
+                row.push('"' + nilaiS + '"');
+
+                // Nilai K
+                let nilaiK = cells[cells.length - 1].innerText.trim();
+                row.push('"' + nilaiK + '"');
+
                 csv.push(row.join(','));
-            }
+            });
 
             let csvString = csv.join('\n');
             let filename = 'laporan_ranking_aras_' + new Date().toISOString().slice(0,10) + '.csv';
