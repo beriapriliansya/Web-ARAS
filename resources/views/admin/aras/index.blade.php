@@ -135,9 +135,9 @@
                         <button type="button" class="btn btn-sm btn-success fw-bold text-white px-3" data-bs-toggle="modal" data-bs-target="#modalKonfirmasiHitung">
                             <i class="bi bi-save me-1"></i> Simpan/Update Hasil
                         </button>
-                        <button type="button" onclick="exportRankingToCSV()" class="btn btn-sm btn-outline-secondary fw-bold px-3">
+                        <a href="{{ route('admin.aras.export-csv') }}" class="btn btn-sm btn-outline-secondary fw-bold px-3">
                             <i class="bi bi-file-earmark-spreadsheet me-1"></i> Unduh CSV
-                        </button>
+                        </a>
                         <a href="{{ route('admin.aras.cetak') }}" target="_blank" class="btn btn-sm btn-danger fw-bold text-white px-3">
                             <i class="bi bi-file-pdf me-1"></i> Unduh PDF
                         </a>
@@ -179,36 +179,5 @@
         </div>
     </div>
 
-    <!-- Client-Side CSV Export Script -->
-    <script>
-        function exportRankingToCSV() {
-            let csv = [];
-            let table = document.querySelector('#rankingTable');
-            if (!table) return;
 
-            let rows = table.querySelectorAll('tr');
-            for (let i = 0; i < rows.length; i++) {
-                let row = [], cols = rows[i].querySelectorAll('td, th');
-                
-                for (let j = 0; j < cols.length; j++) {
-                    // Clean text (remove emojis, line breaks and multiple spaces)
-                    let data = cols[j].innerText.replace(/🥇|🥈|🥉/g, '').replace(/(\r\n|\n|\r)/gm, '').replace(/(\s\s+)/gm, ' ').trim();
-                    // Escape double quotes
-                    data = data.replace(/"/g, '""');
-                    row.push('"' + data + '"');
-                }
-                csv.push(row.join(','));
-            }
-
-            let csvString = csv.join('\n');
-            let filename = 'laporan_ranking_aras_' + new Date().toISOString().slice(0,10) + '.csv';
-            let link = document.createElement('a');
-            link.style.display = 'none';
-            link.setAttribute('href', 'data:text/csv;charset=utf-8,\uFEFF' + encodeURIComponent(csvString));
-            link.setAttribute('download', filename);
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-        }
-    </script>
 </x-app-layout>
