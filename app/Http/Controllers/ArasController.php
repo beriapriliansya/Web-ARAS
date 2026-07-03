@@ -384,6 +384,141 @@ class ArasController extends Controller
     }
 
     /**
+     * [ADMIN] Ekspor Laporan Lengkap ARAS ke CSV (Matriks X, R, V, S, K)
+     */
+    public function exportCSV()
+    {
+        $destinasi = DestinasiWisata::aktif()->get();
+        $kriteria = Kriteria::all();
+
+        if ($destinasi->isEmpty() || $kriteria->isEmpty()) {
+            return redirect()->route('admin.aras.index')->with('error', 'Data destinasi atau kriteria kosong!');
+        }
+
+        $result = $this->runArasCalculation($destinasi, $kriteria);
+
+        $filename = 'laporan_lengkap_aras_' . date('Y-m-d') . '.csv';
+
+        $headers = [
+            'Content-Type' => 'text/csv; charset=utf-8',
+            'Content-Disposition' => "attachment; filename=\"{$filename}\"",
+            'Pragma' => 'no-cache',
+            'Cache-Control' => 'must-revalidate, post-check=0, pre-check=0',
+            'Expires' => '0'
+        ];
+
+        $callback = function() use ($destinasi, $kriteria, $result) {
+            $file = fopen('php://output', 'w');
+            
+            // Add UTF-8 BOM for Excel compatibility
+            fprintf($file, chr(0xEF).chr(0xBB).chr(0xBF));
+            
+            // Force delimiter
+            fputcsv($file, ['sep=,']);
+            
+            // Title Info
+            fputcsv($file, ['LAPORAN HASIL PERHITUNGAN METODE ARAS']);
+            fputcsv($file, ['REKOMENDASI DESTINASI WISATA AIR TERBAIK']);
+            fputcsv($file, ['Tanggal Cetak: ' . date('d F Y H:i')]);
+            fputcsv($file, []);
+
+            // 1. Matriks Keputusan (X)
+            fputcsv($file, ['1. Matriks Keputusan (X) & Nilai Optimum (A0)']);
+            $headersX = ['Alternatif / Kode'];
+            foreach ($kriteria as $k) {
+                $headersX[] = $k->kode . ' (' . ucfirst($k->tipe) . ')';
+            }
+            fputcsv($file, $headersX);
+            
+            // Row A0
+            $rowA0_X = ['A0 (Optimal)'];
+            foreach ($kriteria as $k) {
+                $rowA0_X[] = $result['x0'][$k->id];
+            }
+            fputcsv($file, $rowA0_X);
+            
+            // Rows Ai
+            foreach ($destinasi as $d) {
+                $rowAi = [$d->kode . ' - ' . $d->nama];
+                foreach ($kriteria as $k) {
+                    $rowAi[] = $result['matriks'][$d->id][$k->id];
+                }
+                fputcsv($file, $rowAi);
+            }
+            fputcsv($file, []);
+
+            // 2. Matriks Normalisasi (R)
+            fputcsv($file, ['2. Matriks Normalisasi (R)']);
+            $headersR = ['Alternatif'];
+            foreach ($kriteria as $k) {
+                $headersR[] = $k->kode;
+            }
+            fputcsv($file, $headersR);
+            
+            // Row A0
+            $rowA0_R = ['A0'];
+            foreach ($kriteria as $k) {
+                $rowA0_R[] = number_format($result['matriksR']['A0'][$k->id], 4);
+            }
+            fputcsv($file, $rowA0_R);
+            
+            // Rows Ai
+            foreach ($destinasi as $d) {
+                $rowAi = [$d->kode . ' - ' . $d->nama];
+                foreach ($kriteria as $k) {
+                    $rowAi[] = number_format($result['matriksR'][$d->id][$k->id], 4);
+                }
+                fputcsv($file, $rowAi);
+            }
+            fputcsv($file, []);
+
+            // 3. Matriks Ternormalisasi Berbobot (V)
+            fputcsv($file, ['3. Matriks Ternormalisasi Berbobot (V)']);
+            $headersV = ['Alternatif'];
+            foreach ($kriteria as $k) {
+                $headersV[] = $k->kode . ' (W: ' . $result['bobotUsed'][$k->id] . ')';
+            }
+            fputcsv($file, $headersV);
+            
+            // Row A0
+            $rowA0_V = ['A0'];
+            foreach ($kriteria as $k) {
+                $rowA0_V[] = number_format($result['matriksV']['A0'][$k->id], 4);
+            }
+            fputcsv($file, $rowA0_V);
+            
+            // Rows Ai
+            foreach ($destinasi as $d) {
+                $rowAi = [$d->kode . ' - ' . $d->nama];
+                foreach ($kriteria as $k) {
+                    $rowAi[] = number_format($result['matriksV'][$d->id][$k->id], 4);
+                }
+                fputcsv($file, $rowAi);
+            }
+            fputcsv($file, []);
+
+            // 4. Hasil Akhir & Perankingan
+            fputcsv($file, ['4. Hasil Akhir & Perankingan']);
+            fputcsv($file, ['Rank', 'Alternatif (Destinasi Wisata)', 'Nilai S (Fungsi Optimasi)', 'Nilai K (Derajat Utilitas)']);
+            
+            $rank = 1;
+            foreach ($result['hasilSorted'] as $id => $nilaiK) {
+                $d = $destinasi->firstWhere('id', $id);
+                fputcsv($file, [
+                    $rank++,
+                    $d->kode . ' - ' . $d->nama,
+                    number_format($result['nilaiS'][$d->id], 4),
+                    number_format($nilaiK, 4)
+                ]);
+            }
+            
+            fclose($file);
+        };
+
+        return response()->stream($callback, 200, $headers);
+    }
+
+    /**
      * [PUBLIC] Halaman Ranking Statis
      */
     public function ranking()
