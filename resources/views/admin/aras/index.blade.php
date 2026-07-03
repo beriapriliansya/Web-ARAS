@@ -186,6 +186,9 @@
             let table = document.querySelector('#rankingTable');
             if (!table) return;
 
+            // Force Excel to use comma as the delimiter
+            csv.push('sep=,');
+
             // 1. Explicitly build the header row based on the actual columns
             let headerRow = ['Rank', 'Nama Destinasi'];
             
