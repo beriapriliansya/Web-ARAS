@@ -66,14 +66,7 @@
         <hr class="my-4 bg-white opacity-25">
 
         <div class="row">
-            <div class="col-md-6 text-md-start">
-                <p class="mb-0">
-                    <i class="bi bi-code-slash"></i> Dibuat dengan
-                    <i class="bi bi-heart-fill text-danger"></i>
-                    menggunakan Laravel 10 × Bootstrap 5
-                </p>
-            </div>
-            <div class="col-md-6 text-md-end">
+            <div class="col text-center">
                 <p class="mb-0 text-white-50">
                     <small>© {{ date('Y') }} Pariwisata Pesawaran. Metode ARAS Implementation.</small>
                 </p>

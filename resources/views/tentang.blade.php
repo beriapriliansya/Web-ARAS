@@ -68,53 +68,6 @@
                             </ul>
                         </div>
                     </div>
-                </div>
-            </div>
-
-            <div class="card">
-                <div class="card-body">
-                    <h3 class="fw-bold mb-4">
-                        <i class="bi bi-gear text-warning"></i> Teknologi yang Digunakan
-                    </h3>
-                    <div class="row g-4">
-                        <div class="col-md-4">
-                            <div class="text-center p-3 bg-light rounded">
-                                <i class="bi bi-code-slash text-primary" style="font-size: 3rem;"></i>
-                                <h5 class="mt-3 fw-bold">Frontend</h5>
-                                <ul class="list-unstyled text-start mt-3">
-                                    <li>✅ HTML5 & CSS3</li>
-                                    <li>✅ Bootstrap 5.3</li>
-                                    <li>✅ JavaScript ES6+</li>
-                                    <li>✅ Vite</li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="text-center p-3 bg-light rounded">
-                                <i class="bi bi-server text-success" style="font-size: 3rem;"></i>
-                                <h5 class="mt-3 fw-bold">Backend</h5>
-                                <ul class="list-unstyled text-start mt-3">
-                                    <li>✅ Laravel 10</li>
-                                    <li>✅ PHP 8.1+</li>
-                                    <li>✅ MySQL Database</li>
-                                    <li>✅ XAMPP Server</li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="text-center p-3 bg-light rounded">
-                                <i class="bi bi-star text-warning" style="font-size: 3rem;"></i>
-                                <h5 class="mt-3 fw-bold">Features</h5>
-                                <ul class="list-unstyled text-start mt-3">
-                                    <li>✅ Metode ARAS</li>
-                                    <li>✅ Google Maps API</li>
-                                    <li>✅ Responsive Design</li>
-                                    <li>✅ RESTful API</li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </div>
             </div>
         </div>
     </div>
