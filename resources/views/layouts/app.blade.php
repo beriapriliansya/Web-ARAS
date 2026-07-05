@@ -52,9 +52,8 @@
 
     @include('layouts.footer')
         <!-- ======================================================= -->
-        <!-- TAMBAHAN WAJIB: BOOTSTRAP 5 JS BUNDLE -->
+        <!-- TAMBAHAN WAJIB: BOOTSTRAP 5 JS BUNDLE (Loaded via Vite app.js) -->
         <!-- ======================================================= -->
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
         <!-- SweetAlert2 library -->
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
