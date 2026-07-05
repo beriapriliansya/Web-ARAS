@@ -35,15 +35,13 @@
 
                 <!-- MENU KHUSUS SUPERADMIN: Kalkulasi ARAS (Dropdown) -->
                 @if(auth()->check() && auth()->user()->role === 'superadmin')
-                <li class="nav-item dropdown" x-data="{ open: false }" @click.outside="open = false">
+                <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle px-3 {{ request()->routeIs('admin.aras.*') ? 'active fw-bold text-primary' : '' }}" 
                        href="#" id="navbarDropdownAras" role="button" 
-                       @click.prevent="open = !open"
                        data-bs-toggle="dropdown" aria-expanded="false">
                         Perhitungan ARAS
                     </a>
-                    <ul class="dropdown-menu shadow border-0" :class="{ 'show': open }" x-show="open" x-transition
-                        aria-labelledby="navbarDropdownAras" style="display: none;">
+                    <ul class="dropdown-menu shadow border-0" aria-labelledby="navbarDropdownAras">
                         <li>
                             <a class="dropdown-item py-2 {{ request()->routeIs('admin.aras.kriteria.list') ? 'active fw-bold' : '' }}" href="{{ route('admin.aras.kriteria.list') }}">
                                 <i class="bi bi-list-check me-2"></i> Kriteria
