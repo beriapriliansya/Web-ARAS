@@ -158,47 +158,48 @@
                                 <i class="bi bi-trash3 me-1"></i> {{ __('Hapus Akun Anda') }}
                             </button>
                         </div>
-
-                        <!-- Bootstrap Modal Confirmation -->
-                        <div class="modal fade" id="confirmUserDeletionModal" tabindex="-1" aria-labelledby="confirmUserDeletionModalLabel" aria-hidden="true">
-                            <div class="modal-dialog modal-dialog-centered">
-                                <div class="modal-content rounded-4 border-0 shadow-lg">
-                                    <div class="modal-header bg-danger text-white py-3">
-                                        <h5 class="modal-title fw-bold" id="confirmUserDeletionModalLabel">
-                                            <i class="bi bi-exclamation-octagon me-2"></i>{{ __('Apakah Anda Yakin?') }}
-                                        </h5>
-                                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
-                                    </div>
-                                    <form method="post" action="{{ route('profile.destroy') }}">
-                                        @csrf
-                                        @method('delete')
-                                        <div class="modal-body p-4">
-                                            <p class="text-secondary mb-3">
-                                                {{ __('Semua data Anda akan dihapus secara permanen. Silakan masukkan kata sandi Anda untuk mengonfirmasi tindakan ini.') }}
-                                            </p>
-                                            <div class="mb-3">
-                                                <label for="password" class="form-label fw-bold text-secondary small">{{ __('Kata Sandi Anda') }}</label>
-                                                <input id="password" name="password" type="password" class="form-control rounded-3 @if($errors->userDeletion->has('password')) is-invalid @endif" placeholder="{{ __('Masukkan kata sandi') }}" required>
-                                                @if($errors->userDeletion->has('password'))
-                                                    <div class="invalid-feedback d-block">{{ $errors->userDeletion->first('password') }}</div>
-                                                @endif
-                                            </div>
-                                        </div>
-                                        <div class="modal-footer bg-light p-3 d-flex justify-content-end gap-2 border-0">
-                                            <button type="button" class="btn btn-secondary px-3 fw-bold rounded-pill" data-bs-dismiss="modal">
-                                                {{ __('Batal') }}
-                                            </button>
-                                            <button type="submit" class="btn btn-danger px-4 fw-bold rounded-pill">
-                                                {{ __('Hapus Akun') }}
-                                            </button>
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
+                        
                     </div>
                 </div>
 
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap Modal Confirmation (Placed at root level to prevent backdrop bug) -->
+    <div class="modal fade" id="confirmUserDeletionModal" tabindex="-1" aria-labelledby="confirmUserDeletionModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content rounded-4 border-0 shadow-lg">
+                <div class="modal-header bg-danger text-white py-3">
+                    <h5 class="modal-title fw-bold" id="confirmUserDeletionModalLabel">
+                        <i class="bi bi-exclamation-octagon me-2"></i>{{ __('Apakah Anda Yakin?') }}
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form method="post" action="{{ route('profile.destroy') }}">
+                    @csrf
+                    @method('delete')
+                    <div class="modal-body p-4">
+                        <p class="text-secondary mb-3">
+                            {{ __('Semua data Anda akan dihapus secara permanen. Silakan masukkan kata sandi Anda untuk mengonfirmasi tindakan ini.') }}
+                        </p>
+                        <div class="mb-3">
+                            <label for="password" class="form-label fw-bold text-secondary small">{{ __('Kata Sandi Anda') }}</label>
+                            <input id="password" name="password" type="password" class="form-control rounded-3 @if($errors->userDeletion->has('password')) is-invalid @endif" placeholder="{{ __('Masukkan kata sandi') }}" required>
+                            @if($errors->userDeletion->has('password'))
+                                <div class="invalid-feedback d-block">{{ $errors->userDeletion->first('password') }}</div>
+                            @endif
+                        </div>
+                    </div>
+                    <div class="modal-footer bg-light p-3 d-flex justify-content-end gap-2 border-0">
+                        <button type="button" class="btn btn-secondary px-3 fw-bold rounded-pill" data-bs-dismiss="modal">
+                            {{ __('Batal') }}
+                        </button>
+                        <button type="submit" class="btn btn-danger px-4 fw-bold rounded-pill">
+                            {{ __('Hapus Akun') }}
+                        </button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
