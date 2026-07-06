@@ -364,7 +364,7 @@ body {
    FOOTER STYLING
    ======================================== */
 footer {
-    background: var(--dark-gradient);
+    background: linear-gradient(135deg, #111e38 0%, #1a365d 100%);
     box-shadow: 0 -4px 16px rgba(0,0,0,0.1);
     position: relative;
     overflow: hidden;
