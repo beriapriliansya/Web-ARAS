@@ -53,7 +53,12 @@
                                 <div class="col-md-3">
                                     <label class="form-label fw-bold">Kategori *</label>
                                     <select class="form-select @error('kategori') is-invalid @enderror" name="kategori" required>
-                                        <option value="Pantai" selected>Pantai</option>
+                                        <option value="Pantai" {{ old('kategori') == 'Pantai' ? 'selected' : '' }}>Pantai</option>
+                                        <option value="Pulau" {{ old('kategori') == 'Pulau' ? 'selected' : '' }}>Pulau</option>
+                                        <option value="Air Terjun" {{ old('kategori') == 'Air Terjun' ? 'selected' : '' }}>Air Terjun</option>
+                                        <option value="Danau" {{ old('kategori') == 'Danau' ? 'selected' : '' }}>Danau</option>
+                                        <option value="Waterpark" {{ old('kategori') == 'Waterpark' ? 'selected' : '' }}>Waterpark</option>
+                                        <option value="Hutan Mangrove" {{ old('kategori') == 'Hutan Mangrove' ? 'selected' : '' }}>Hutan Mangrove</option>
                                     </select>
                                     @error('kategori')
                                         <div class="invalid-feedback">{{ $message }}</div>
